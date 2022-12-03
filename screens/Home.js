@@ -1,19 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, Text, View,Image } from 'react-native';
-import Home from './screens/Home';
-import LandingPage from './screens/LandingPage';
 
-export default function App() {
-  const [landingPageLoad,setLandingPageLoad] = useState(true)
-
-  setInterval(() => {
-    setLandingPageLoad(false)
-  }, 3500);
+export default function Home() {
 
   return (
     <View style={styles.container}>
-      {landingPageLoad ? <LandingPage/> : <Home/>}
+      <Text style={styles.welcomeText}>Welcome to <Text style={{color:'red',fontWeight:'bolder'}}> Sudoku Forever</Text></Text>
+      <StatusBar style="auto" />
     </View>
   );
 }
