@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View,Image } from 'react-native';
+import { StyleSheet, Text, View,Image, Button } from 'react-native';
+import {BigSquare} from '../components/BigSquare'
 
-export default function Home() {
+export default function Home({ navigation}) {
 
   return (
     <View style={styles.container}>

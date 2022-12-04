@@ -1,8 +1,8 @@
+import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { Button,StyleSheet, Text, View,Image } from 'react-native';
+import { Button,StyleSheet, Text, View,Image, Pressable } from 'react-native';
 
-export default function LandingPage() {
-
+export default function LandingPage({navigation}) {
 
   return (
     <View style={styles.container}>
@@ -11,8 +11,13 @@ export default function LandingPage() {
         source={require('../assets/logo.png')}
       />
       <Text style={styles.welcomeText}>Welcome to <Text style={{color:'red'}}> Sudoku Forever</Text></Text>
-      <Button>hi</Button>
       <Text style={styles.welcomeText}>&nbsp;</Text>
+      <Pressable
+        style={styles.enterPlayzoneBtn}
+        onPress={() =>
+          navigation.navigate('Home')
+        }
+        ><Text style={styles.btnText}>Enter the Playzone</Text></Pressable>
       <StatusBar style="auto" />
     </View>
   );
@@ -21,7 +26,6 @@ export default function LandingPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'yellow',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -33,5 +37,17 @@ const styles = StyleSheet.create({
     width: 150,
     height:150,
     margin: 30
+  },
+  enterPlayzoneBtn:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 8,
+    backgroundColor: 'red',
+  },
+  btnText:{
+    color:'white',
+    fontSize: 22
   }
 });

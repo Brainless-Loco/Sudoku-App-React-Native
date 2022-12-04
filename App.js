@@ -1,20 +1,28 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import * as React from 'react';
 import { StyleSheet, Text, View,Image } from 'react-native';
 import Home from './screens/Home';
 import LandingPage from './screens/LandingPage';
 
-export default function App() {
-  const [landingPageLoad,setLandingPageLoad] = useState(true)
+import { NavigationContainer } from '@react-navigation/native';
 
-  setInterval(() => {
-    setLandingPageLoad(false)
-  }, 3500);
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+export default function App() {
+  const Stack = createNativeStackNavigator();
 
   return (
-    <View style={styles.container}>
-      {landingPageLoad ? <LandingPage/> : <Home/>}
-    </View>
+
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="LandingPage"
+          component={LandingPage}
+          options={{ title: 'Sudoku Forever' }}
+        />
+        <Stack.Screen name="Home" component={Home} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -33,5 +41,5 @@ const styles = StyleSheet.create({
     width: 150,
     height:150,
     margin: 30
-  }
+  },
 });
