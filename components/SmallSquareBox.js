@@ -1,13 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function SmallSquareBox() {
+const white=7;
+export default function SmallSquareBox({selectedBtn}) {
 
     let x = Math.floor(Math.random() * 9) + 1;
 
   return (
     <View style={styles.container}>
-        <Text style={styles.text}>{x}</Text>
+        <Text style={styles.text}>{selectedBtn}</Text>
       
       <StatusBar style="auto" />
     </View>
@@ -21,13 +22,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     color:"white",
-    height:42,
+    height:32,
     width: '31%',
-    borderRadius: 8,
+    borderRadius: 4,
   },
   text: {
     color:"white",
-    fontSize:20,
+    fontSize:15,
     fontWeight:"bold",
   },
 });

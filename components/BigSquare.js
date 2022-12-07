@@ -1,25 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import MediumSquare from './MediumSquare';
+import SudokuRow from './SudokuRow';
 
 
 
 
-export default function BigSquare() {
+export default function BigSquare({selectedBtn}) {
 
 
-  const MediumComp = [];
+  const MediumComp = [1,2,3,4,5,6,7,8,9];
+
   let i,j;
-  for(i=1;i<=3;i++){
-    for(j=1;j<=3;j++){
-        MediumComp.push(<MediumSquare x={i} y={j} key={i*100+j*10}/>)
-    }
-  }
-
 
   return (
     <View style={styles.bigSquare}>
-    {MediumComp}
+      {MediumComp.map((item)=>{
+        return <MediumSquare selectedBtn={selectedBtn} key={item}/>
+      })}
     <StatusBar style="auto" />
     </View>
   );
@@ -32,13 +30,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexWrap: 'wrap',
     flexDirection:'row',
-    height:'auto',
-    maxHeight:'70%',
+    height:'50%',
+    maxHeight:'60%',
     width:'auto',
     maxWidth:'100%',
     backgroundColor: 'transparent',
     borderColor:'white',
     borderWidth:1,
   },
-  
+  row: {
+    backgroundColor: 'green',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color:"white",
+    width: '100%',
+  }
 });

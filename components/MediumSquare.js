@@ -5,20 +5,15 @@ import SmallSquareBox from './SmallSquareBox';
 
 
 
-export default function MediumSquare(props) {
-    const {x,y} = props;
-    const SmallSquares = [];
-    let i,j;
-    for(i=x*3-2;i<=x*3;i++){
-        for(j=y*3-2;j<=y*3;j++){
-            SmallSquares.push(<SmallSquareBox key={i*10+j}/>)
-        }
-    }
+export default function MediumSquare({selectedBtn}) {
+    const SmallSquares = [1,2,3,4,5,6,7,8,9];
 
 
     return (
         <View style={styles.mediumSquare}>
-            {SmallSquares}
+            {SmallSquares.map((item)=>{
+                return <SmallSquareBox selectedBtn={selectedBtn} key={item*10}/>
+            })}
         <StatusBar style="auto" />
         </View>
     );
@@ -32,7 +27,7 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     flexWrap:'wrap',
     height:'auto',
-    width:'26%',
+    width:'30%',
     minWidth:'26%',
     margin:1,
     paddingVertical: 2,
@@ -40,6 +35,6 @@ const styles = StyleSheet.create({
     borderWidth:2,
     backgroundColor: 'white',
     borderColor:'black',
-    borderRadius:8,
+    borderRadius:5,
   },
 });

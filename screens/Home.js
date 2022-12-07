@@ -1,13 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, Text, View,Image, Button } from 'react-native';
-import {BigSquare} from '../components/BigSquare'
+import BigSquare from '../components/BigSquare'
+import MediumSquare from '../components/MediumSquare';
+import NumberBtnList from '../components/NumberBtnList';
+// import SmallSquareBox from '../components/SmallSquareBox';
 
 export default function Home({ navigation}) {
 
+  const [selectedBtn,setselectedBtn] = useState(' ')
+
   return (
     <View style={styles.container}>
-      <Text style={styles.welcomeText}>Welcome to <Text style={{color:'red',fontWeight:'bolder'}}> Sudoku Forever</Text></Text>
+      <Text>{selectedBtn}</Text>
+      <BigSquare selectedBtn={selectedBtn}/>
+      <NumberBtnList setselectedBtn={setselectedBtn}/>
       <StatusBar style="auto" />
     </View>
   );
@@ -16,6 +23,7 @@ export default function Home({ navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection:'column',
     backgroundColor: 'yellow',
     alignItems: 'center',
     justifyContent: 'center',
