@@ -6,9 +6,10 @@ import MediumSquare from '../components/MediumSquare';
 import NumberBtnList from '../components/NumberBtnList';
 // import SmallSquareBox from '../components/SmallSquareBox';
 
-export default function Home({ navigation}) {
+export default function Playzone({ navigation}) {
 
   const [selectedBtn,setselectedBtn] = useState(' ')
+
 
   return (
     <View style={styles.container}>
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection:'column',
-    backgroundColor: 'yellow',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },

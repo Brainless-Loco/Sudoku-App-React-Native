@@ -4,6 +4,7 @@ import React from 'react'
 export default function NumberBtnList({setselectedBtn}) {
 
   const nums = ['1','2','3','4','5','6','7','8','9']
+
   return (
     <View style={styles.container}>
       <View style={styles.midContainer}>
@@ -26,6 +27,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     color:"white",
     backgroundColor: 'white',
+    borderColor:'#000099',
+    borderTopWidth:1,
+    borderBottomWidth:1,
     minHeight:60,
     width: '100%',
   },
@@ -39,7 +43,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   btn:{
-    backgroundColor:'red',
+    backgroundColor:'#000099',
     width:'10%',
     height:40,
     display:'flex',

@@ -34,9 +34,7 @@ const styles = StyleSheet.create({
     maxHeight:'60%',
     width:'auto',
     maxWidth:'100%',
-    backgroundColor: 'transparent',
-    borderColor:'white',
-    borderWidth:1,
+    backgroundColor: 'transparent'
   },
   row: {
     backgroundColor: 'green',

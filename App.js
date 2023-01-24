@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { StyleSheet, Text, View,Image } from 'react-native';
-import Home from './screens/Home';
+import Playzone from './screens/Playzone';
 import LandingPage from './screens/LandingPage';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -20,7 +20,7 @@ export default function App() {
           component={LandingPage}
           options={{ title: 'Sudoku Forever' }}
         />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Playzone" component={Playzone} />
       </Stack.Navigator>
     </NavigationContainer>
   );
