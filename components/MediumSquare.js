@@ -5,15 +5,24 @@ import SmallSquareBox from './SmallSquareBox';
 
 
 
-export default function MediumSquare({selectedBtn}) {
-    const SmallSquares = [1,2,3,4,5,6,7,8,9];
+export default function MediumSquare({selectedBtn,id}) {
+    const SmallSquares=[1,2,3,4,5,6,7,8,9]
+    const x=Math.floor((id-1)/3)*3;
+    const y=Math.floor(((id%3+(id%3==0)*3)-1)*3)
+
+    const rows=[x+1,x+2,x+3]
+    const cols=[y+1,y+2,y+3]
 
 
     return (
         <View style={styles.mediumSquare}>
-            {SmallSquares.map((item)=>{
-                return <SmallSquareBox selectedBtn={selectedBtn} key={item*10}/>
-            })}
+            {
+              rows.map((row)=>{
+                return cols.map((col)=>{
+                  return <SmallSquareBox selectedBtn={selectedBtn} id={row*10+col} key={row*10+col}/>
+                })
+              })
+            }
         <StatusBar style="auto" />
         </View>
     );

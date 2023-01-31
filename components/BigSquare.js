@@ -16,7 +16,7 @@ export default function BigSquare({selectedBtn}) {
   return (
     <View style={styles.bigSquare}>
       {MediumComp.map((item)=>{
-        return <MediumSquare selectedBtn={selectedBtn} key={item}/>
+        return <MediumSquare selectedBtn={selectedBtn} id={item} key={item}/>
       })}
     <StatusBar style="auto" />
     </View>

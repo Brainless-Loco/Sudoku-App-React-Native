@@ -14,8 +14,9 @@ export default function LandingPage({navigation}) {
       <Text style={styles.welcomeText}>&nbsp;</Text>
       <Pressable
         style={styles.enterPlayzoneBtn}
-        onPress={() =>
+        onPress={() =>{
           navigation.navigate('Playzone')
+        }
         }
         ><Text style={styles.btnText}>Enter the Playzone</Text></Pressable>
       <StatusBar style="auto" />

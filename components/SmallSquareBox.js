@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-const white=7;
-export default function SmallSquareBox({selectedBtn}) {
+import { store } from '../redux/store';
 
-    let x = Math.floor(Math.random() * 9) + 1;
+const white=7;
+export default function SmallSquareBox({selectedBtn,id}) {
 
   return (
     <View style={styles.container}>
