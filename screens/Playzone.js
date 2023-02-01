@@ -14,7 +14,9 @@ export default function Playzone({ navigation}) {
   const values = useSelector(state => state.squareValues)
   const dispatch = useDispatch()
   const sqre_value_update = ({index,val}) => dispatch(valueUpdate({index,val}))
-
+  
+  const new_pattern= SUDOKU;
+  console.log(new_pattern)
 
   return (
     <View style={styles.container}>
