@@ -1,7 +1,5 @@
-// import { createStore , combineReducers} from 'redux';
-// import grid_values_reducers from './reducers/grid_values_reducers';
+import { createStore , combineReducers} from 'redux';
+import Grid_values_reducers from './reducers/Grid_values_reducers';
 
-
-// export const store = configureStore (grid_values_reducers);
-
-// store.subscribe()
+const store = createStore (Grid_values_reducers)
+export default store

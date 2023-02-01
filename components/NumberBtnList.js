@@ -10,7 +10,7 @@ export default function NumberBtnList({setselectedBtn}) {
       <View style={styles.midContainer}>
         {
           nums.map((num)=>{
-            return <Pressable style={styles.btn} key={num} onPress={()=>{setselectedBtn(num)}} >
+            return <Pressable style={styles.btn} key={num} onPress={()=>{setselectedBtn({num,num})}} >
                 <Text style={styles.text}>{num}</Text>
               </Pressable>
           })

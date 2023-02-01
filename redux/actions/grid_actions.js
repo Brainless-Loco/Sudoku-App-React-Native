@@ -1,6 +1,8 @@
-export const valueUpdate = (val) => {
+import { SQUARE_VALUE_UPDATE } from "../Types";
+
+export const valueUpdate = ({index,val}) => {
     return {
-      type: 'VALUE_UPDATE',
-      payload:val
+      type: SQUARE_VALUE_UPDATE,
+      payload:{index,val}
     };
 };

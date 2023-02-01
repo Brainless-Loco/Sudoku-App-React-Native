@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { store } from '../redux/store';
+import { Store } from 'redux';
 
 const white=7;
 export default function SmallSquareBox({selectedBtn,id}) {

@@ -5,24 +5,26 @@ import Playzone from './screens/Playzone';
 import LandingPage from './screens/LandingPage';
 
 import { NavigationContainer } from '@react-navigation/native';
-
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Provider } from 'react-redux';
+import store  from './redux/store';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
-
   return (
 
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="LandingPage"
-          component={LandingPage}
-          options={{ title: 'Sudoku Forever' }}
-        />
-        <Stack.Screen name="Playzone" component={Playzone} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="LandingPage"
+            component={LandingPage}
+            options={{ title: 'Sudoku Forever' }}
+          />
+          <Stack.Screen name="Playzone" component={Playzone} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

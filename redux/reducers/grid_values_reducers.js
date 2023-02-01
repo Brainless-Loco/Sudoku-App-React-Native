@@ -1,13 +1,15 @@
+import { SQUARE_VALUE_UPDATE } from "../Types";
+
 const initialState = {
-    squareValues: [[]],
+    squareValues: 0,
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-      case 'VALUE_UPDATE':
+      case SQUARE_VALUE_UPDATE:
         return {
           ...state,
-          squareValues: state.squareValues[0].add(2),
+          squareValues: state.squareValues+1,
         };
       default:
         return state;
