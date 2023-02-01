@@ -1,1 +1,2 @@
 export const SQUARE_VALUE_UPDATE = 'SQUARE_VALUE_UPDATE';
+export const GRID_UPDATE = 'GRID_UPDATE';

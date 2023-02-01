@@ -14,7 +14,9 @@ const make_array = (row, col) =>
              });
 };
 
-const rand = () => {return Math.floor(Math.random() * (9)) + 1;};
+const rand = () => {
+    return Math.floor(Math.random()* (9)) + 1;
+};
 
 var got_pattern=false;
 

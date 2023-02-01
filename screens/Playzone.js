@@ -20,7 +20,7 @@ export default function Playzone({ navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text>{values}</Text>
+      <Text>{selectedBtn}</Text>
       <BigSquare selectedBtn={selectedBtn}/>
       <NumberBtnList setselectedBtn={sqre_value_update}/>
       <StatusBar style="auto" />
