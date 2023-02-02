@@ -2,22 +2,22 @@ import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, Text, View,Image, Button } from 'react-native';
 import BigSquare from '../components/BigSquare'
-import MediumSquare from '../components/MediumSquare';
 import NumberBtnList from '../components/NumberBtnList';
 import { useSelector, useDispatch } from 'react-redux'
-import { valueUpdate } from '../redux/actions/Grid_actions';
+import { valueUpdate,gridUpdate } from '../redux/actions/Grid_actions';
 import SUDOKU from '../sudoku_maker/sudoku_pattern_generator';
 
 export default function Playzone({ navigation}) {
-
+  
+  
   const [selectedBtn,setselectedBtn] = useState(' ')
-  const values = useSelector(state => state.squareValues)
+  const grid = useSelector(state => state.grid)
   const dispatch = useDispatch()
   const sqre_value_update = ({index,val}) => dispatch(valueUpdate({index,val}))
-  
   const new_pattern= SUDOKU;
-  console.log(new_pattern)
-
+  const update_current_game = (pattern)=>dispatch(gridUpdate(pattern))
+  // console.log(grid)
+  update_current_game(new_pattern)
   return (
     <View style={styles.container}>
       <Text>{selectedBtn}</Text>

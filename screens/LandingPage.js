@@ -1,8 +1,10 @@
-import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { Button,StyleSheet, Text, View,Image, Pressable } from 'react-native';
+import {StyleSheet, Text, View,Image, Pressable } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { gridUpdate } from '../redux/actions/Grid_actions';
 
 export default function LandingPage({navigation}) {
+  const dispatch = useDispatch();
 
   return (
     <View style={styles.container}>

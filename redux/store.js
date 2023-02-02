@@ -1,5 +1,5 @@
 import { createStore , combineReducers} from 'redux';
-import Grid_values_reducers from './reducers/Grid_values_reducers';
+import Playzone_reducers from './reducers/Playzone_reducers';
 
-const store = createStore (Grid_values_reducers)
+const store = createStore (Playzone_reducers)
 export default store

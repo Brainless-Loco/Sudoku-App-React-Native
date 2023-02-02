@@ -9,6 +9,6 @@ export const valueUpdate = ({index,val}) => {
 export const gridUpdate = (grid) =>{
   return {
     type:GRID_UPDATE,
-    payload: grid
+    new_game: grid
   }
 }

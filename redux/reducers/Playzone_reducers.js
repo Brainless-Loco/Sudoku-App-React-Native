@@ -2,6 +2,7 @@ import { GRID_UPDATE, SQUARE_VALUE_UPDATE } from "../Types";
 
 const initialState = {
     grid: [[]],
+    squareValues:0
 };
 
 export default (state = initialState, action) => {
@@ -9,7 +10,7 @@ export default (state = initialState, action) => {
       case GRID_UPDATE:
         return{
           ...state,
-          grid : [[2]]
+          grid : action.new_game
         }
       case SQUARE_VALUE_UPDATE:
         return {
