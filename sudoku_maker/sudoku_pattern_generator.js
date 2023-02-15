@@ -1,3 +1,11 @@
+var rn = require('random-number');
+var gen = rn.generator({
+  min:  1
+, max:  9
+, integer: true
+})
+
+
 const matrix_number = (i,j) =>
 {
     return (
@@ -15,7 +23,8 @@ const make_array = (row, col) =>
 };
 
 const rand = () => {
-    return Math.floor(Math.random()* (9)) + 1;
+
+    return gen();
 };
 
 var got_pattern=false;
@@ -31,7 +40,7 @@ const create_pattern = (x,y) =>
   const till_now = new Set([]);
   
   while(till_now.size<9 && !got_pattern){
-    let new_num = rand();
+    let new_num = gen();
     if(till_now.has(new_num)) continue;
     till_now.add(new_num);
 
@@ -52,6 +61,13 @@ const create_pattern = (x,y) =>
   }
 };
 
-create_pattern(0,0);
+const generate_a_new_pattern = ()=>{
+
+  create_pattern(0,0);
+}
+
+generate_a_new_pattern()
+
+// export function generate_a_new_pattern()
 
 export default SUDOKU;

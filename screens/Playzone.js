@@ -14,10 +14,7 @@ export default function Playzone({ navigation}) {
   const grid = useSelector(state => state.grid)
   const dispatch = useDispatch()
   const sqre_value_update = ({index,val}) => dispatch(valueUpdate({index,val}))
-  const new_pattern= SUDOKU;
-  const update_current_game = (pattern)=>dispatch(gridUpdate(pattern))
   // console.log(grid)
-  update_current_game(new_pattern)
   return (
     <View style={styles.container}>
       <Text>{selectedBtn}</Text>
