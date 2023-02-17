@@ -1,25 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View,Image, Button } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import BigSquare from '../components/BigSquare'
 import NumberBtnList from '../components/NumberBtnList';
-import { useSelector, useDispatch } from 'react-redux'
-import { valueUpdate,gridUpdate } from '../redux/actions/Grid_actions';
-import SUDOKU from '../sudoku_maker/sudoku_pattern_generator';
+import { useSelector } from 'react-redux'
 
 export default function Playzone({ navigation}) {
   
   
-  const [selectedBtn,setselectedBtn] = useState(' ')
-  const grid = useSelector(state => state.grid)
-  const dispatch = useDispatch()
-  const sqre_value_update = ({index,val}) => dispatch(valueUpdate({index,val}))
-  // console.log(grid)
   return (
     <View style={styles.container}>
-      <Text>{selectedBtn}</Text>
-      <BigSquare selectedBtn={selectedBtn}/>
-      <NumberBtnList setselectedBtn={sqre_value_update}/>
+      <BigSquare/>
+      <NumberBtnList/>
       <StatusBar style="auto" />
     </View>
   );

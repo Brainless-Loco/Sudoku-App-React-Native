@@ -1,9 +1,14 @@
 import { View, Text, StyleSheet, Button, Pressable } from 'react-native'
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { selected_Button_update } from '../redux/actions/Grid_actions'
 
-export default function NumberBtnList({setselectedBtn}) {
+export default function NumberBtnList() {
 
   const nums = ['1','2','3','4','5','6','7','8','9']
+  const dispatch = useDispatch()
+
+  const update_selected_button = (id) => dispatch(selected_Button_update(id))
 
   return (
     <View style={styles.container}>
@@ -12,7 +17,7 @@ export default function NumberBtnList({setselectedBtn}) {
           nums.map((num)=>{
             return <Pressable style={styles.btn} key={num} 
               onPress={()=>{
-                  setselectedBtn({num,num})
+                  update_selected_button(num)
                   }} >
                 <Text style={styles.text}>{num}</Text>
               </Pressable>
