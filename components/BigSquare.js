@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import MediumSquare from './MediumSquare';
-import SudokuRow from './SudokuRow';
 
 
 
@@ -25,16 +24,16 @@ export default function BigSquare({selectedBtn}) {
 
 const styles = StyleSheet.create({
   bigSquare: {
-    flex: 1,
+    display:'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexWrap: 'wrap',
     flexDirection:'row',
-    height:'50%',
+    height:'auto',
     maxHeight:'60%',
     width:'auto',
     maxWidth:'100%',
-    backgroundColor: 'transparent'
+    paddingVertical:'2%',
   },
   row: {
     backgroundColor: 'green',

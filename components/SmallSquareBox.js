@@ -2,16 +2,19 @@ import { StatusBar } from 'expo-status-bar';
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 
-const white=7;
-export default function SmallSquareBox({selectedBtn,id}) {
+
+export default function SmallSquareBox({id}) {
   const row = Math.floor(id/10)%10
   const col = id%10
   const value = useSelector(state=>state.grid[row-1][col-1]);
+  const is_locked = useSelector(state=>state.is_Num_Button_Locked)
 
   return (
-    <Pressable style={styles.container} onPress={()=>{console.log("haha")}}>
+    <Pressable style={styles.container} onPress={()=>{
+        if(is_locked) console.log(id)
+        // else 
+      }}>
         <Text style={styles.text} >{value}</Text>
-      
       <StatusBar style="auto" />
     </Pressable>
   );

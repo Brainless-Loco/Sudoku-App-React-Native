@@ -1,4 +1,4 @@
-import { CURRENT_GRID_UPDATE, GRID_UPDATE, SELECTED_BUTTON_UPDATE, SQUARE_VALUE_UPDATE } from "../Types";
+import { CHANGE_BUTTON_LOCK_STATUS, CURRENT_GRID_UPDATE, GRID_UPDATE, SELECTED_BUTTON_UPDATE, SQUARE_VALUE_UPDATE } from "../Types";
 
 export const valueUpdate = ({index,val}) => {
     return {
@@ -20,14 +20,23 @@ export const selected_Button_update =(btn_id)=>{
   }
 }
 
-export const current_grid_update=(id)=>{
+export const current_grid_update=({id,value})=>{
   const row = (Math.floor(id/10))%10
   const col = id%10
   return{
     type: CURRENT_GRID_UPDATE,
     index: {
-      row:row,
-      col : col
-    }
+      row:row-1,
+      col : col-1
+    },
+    val:value
+  }
+}
+
+export const change_button_lock_status = (new_status)=>{
+  
+  return {
+    type:CHANGE_BUTTON_LOCK_STATUS,
+    val:new_status
   }
 }
