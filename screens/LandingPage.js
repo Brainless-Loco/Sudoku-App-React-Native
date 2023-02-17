@@ -2,13 +2,16 @@ import { StatusBar } from 'expo-status-bar';
 import {StyleSheet, Text, View,Image, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { gridUpdate } from '../redux/actions/Grid_actions';
-import SUDOKU from '../sudoku_maker/sudoku_pattern_generator';
+import { SUDOKU,generate_a_new_pattern } from '../sudoku_maker/sudoku_pattern_generator';
 
 export default function LandingPage({navigation}) {
   const dispatch = useDispatch()
   const sqre_value_update = ({index,val}) => dispatch(valueUpdate({index,val}))
   const update_current_game = (pattern)=>dispatch(gridUpdate(pattern))
-  const new_pattern = SUDOKU
+  const update_everything_for_playzone = ()=>{
+    const new_pattern = generate_a_new_pattern()
+    update_current_game(new_pattern)
+  }
 
   return (
     <View style={styles.container}>
@@ -21,7 +24,7 @@ export default function LandingPage({navigation}) {
       <Pressable
         style={styles.enterPlayzoneBtn}
         onPress={() =>{
-          update_current_game(new_pattern)
+          update_everything_for_playzone()
           navigation.navigate('Playzone')
         }
         }
