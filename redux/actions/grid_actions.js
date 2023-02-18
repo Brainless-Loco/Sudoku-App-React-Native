@@ -1,4 +1,4 @@
-import { CHANGE_BUTTON_LOCK_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, GRID_UPDATE, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, SQUARE_VALUE_UPDATE, UPDATE_SELECTED_SMALL_SQUARE_INDEX } from "../Types";
+import { CHANGE_BUTTON_LOCK_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, GRID_UPDATE, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, SELECTED_SMALL_SQUARE_VALUE, SQUARE_VALUE_UPDATE, UPDATE_SELECTED_SMALL_SQUARE_INDEX } from "../Types";
 
 export const valueUpdate = ({index,val}) => {
     return {
@@ -56,7 +56,7 @@ export const insert_action_history = (id,value)=>{
   }
 };
 
-export const undo_aka_delete_from_action_history = ()=>{
+export const undo_from_action_history = ()=>{
   return{
     type: DELETE_ACTION_HISTORY
   }
