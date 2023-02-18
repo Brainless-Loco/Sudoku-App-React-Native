@@ -2,11 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import SmallSquareBox from './SmallSquareBox';
 
-
-
-
 export default function MediumSquare({selectedBtn,id}) {
-    const SmallSquares=[1,2,3,4,5,6,7,8,9]
     const x=Math.floor((id-1)/3)*3;
     const y=Math.floor(((id%3+(id%3==0)*3)-1)*3)
 
@@ -19,7 +15,7 @@ export default function MediumSquare({selectedBtn,id}) {
             {
               rows.map((row)=>{
                 return cols.map((col)=>{
-                  return <SmallSquareBox selectedBtn={selectedBtn} id={row*10+col} key={row*10+col}/>
+                  return <SmallSquareBox id={row*10+col} key={row*10+col}/>
                 })
               })
             }

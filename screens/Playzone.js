@@ -11,18 +11,23 @@ import { change_button_lock_status } from '../redux/actions/Grid_actions';
 export default function Playzone({ navigation}) {
     
   const dispatch = useDispatch()
-  const lock_status = useSelector(state=>state.is_Num_Button_Locked)
-
+  
   const update_button_lock_status = (status)=> dispatch(change_button_lock_status(status))
-
+  const undo_action = ()=> dispatch()
+  
+  const lock_status = useSelector(state=>state.is_Num_Button_Locked)
+  const locked_index = useSelector(state=>state.selected_small_square_index)
   const selected_Button = useSelector(state => state.selected_Button)
+  const actionHis = useSelector(state=>state.action_history)
   // console.log(grid)
   return (
     <View style={styles.container}>
       <Text>{selected_Button}</Text>
+      <Text>{locked_index}</Text>
+      <Text>{actionHis.length}</Text>
       <BigSquare/>
       <View style={styles.extra_menu}>
-          <FontAwesome5 style={[styles.extra_menu_option]} name='undo-alt' size={20}/>
+          <FontAwesome5  style={[styles.extra_menu_option]} name='undo-alt' size={20}/>
           <FontAwesome5 style={[styles.extra_menu_option,styles.pause_button]} size={20} name='pause'/>
           <Icon style={[styles.extra_menu_option, !lock_status? styles.lock_buttons:styles.unlock_buttons]} onPress={()=>{
             update_button_lock_status(!lock_status)

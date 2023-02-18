@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Button, Pressable } from 'react-native'
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { selected_Button_update } from '../redux/actions/Grid_actions'
+import { useDispatch, useSelector } from 'react-redux'
+import { current_grid_update, selected_Button_update } from '../redux/actions/Grid_actions'
 
 export default function NumberBtnList() {
 
@@ -9,6 +9,10 @@ export default function NumberBtnList() {
   const dispatch = useDispatch()
 
   const update_selected_button = (id) => dispatch(selected_Button_update(id))
+  const square_update = (id,val)=>dispatch(current_grid_update(id,val))
+
+  const selected_index = useSelector(state=>state.selected_small_square_index)
+  const lock_btn_status = useSelector(state=>state.is_Num_Button_Locked)
 
   return (
     <View style={styles.container}>
@@ -18,6 +22,7 @@ export default function NumberBtnList() {
             return <Pressable style={styles.btn} key={num} 
               onPress={()=>{
                   update_selected_button(num)
+                  if(!lock_btn_status && selected_index)  square_update(selected_index,num)
                   }} >
                 <Text style={styles.text}>{num}</Text>
               </Pressable>
