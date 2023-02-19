@@ -1,15 +1,45 @@
-import { CHANGE_BUTTON_LOCK_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, GRID_UPDATE, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, SELECTED_SMALL_SQUARE_VALUE, SQUARE_VALUE_UPDATE, UPDATE_SELECTED_SMALL_SQUARE_INDEX } from "../Types";
+import { CHANGE_BUTTON_LOCK_STATUS, CHANGE_PAUSE_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, FORM_THE_GAME_PATTERN, GRID_UPDATE, INCREASE_MISTAKE_COUNT, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, UPDATE_SELECTED_SMALL_SQUARE_INDEX } from "../Types";
 
-export const valueUpdate = ({index,val}) => {
-    return {
-      type: SQUARE_VALUE_UPDATE,
-      payload:{index,val}
-    };
-};
+var rn = require('random-number');
+
 export const gridUpdate = (grid) =>{
   return {
     type:GRID_UPDATE,
     new_game: grid
+  }
+}
+
+export const game_pattern_formation = (pattern)=>{
+
+  var genTotal = rn.generator({
+    min:  35,
+    max:  40,
+    integer: true
+  });
+  var genIndex = rn.generator({
+    min: 11,
+    max: 99,
+    integer:true
+  });
+  var is_editable_matrix = Array.from(Array(9), () =>  new Array(9).fill(false))   
+
+  var total_erase = genTotal()
+  while(total_erase){
+    var id = genIndex();
+    var row = ((Math.floor(id/10))%10)-1
+    var col = (id%10)-1
+
+    if(pattern[row][col]){
+      total_erase--;
+      pattern[row][col]=0;
+      is_editable_matrix[row][col]=true;
+    }
+  }
+
+  return{
+    type:FORM_THE_GAME_PATTERN,
+    game:pattern,
+    is_editable:is_editable_matrix
   }
 }
 
@@ -21,8 +51,8 @@ export const selected_Button_update =(btn_id)=>{
 }
 
 export const current_grid_update=(id,value)=>{
-  const row = (Math.floor(id/10))%10
-  const col = id%10
+  var row = (Math.floor(id/10))%10
+  var col = id%10
   return{
     type: CURRENT_GRID_UPDATE,
     index: {
@@ -31,7 +61,8 @@ export const current_grid_update=(id,value)=>{
     },
     val:value
   }
-}
+};
+
 
 export const change_button_lock_status = (new_status)=>{
   
@@ -62,3 +93,14 @@ export const undo_from_action_history = ()=>{
   }
 }
 
+export const increase_mistake_count = ()=>{
+  return{
+    type:INCREASE_MISTAKE_COUNT
+  }
+}
+
+export const change_pause_status = ()=>{
+  return {
+    type:CHANGE_PAUSE_STATUS
+  }
+}

@@ -1,15 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
 import {StyleSheet, Text, View,Image, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { change_button_lock_status, gridUpdate } from '../redux/actions/Grid_actions';
+import { game_pattern_formation, gridUpdate } from '../redux/actions/Grid_actions';
 import { generate_a_new_pattern } from '../sudoku_maker/sudoku_pattern_generator';
 
 export default function LandingPage({navigation}) {
   const dispatch = useDispatch()
+
   const update_current_game = (pattern)=>dispatch(gridUpdate(pattern))
+  const form_new_game = (grid)=>dispatch(game_pattern_formation(grid))
+
+
   const update_everything_for_playzone = ()=>{
-    const new_pattern = generate_a_new_pattern()
+    var new_pattern = generate_a_new_pattern()
+    const temp = new_pattern.map((arr)=>arr.slice())
+
+    form_new_game(temp)
     update_current_game(new_pattern)
+
   }
 
   return (
