@@ -48,7 +48,7 @@ export default function Playzone({ navigation}) {
       <View style={styles.informations_container}>
 
         <Text style={[styles.an_information,styles.text_red]}>Mistakes: {mistake_count} / 5</Text>
-        <Text style={styles.an_information}>{if_win?'true':'false'}</Text>
+        <Text style={styles.an_information}>{}</Text>
         <Text style={[styles.an_information,styles.timer_text]}>
           {minute<10 && '0'}{minute} : {second<10 && '0'}{second}
         </Text>

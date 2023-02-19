@@ -13,7 +13,7 @@ export default function LandingPage({navigation}) {
 
   const update_everything_for_playzone = ()=>{
     var new_pattern = generate_a_new_pattern()
-    const temp = new_pattern.map((arr)=>arr.slice())
+    const temp = new_pattern.map((arr)=> arr.slice())
 
     form_new_game(temp)
     update_current_game(new_pattern)

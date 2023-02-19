@@ -18,12 +18,13 @@ export default function SmallSquareBox({ id }) {
 
   const correct_value = useSelector(state => state.grid[row][col]);
   const value = useSelector(state => state.current_playing_grid[row][col]);
-
   const is_locked = useSelector(state => state.is_Num_Button_Locked)
   const locked_button_key = useSelector(state => state.selected_Button)
   const locked_square = useSelector(state => state.selected_small_square_index)
   const is_editable_square = useSelector(state => state.is_editable[row][col])
   const is_pause = useSelector(state=>state.is_paused)
+
+  // console.log(locked_button_key+' '+value)
 
 
   return (
@@ -34,18 +35,18 @@ export default function SmallSquareBox({ id }) {
           if (is_locked && locked_button_key) {
             insert_an_action(id, value)
             square_update(id, locked_button_key)
-            // if(locked_button_key!=correct_value) did_a_mistake()
+            if(locked_button_key!=correct_value) did_a_mistake()
           }
         }
         else {
           select_this_square_for_update(0)
         }
       }}>
-      <Text style={[is_editable_square ?
-        correct_value==value? styles.correct_value:styles.incorrect_value
-        : locked_square == id ?
-          styles.selected_text
-          : styles.unselected_text]} >{value && !is_pause ? value : ''}</Text>
+      <Text style={[(is_locked && id!=locked_square && value==locked_button_key)? styles.locked_text:
+      is_editable_square ?
+        correct_value==value ? 
+          styles.correct_value:styles.incorrect_value
+        : is_locked && value==locked_button_key? styles.locked_text:styles.unselected_text]} >{value && !is_pause ? value : ''}</Text>
       <StatusBar style="auto" />
     </Pressable>
   );
@@ -86,9 +87,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   correct_value: {
-    color: '#03fc13'
+    color: '#03fc13',
+    fontWeight: 'bold',
   },
   incorrect_value: {
-    color:'red'
+    color:'#42282a',
+    fontWeight: 'bold',
+  },
+  locked_text:{
+    color:'#000099',
+    fontWeight: 'bold',
   }
 });

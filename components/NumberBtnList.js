@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Button, Pressable } from 'react-native'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { current_grid_update, increase_mistake_count, insert_action_history, selected_Button_update } from '../redux/actions/Grid_actions'
+import { current_grid_update, increase_mistake_count, insert_action_history, selected_Button_update, update_selected_small_square_index } from '../redux/actions/Grid_actions'
 
 export default function NumberBtnList() {
 
@@ -12,6 +12,7 @@ export default function NumberBtnList() {
   const square_update = (id,val)=>dispatch(current_grid_update(id,val))
   const insert_an_action = (id,val)=>dispatch(insert_action_history(id,val))
   const did_a_mistake = ()=>dispatch(increase_mistake_count())
+  const select_this_square_for_update = (id) => dispatch(update_selected_small_square_index(id))
 
   
   const selected_index = useSelector(state=>state.selected_small_square_index)
@@ -44,6 +45,9 @@ export default function NumberBtnList() {
                         insert_an_action(selected_index,selected_index_value)
                         square_update(selected_index,num)
                         if(num!=correct_value) did_a_mistake()
+                      }
+                      else{
+                        select_this_square_for_update(0)
                       }
                       }} >
                     <Text style={styles.text}>{num}</Text>
