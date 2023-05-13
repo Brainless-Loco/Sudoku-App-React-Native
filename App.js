@@ -1,6 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import { StyleSheet, Text, View,Image } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Playzone from './screens/Playzone';
 import LandingPage from './screens/LandingPage';
 
@@ -8,6 +7,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
 import store  from './redux/store';
+import LogIn from './screens/LogIn';
+import SignUp from './screens/SignUp';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -16,6 +17,16 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+        <Stack.Screen
+            name="LogIn"
+            component={LogIn}
+            options={{headerShown:false}}
+          />
+          <Stack.Screen
+            name="SignUp"
+            component={SignUp}
+            options={{headerShown:false}}
+          />
           <Stack.Screen
             name="LandingPage"
             component={LandingPage}

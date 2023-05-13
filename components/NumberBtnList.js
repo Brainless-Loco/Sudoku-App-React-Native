@@ -20,6 +20,7 @@ export default function NumberBtnList() {
   const lock_btn_status = useSelector(state=>state.is_Num_Button_Locked)
   const locked_btn_id = useSelector(state=>state.selected_Button)
   const if_win = useSelector(state=>state.matched_all_squares)
+  const is_pause = useSelector(state=>state.is_paused)
 
   const GRID = useSelector(state=>state.grid)
   const GAME = useSelector(state=>state.current_playing_grid)
@@ -40,6 +41,7 @@ export default function NumberBtnList() {
                 lock_btn_status && locked_btn_id!=num && styles.unlocked_btn,
                 !lock_btn_status && styles.locked_btn]} key={num} 
                   onPress={()=>{
+                    if(!is_pause){
                       update_selected_button(num)
                       if(!lock_btn_status && selected_index) {
                         insert_an_action(selected_index,selected_index_value)
@@ -49,6 +51,7 @@ export default function NumberBtnList() {
                       else{
                         select_this_square_for_update(0)
                       }
+                    }
                       }} >
                     <Text style={styles.text}>{num}</Text>
                   </Pressable>

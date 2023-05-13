@@ -5,10 +5,10 @@ import NumberBtnList from '../components/NumberBtnList';
 import { useDispatch, useSelector } from 'react-redux'
 import Icon  from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { change_button_lock_status,change_pause_status, undo_from_action_history } from '../redux/actions/Grid_actions';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 
@@ -29,12 +29,14 @@ export default function Playzone({ navigation}) {
   const [minute,setMinute] = useState(0)
   const [second,setSecond] = useState(0)
 
-  !is_pause && setTimeout(()=>{
-    if(second == 59){
-      setSecond(0)
-      setMinute(minute+1)
+  setTimeout(()=>{
+    if(!is_pause ){
+      if(second == 59){
+        setSecond(0)
+        setMinute(minute+1)
+      }
+      else setSecond(second+1)
     }
-    else setSecond(second+1)
   },1000)
 
   useEffect(()=>{
@@ -78,9 +80,15 @@ export default function Playzone({ navigation}) {
               <View style ={{width: '90%', height:"45%",}}>
                   <Image
                     style ={{width: '100%', height:"100%",resizeMode:'contain'}}
+                    // source={
+                    //   (if_win && mistake_count<5)? require("../assets/gifs/win_trophy.gif")
+                    //   : require("../assets/gifs/sad_emoji.gif")
+
+                    // }
                     source={{ uri : 
                       // "https://media.geeksforgeeks.org/wp-content/uploads/20220221170632/ezgifcomgifmaker1.gif"
-                      (if_win && mistake_count<5)?"https://media.giphy.com/media/dxIWYNNVCxFXdP76XE/giphy.gif":"https://media.giphy.com/media/h4OGa0npayrJX2NRPT/giphy.gif"
+                      (if_win && mistake_count<5)?"https://media.giphy.com/media/dxIWYNNVCxFXdP76XE/giphy.gif"
+                      :"https://media.giphy.com/media/h4OGa0npayrJX2NRPT/giphy.gif"
 
                     }}
                   />
@@ -88,11 +96,18 @@ export default function Playzone({ navigation}) {
               <View style ={{width: '100%', height:"22%"}}>
                 <Image
                     style ={{width: '100%', height:"100%",resizeMode:'cover'}} 
+                    // source={
+                    // (if_win && mistake_count<5)?
+                    // require("../assets/gifs/congrats.gif"):
+                    // require("../assets/gifs/oops.gif")
+                    // }
+
                     source={{uri:
-                    (if_win && mistake_count<5)?
-                    "https://media.giphy.com/media/kh6WSohdbYXQcMM9lu/giphy.gif":
-                    "https://media.giphy.com/media/PBDlAUpB9sN6pzobjT/giphy.gif"
-                    }}/>
+                      (if_win && mistake_count<5)?
+                      "https://media.giphy.com/media/kh6WSohdbYXQcMM9lu/giphy.gif":
+                      "https://media.giphy.com/media/PBDlAUpB9sN6pzobjT/giphy.gif"
+                      }}
+                    />
               </View>
 
               {(if_win && mistake_count<5) ? 
@@ -115,6 +130,7 @@ export default function Playzone({ navigation}) {
                 <Pressable
                   style={[styles.modal_button]}
                   onPress={()=>{
+                    AsyncStorage.setItem('has_saved_game','0')
                     navigation.navigate('LandingPage')
                   }}
                   >

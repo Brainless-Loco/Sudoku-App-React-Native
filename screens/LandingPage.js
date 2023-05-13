@@ -3,6 +3,9 @@ import {StyleSheet, Text, View,Image, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { game_pattern_formation, gridUpdate } from '../redux/actions/Grid_actions';
 import { generate_a_new_pattern } from '../sudoku_maker/sudoku_pattern_generator';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 export default function LandingPage({navigation}) {
   const dispatch = useDispatch()
@@ -10,13 +13,27 @@ export default function LandingPage({navigation}) {
   const update_current_game = (pattern)=>dispatch(gridUpdate(pattern))
   const form_new_game = (grid)=>dispatch(game_pattern_formation(grid))
 
+  const [has_paused_game,set_paused_game_check] = useState(false)
 
-  const update_everything_for_playzone = ()=>{
+  const is_there_any_paused_game = async ()=>{
+    var ret = await AsyncStorage.getItem('has_saved_game')
+    set_paused_game_check((ret === '1'))
+  }
+
+  useEffect(()=>{
+    is_there_any_paused_game()
+  },[])
+  
+
+  const current_grid = useSelector(state=>state.current_playing_grid)
+  const right_value = useSelector(state=>state.grid)
+
+  const update_everything_for_playzone = async ()=>{
     var new_pattern = generate_a_new_pattern()
     const temp = new_pattern.map((arr)=> arr.slice())
-
     form_new_game(temp)
     update_current_game(new_pattern)
+
 
   }
 
@@ -30,12 +47,23 @@ export default function LandingPage({navigation}) {
       <Text style={styles.welcomeText}>&nbsp;</Text>
       <Pressable
         style={styles.enterPlayzoneBtn}
-        onPress={() =>{
+        onPress={ async () =>{
           update_everything_for_playzone()
           navigation.navigate('Playzone')
         }
         }
         ><Text style={styles.btnText}>Enter the Playzone</Text></Pressable>
+        
+        
+        {
+        has_paused_game&&<Pressable
+        style={styles.enterPlayzoneBtn}
+        onPress={() =>{
+          update_everything_for_playzone()
+          navigation.navigate('Playzone')
+        }
+        }
+        ><Text style={styles.btnText}> Continue Previous </Text></Pressable>}
       <StatusBar style="auto" />
     </View>
   );
@@ -63,6 +91,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 8,
     backgroundColor: 'red',
+    margin:8,
   },
   btnText:{
     color:'white',

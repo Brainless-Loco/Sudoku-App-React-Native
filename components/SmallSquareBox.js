@@ -32,7 +32,7 @@ export default function SmallSquareBox({ id }) {
       onPress={() => {
         if (is_editable_square) {
           select_this_square_for_update(id)
-          if (is_locked && locked_button_key) {
+          if (is_locked && locked_button_key && !is_pause) {
             insert_an_action(id, value)
             square_update(id, locked_button_key)
             if(locked_button_key!=correct_value) did_a_mistake()
