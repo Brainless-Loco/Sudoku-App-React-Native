@@ -15,10 +15,10 @@ const initialState = {
     selected_small_square_value:0,
     matched_all_squares:false,
     currentPlayer_info:{
-      userRef:'',
-      userProfilePic:'',
+      userRef:'eeZ8LUHQIkrd3K0XqIFv',
+      userProfilePic:'images/avatar.png',
       userName:'',
-      userEmail:''
+      userEmail:'tonmoy'
     }
 };
 

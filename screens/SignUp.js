@@ -65,7 +65,7 @@ export default function SignUp({navigation}) {
             const docRef = await addDoc(usersRef,{
                 "userName":userName,
                 "email":email,
-                "dp_url":"",
+                "dp_url":"images/avatar.png",
                 "joiningDate": Timestamp.fromDate(new Date()),
                 'birthday':birthDate,
                 "user_id":''

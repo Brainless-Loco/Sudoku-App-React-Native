@@ -23,6 +23,8 @@ export default function AboutSudokuForever() {
 
 
     const {userRef} = useSelector(state=>state.currentPlayer_info)
+
+
     const reviewCheckQuery = query(reviewColRef, where('userRef', '==', userRef));
 
     const checkIfUserHasReviewed = ()=>{
