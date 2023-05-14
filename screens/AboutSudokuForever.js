@@ -3,10 +3,10 @@ import React from 'react'
 import { AirbnbRating, Rating } from 'react-native-ratings';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUserInfo } from '../redux/actions/Grid_actions';
 import { db } from '../firebase/firebaseConfig';
 import { addDoc, collection, query, where,getDocs, Timestamp } from 'firebase/firestore/lite';
 import { useEffect } from 'react';
+import MapView, { Marker } from 'react-native-maps';
 
 
 
@@ -25,27 +25,28 @@ export default function AboutSudokuForever() {
 
     const {userRef} = useSelector(state=>state.currentPlayer_info)
 
-
+    const getAverageRating = async()=>{
+        const querySnapshot = await getDocs(reviewColRef);
+        let totalRating = 0;
+        let reviewCount = 0;
+        querySnapshot.forEach((doc) => {
+            const reviewData = doc.data();
+        totalRating += reviewData.rating;
+        reviewCount++;
+        });
+        const avg = totalRating / reviewCount;
+        setaverageRating(avg)
+    }
 
     useEffect(() => {
-        const getAverageRating = async()=>{
-            const querySnapshot = await getDocs(reviewColRef);
-            let totalRating = 0;
-            let reviewCount = 0;
-            querySnapshot.forEach((doc) => {
-                const reviewData = doc.data();
-            totalRating += reviewData.rating;
-            reviewCount++;
-            });
-            const avg = totalRating / reviewCount;
-            setaverageRating(avg)
-        }
         getAverageRating()
     }, [])
     
 
 
     const submitButtonAction = async ()=>{
+        getAverageRating()
+        console.log(averageRating)
         try{
             const docRef = await addDoc(reviewColRef,{
                 'date': Timestamp.fromDate(new Date()),
@@ -53,7 +54,6 @@ export default function AboutSudokuForever() {
                 'userRef':'XXXXXXX',
                 'review':review
             });
-            console.log("DONE"+docRef)
         }
         catch(e){
             console.log(e)
@@ -64,13 +64,31 @@ export default function AboutSudokuForever() {
   return (
     <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
+            <Text style={{marginTop:15,textAlign:'center',marginTop:50,paddingBottom:20,fontSize:28,color:'#e80505',fontWeight:'600'}}>About Sudoku Forever</Text>
             <Image
                 style={styles.logo}
                 source={require('../assets/logo.png')}
             />
-            <View aria-disabled={true} style={[styles.reviewingOptionContainer,{margin:10,overflow:'hidden',display:'flex',justifyContent:'center',alignItems:'center',}]}>
-                <Rating showRating={false} fractions="{1}" ratingCount={10} ratingTextColor='$e80505' startingValue={averageRating}  imageSize={30}/>
+            <View style={[styles.reviewingOptionContainer,{margin:10,overflow:'hidden',display:'flex',justifyContent:'center',alignItems:'center',}]}>
+                <Rating showRating={false} fractions="{1}" ratingCount={10}  startingValue={averageRating} readonly  imageSize={30}/>
             </View>
+            <View style={styles.mapViewContainer}>
+                    <Text style={styles.aboutText}>HeadOffice</Text>
+                    <MapView style={{flex:1}}
+                        initialRegion={{
+                            latitude: 22.4716,
+                            longitude: 91.7877,
+                            latitudeDelta: 0.0222,
+                            longitudeDelta: 0.0921,
+                        }}
+                    >
+                        <Marker
+                            coordinate={{ latitude: 22.4716, longitude: 91.7877 }}
+                            title="Sudoku Forever"
+                            description="Headoffice of Sudoku Forever"
+                            />
+                    </MapView>
+                </View>
             <View style={styles.afterLogoView}>
                 <Text style={styles.aboutText}>
                     Welcome to Sudoku Forever, the ultimate Sudoku game app! Dive into the addictive world of Sudoku and challenge yourself with puzzles of varying difficulties. Sharpen your logical thinking, improve your problem-solving skills, and have endless fun along the way!
@@ -81,6 +99,8 @@ export default function AboutSudokuForever() {
                 <Text style={styles.aboutText}>
                     But that's not all! Sudoku Forever also provides valuable insights and strategies through our informative blogs. Learn the best techniques to solve puzzles efficiently, unravel the secrets of advanced solving methods, and enhance your overall gameplay. Stay up to date with the latest Sudoku trends and gain an edge over your opponents.
                 </Text>
+                
+                
                 { userRef==='' &&
                     <View style={styles.reviewingOptionContainer}>
                         <Text style={{color:'#e80505',fontWeight:'500',fontSize:19,textAlign:'center',marginBottom:5}}>Review Sudoku Forever</Text>
@@ -92,7 +112,7 @@ export default function AboutSudokuForever() {
                             defaultRating={rating}
                             size={22}
                             reviewSize={35}
-                            onFinishRating={(rating)=>{setrating(rating); console.log(rating)}}
+                            onFinishRating={(rating)=>{setrating(rating);}}
                         />
                         <TextInput value={review} placeholder='Write a small review' style={styles.input} onChangeText={(text)=>{setreview(text)}}>
                             
@@ -103,6 +123,9 @@ export default function AboutSudokuForever() {
                     </View>
                 }
             </View>
+            <Text style={{margin:15,paddingBottom:10, textAlign:'center',fontSize:20,color:'#e80505', fontWeight:'bold',fontSize:25}}>
+                    - Brainless Loco -
+            </Text>
         </ScrollView>
     </View>
   )
@@ -121,7 +144,6 @@ const styles = StyleSheet.create({
         height:150,
         width:150,
         marginBottom:20,
-        marginTop:80
     },
     afterLogoView:{
         padding:10,
@@ -132,8 +154,7 @@ const styles = StyleSheet.create({
         fontWeight:'500'
     },
     reviewingOptionContainer:{
-        marginBottom:20,
-        marginTop:10,
+        marginTop:20,
         padding:10,
         borderWidth:2,
         borderColor:'#e80505',
@@ -161,5 +182,14 @@ const styles = StyleSheet.create({
         borderColor:'#e80505',
         borderRadius:6,
         marginBottom:10
+    },
+    mapViewContainer:{
+        marginVertical:10,
+        marginHorizontal:8,
+        padding:10,
+        borderWidth:2,
+        borderColor:'#e80505',
+        borderRadius:10,
+        height:350
     }
 })
