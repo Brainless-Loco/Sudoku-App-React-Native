@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Image, StyleSheet, Pressable, TouchableOpacity,
 import React from 'react'
 import { AirbnbRating, Rating } from 'react-native-ratings';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { db } from '../firebase/firebaseConfig';
 import { addDoc, collection, query, where,getDocs, Timestamp } from 'firebase/firestore/lite';
 import { useEffect } from 'react';
@@ -12,18 +12,33 @@ import MapView, { Marker } from 'react-native-maps';
 
 export default function AboutSudokuForever() {
 
-
-    const dispatch =useDispatch()
     
     const [averageRating, setaverageRating] = useState(10)
     const [review, setreview] = useState('')
     const [rating, setrating] = useState(5)
+    const [hasGivenReview,sethasGivenReview] = useState(false)
     
     
     const reviewColRef = collection(db,'reviews')
 
 
     const {userRef} = useSelector(state=>state.currentPlayer_info)
+    const reviewCheckQuery = query(reviewColRef, where('userRef', '==', userRef));
+
+    const checkIfUserHasReviewed = ()=>{
+        getDocs(reviewCheckQuery)
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                sethasGivenReview(true)
+            } else {
+                sethasGivenReview(false)
+            }
+        })
+        .catch((error) => {
+            console.error('Error getting review documents:', error);
+        });
+    }
+
 
     const getAverageRating = async()=>{
         const querySnapshot = await getDocs(reviewColRef);
@@ -40,13 +55,14 @@ export default function AboutSudokuForever() {
 
     useEffect(() => {
         getAverageRating()
+        checkIfUserHasReviewed()
     }, [])
     
 
 
     const submitButtonAction = async ()=>{
         getAverageRating()
-        console.log(averageRating)
+        sethasGivenReview(true)
         try{
             const docRef = await addDoc(reviewColRef,{
                 'date': Timestamp.fromDate(new Date()),
@@ -54,6 +70,7 @@ export default function AboutSudokuForever() {
                 'userRef':'XXXXXXX',
                 'review':review
             });
+            sethasGivenReview(true)
         }
         catch(e){
             console.log(e)
@@ -101,7 +118,7 @@ export default function AboutSudokuForever() {
                 </Text>
                 
                 
-                { userRef==='' &&
+                { hasGivenReview ==false &&
                     <View style={styles.reviewingOptionContainer}>
                         <Text style={{color:'#e80505',fontWeight:'500',fontSize:19,textAlign:'center',marginBottom:5}}>Review Sudoku Forever</Text>
                         <AirbnbRating
@@ -114,7 +131,7 @@ export default function AboutSudokuForever() {
                             reviewSize={35}
                             onFinishRating={(rating)=>{setrating(rating);}}
                         />
-                        <TextInput value={review} placeholder='Write a small review' style={styles.input} onChangeText={(text)=>{setreview(text)}}>
+                        <TextInput value={review} multiline={true} placeholder='Write a small review' style={styles.input} onChangeText={(text)=>{setreview(text)}}>
                             
                         </TextInput>
                         <TouchableOpacity onPress={()=>submitButtonAction()} style={styles.submitButton}>
@@ -161,7 +178,7 @@ const styles = StyleSheet.create({
         borderRadius:10
     },
     input: {
-        minHeight: 48,
+        minHeight:50,
         borderRadius: 5,
         overflow: 'hidden',
         backgroundColor: '#f0f0f0',
