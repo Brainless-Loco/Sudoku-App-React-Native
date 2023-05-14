@@ -3,7 +3,7 @@ import {StyleSheet, Text, View,Image, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { game_pattern_formation, gridUpdate } from '../redux/actions/Grid_actions';
 import { generate_a_new_pattern } from '../sudoku_maker/sudoku_pattern_generator';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+// import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect } from 'react';
 import { useState } from 'react';
 
@@ -16,7 +16,8 @@ export default function LandingPage({navigation}) {
   const [has_paused_game,set_paused_game_check] = useState(false)
 
   const is_there_any_paused_game = async ()=>{
-    var ret = await AsyncStorage.getItem('has_saved_game')
+    // var ret = await AsyncStorage.getItem('has_saved_game')
+    var ret = '1'
     set_paused_game_check((ret === '1'))
   }
 

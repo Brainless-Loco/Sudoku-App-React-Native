@@ -1,30 +1,56 @@
 import React, { useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
-import { auth } from '../firebase/firebaseConfig';
+import { auth, db } from '../firebase/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useDispatch } from 'react-redux';
+import { updateUserInfo } from '../redux/actions/Grid_actions';
+import { collection, query, where } from "firebase/firestore";
 
 export default function LogIn({navigation}) {
+
+    const dispatch = useDispatch()
+
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [errorMessage, seterrorMessage] = useState('')
+    
+
+    const update_user_info = (info)=>dispatch(updateUserInfo(info))
+
+
+
+    
+
+
 
     const loginUser = async () => {
         try {
-          await signInWithEmailAndPassword(auth, email, password);
+            await signInWithEmailAndPassword(auth, email, password);
+            const usersRef = collection(db, "users");
+            const q = query(usersRef, where("email", "==", email));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+            });
+
+
             alert("Logged In")
-        //   navigation.navigate('LandingPage')
-        } catch (e) {
-          if(e.code==='auth/wrong-password') seterrorMessage("Wrong Password")
-          if(e.code==='auth/user-not-found') seterrorMessage('No account matches this email')
-          else console.log(e)
+            
+            
+        } 
+        catch (e) {
+            if(e.code==='auth/wrong-password') seterrorMessage("Wrong Password")
+            if(e.code==='auth/user-not-found') seterrorMessage('No account matches this email')
+            else console.log(e)
         }
       };
 
     const onLoginPress = () => {
         loginUser()
-        // navigation.navigate('LandingPage')
+        navigation.navigate('LandingPage')
     }
 
     return (

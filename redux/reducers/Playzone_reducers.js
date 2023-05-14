@@ -1,4 +1,5 @@
-import { CHANGE_BUTTON_LOCK_STATUS, CHANGE_PAUSE_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, FORM_THE_GAME_PATTERN, GRID_UPDATE, INCREASE_MISTAKE_COUNT, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, UPDATE_SELECTED_SMALL_SQUARE_INDEX } from "../Types";
+import { CHANGE_BUTTON_LOCK_STATUS, CHANGE_PAUSE_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, FORM_THE_GAME_PATTERN, GRID_UPDATE, INCREASE_MISTAKE_COUNT, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, UPDATE_SELECTED_SMALL_SQUARE_INDEX, UPDATE_USER_INFO } from "../Types";
+// import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 const initialState = {
@@ -13,6 +14,12 @@ const initialState = {
     selected_small_square_index:0,
     selected_small_square_value:0,
     matched_all_squares:false,
+    currentPlayer_info:{
+      userRef:'',
+      userProfilePic:'',
+      userName:'',
+      userEmail:''
+    }
 };
 
 export default (state = initialState, action) => {
@@ -74,8 +81,8 @@ export default (state = initialState, action) => {
             temp_grid[row][col]=action.val*1
             var temp = (JSON.stringify(temp_grid)==JSON.stringify(state.grid))
 
-            AsyncStorage.setItem('current_playing_game',temp_grid.toString())
-            if(temp) AsyncStorage.setItem('has_saved_game','0')
+            // AsyncStorage.setItem('current_playing_game',temp_grid.toString())
+            // if(temp) AsyncStorage.setItem('has_saved_game','0')
             return {
               ...state,
               current_playing_grid:temp_grid,
@@ -114,13 +121,13 @@ export default (state = initialState, action) => {
       ///end of undo button reducers
       
         case INCREASE_MISTAKE_COUNT:{
-          AsyncStorage.setItem('mistake',(state.mistakes+1).toString())
-          if(state.mistakes==4){
-            AsyncStorage.setItem('current_playing_game','')
-            AsyncStorage.setItem('grid','')
-            AsyncStorage.setItem('has_saved_game','0')
-            AsyncStorage.setItem("is_editable_matrix",'');  
-          }
+          // AsyncStorage.setItem('mistake',(state.mistakes+1).toString())
+          // if(state.mistakes==4){
+          //   AsyncStorage.setItem('current_playing_game','')
+          //   AsyncStorage.setItem('grid','')
+          //   AsyncStorage.setItem('has_saved_game','0')
+          //   AsyncStorage.setItem("is_editable_matrix",'');  
+          // }
           return{
             ...state,
             mistakes:state.mistakes+1
@@ -133,6 +140,17 @@ export default (state = initialState, action) => {
           return{
             ...state,
             is_paused:!state.is_paused
+          }
+        }
+
+        case UPDATE_USER_INFO:{
+          const {userRef,userEmail,userName,userProfilePic}=action.userInfo
+          return{
+            ...state,
+            userRef:userRef,
+            userEmail:userEmail,
+            userName:userName,
+            userProfilePic:userProfilePic
           }
         }
 

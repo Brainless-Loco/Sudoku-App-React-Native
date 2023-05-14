@@ -8,7 +8,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { change_button_lock_status,change_pause_status, undo_from_action_history } from '../redux/actions/Grid_actions';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+// import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 
@@ -130,7 +130,7 @@ export default function Playzone({ navigation}) {
                 <Pressable
                   style={[styles.modal_button]}
                   onPress={()=>{
-                    AsyncStorage.setItem('has_saved_game','0')
+                    // AsyncStorage.setItem('has_saved_game','0')
                     navigation.navigate('LandingPage')
                   }}
                   >

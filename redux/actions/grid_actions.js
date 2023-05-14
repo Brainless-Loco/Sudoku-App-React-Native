@@ -1,6 +1,6 @@
-import { CHANGE_BUTTON_LOCK_STATUS, CHANGE_PAUSE_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, FORM_THE_GAME_PATTERN, GRID_UPDATE, INCREASE_MISTAKE_COUNT, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, UPDATE_SELECTED_SMALL_SQUARE_INDEX } from "../Types";
+import { CHANGE_BUTTON_LOCK_STATUS, CHANGE_PAUSE_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, FORM_THE_GAME_PATTERN, GRID_UPDATE, INCREASE_MISTAKE_COUNT, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, UPDATE_SELECTED_SMALL_SQUARE_INDEX, UPDATE_USER_INFO } from "../Types";
 // import {AsyncStorage} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+// import AsyncStorage from '@react-native-async-stora ync-storage'
 
 
 var rn = require('random-number');
@@ -26,8 +26,8 @@ export const game_pattern_formation = (pattern)=>{
   });
   var is_editable_matrix = Array.from(Array(9), () =>  new Array(9).fill(false))
 
-  AsyncStorage.setItem("has_saved_game",'1')
-  AsyncStorage.setItem("grid",pattern.toString());   
+  // AsyncStorage.setItem("has_saved_game",'1')
+  // AsyncStorage.setItem("grid",pattern.toString());   
 
   var total_erase = genTotal()
   while(total_erase){
@@ -44,8 +44,8 @@ export const game_pattern_formation = (pattern)=>{
 
 
   
-  AsyncStorage.setItem('current_playing_game',pattern.toString());
-  AsyncStorage.setItem("is_editable_matrix",is_editable_matrix.toString());  
+  // AsyncStorage.setItem('current_playing_game',pattern.toString());
+  // AsyncStorage.setItem("is_editable_matrix",is_editable_matrix.toString());  
 
   return{
     type:FORM_THE_GAME_PATTERN,
@@ -113,5 +113,12 @@ export const increase_mistake_count = ()=>{
 export const change_pause_status = ()=>{
   return {
     type:CHANGE_PAUSE_STATUS
+  }
+}
+
+export const updateUserInfo = (info)=>{
+  return{
+    type:UPDATE_USER_INFO,
+    userInfo:info
   }
 }

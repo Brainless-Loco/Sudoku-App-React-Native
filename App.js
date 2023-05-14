@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import store  from './redux/store';
 import LogIn from './screens/LogIn';
 import SignUp from './screens/SignUp';
+import AboutSudokuForever from './screens/AboutSudokuForever';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -17,6 +18,12 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+        <Stack.Screen
+            name="About"
+            component={AboutSudokuForever}
+            options={{headerShown:false}}
+          />
+
         <Stack.Screen
             name="LogIn"
             component={LogIn}
@@ -30,7 +37,7 @@ export default function App() {
           <Stack.Screen
             name="LandingPage"
             component={LandingPage}
-            options={{ title: 'Sudoku Forever' }}
+            options={{ headerShown:false }}
           />
           <Stack.Screen name="Playzone" component={Playzone} />
         </Stack.Navigator>
