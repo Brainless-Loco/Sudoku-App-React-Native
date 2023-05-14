@@ -12,6 +12,8 @@ import SignUp from './screens/SignUp';
 import AboutSudokuForever from './screens/AboutSudokuForever';
 import HowtoPlay from './screens/HowtoPlay';
 import Profile from './screens/Profile';
+import AllBlogs from './screens/AllBlogs';
+import ABlog from './screens/ABlog';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -20,6 +22,16 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+        <Stack.Screen
+            name="AllBlogLists"
+            component={AllBlogs}
+            options={{headerShown:false}}
+          />
+        <Stack.Screen
+          name="ABlog"
+          component={ABlog}
+          options={{headerShown:false}}
+        />
         <Stack.Screen
             name="Profile"
             component={Profile}
