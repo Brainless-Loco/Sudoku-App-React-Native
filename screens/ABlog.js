@@ -169,7 +169,7 @@ const BlogUI = ({ navigation, route }) => {
         <Image source={{ uri: getImageUrlToShow(blogData.profilePicUrl) }} style={styles.authorImage} />
         <View style={styles.authorInfo}>
           <Text style={styles.authorName}>{blogData.username}</Text>
-          <Text style={styles.date}>{blogData.date}</Text>
+          <Text style={styles.date}>{blogData.date.slice(0,5)+' '+blogData.date.slice(8)}</Text>
         </View>
       </View>
       
@@ -184,7 +184,7 @@ const BlogUI = ({ navigation, route }) => {
           {
             likes.includes(userRef)==true?
               <AntDesign name="like1" size={20} color="blue" />:
-              <Feather name="thumbs-up" size={20} color="blue" />
+              <Feather name="thumbs-up" size={20} color="green" />
           }
           <Text style={styles.likeDislikeCount}>({likes.length})</Text>
         </TouchableOpacity>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
 import BlogListItem from '../components/BlogsListItem';
-import { Timestamp, addDoc, collection, doc, updateDoc,query, where,getDocs } from 'firebase/firestore/lite';
+import { Timestamp, addDoc, collection, doc, updateDoc,query, where,getDocs, orderBy, limit, getDoc, startAfter } from 'firebase/firestore/lite';
 import { db } from '../firebase/firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons';
 
 
 const BlogList = ({navigation}) => {
@@ -33,6 +34,9 @@ const BlogList = ({navigation}) => {
   ];
 
   const [blogsList, setblogsList] = useState([])
+  const [lastBlogRef, setlastBlogRef] = useState(null)
+  const [endOfAllBlogs, setendOfAllBlogs] = useState(false)
+  const [loading, setloading] = useState(false)
 
   const fetchBlogs = async ()=>{
     const blogsRef = collection(db, 'blogs');
@@ -45,15 +49,72 @@ const BlogList = ({navigation}) => {
     setblogsList(blogs)
   }
 
+  const FetchFewBlogs = async () => {
+    try {
+      setloading(true)
+      const blogsRef = collection(db, 'blogs');
+      let blogQuery = query(blogsRef, orderBy('blogRef'), limit(2));
+
+      if (lastBlogRef) {
+        blogQuery = query(blogQuery, startAfter(lastBlogRef));
+      }
+
+      const querySnapshot = await getDocs(blogQuery);
+
+      if(querySnapshot.size<1){
+        setendOfAllBlogs(true);
+      }
+      else{
+        const newBlogs = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setblogsList([...blogsList, ...newBlogs])
+        setlastBlogRef(newBlogs[newBlogs.length-1].blogRef)
+      }
+      setloading(false)
+      
+    } catch (error) {
+      console.error('Error fetching blogs:', error);
+    }
+  };
+
+
+  const getPrevFetchedBlogsReloaded =  async ()=>{
+    try {
+      setloading(true)
+      const blogsRef = collection(db, 'blogs');
+      let blogQuery = query(blogsRef, orderBy('blogRef'), limit(blogsList.length));
+
+      const querySnapshot = await getDocs(blogQuery);
+
+      if(querySnapshot.size<1){
+        setendOfAllBlogs(true);
+      }
+      else{
+        const newBlogs = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setblogsList([...newBlogs])
+        setlastBlogRef(newBlogs[newBlogs.length-1].blogRef)
+      }
+      setloading(false)
+      
+    } catch (error) {
+      console.error('Error fetching blogs:', error);
+    }
+  }
+
   useEffect(() => {
-    isFocused && fetchBlogs()
+    if(isFocused && blogsList.length>0){
+      ///
+      getPrevFetchedBlogsReloaded()
+    }
+    else if(blogsList.length==0) FetchFewBlogs()
   }, [isFocused])
-  
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{paddingTop:50,paddingHorizontal:10, flex: 1}}>
+    <ScrollView showsVerticalScrollIndicator={false} style={{paddingTop:50,paddingHorizontal:10, flex: 1,paddingBottom:50}}>
+      {
+        blogsList.length==0 && <ActivityIndicator size={40} color={"red"}/>
+      }
       <Text style={styles.HeaderTitle}>Blogs</Text>
-      {blogsList.map((item) => (
+      {blogsList.length>0 &&  blogsList.map((item) => (
         <BlogListItem
           navigation={navigation}
           key={item.id}
@@ -67,10 +128,18 @@ const BlogList = ({navigation}) => {
           date={item.date}
         />
       ))}
-      {/* <View style={{flex:1,justifyContent:'center',height:'auto',alignItems:'center'}}>
-
-        <ActivityIndicator size={100}/>
-      </View> */}
+      {
+        loading&&<ActivityIndicator color={'blue'} size={25}/>
+      }
+      {endOfAllBlogs==true?
+        <Text style={{textAlign:'center',fontSize:15,color:'red',fontWeight:'bold'}}>End of all Blogs :'(</Text>:
+        <TouchableOpacity style={styles.buttonContainer} onPress={FetchFewBlogs}>
+          <Feather name="chevron-down" size={24} color="white" />
+          <Text style={styles.buttonText}>Load More</Text>
+        </TouchableOpacity>
+      }
+      <View style={{flex:1,justifyContent:'center',height:'auto',alignItems:'center',paddingBottom:50,paddingTop:20}}>
+      </View>
     </ScrollView>
   );
 };
@@ -81,7 +150,21 @@ const styles = StyleSheet.create({
     fontSize:30,
     fontWeight:'bold',
     marginBottom:15
-  }
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#4287f5',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    marginLeft: 10,
+  },
 })
 
 export default BlogList;

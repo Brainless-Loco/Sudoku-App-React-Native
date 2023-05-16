@@ -14,7 +14,7 @@ import HowtoPlay from './screens/HowtoPlay';
 import Profile from './screens/Profile';
 import AllBlogs from './screens/AllBlogs';
 import ABlog from './screens/ABlog';
-import PostABlog from './screens/PostABlog'
+import WriteBlogScreen from './screens/WriteBlogScreen';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -23,53 +23,53 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
-        <Stack.Screen
-            name="PostABlog"
-            component={PostABlog}
+          <Stack.Screen
+              name="AllBlogLists"
+              component={AllBlogs}
+              options={{headerShown:false}}
+            />
+          <Stack.Screen
+              name="WriteABlog"
+              component={WriteBlogScreen}
+              options={{headerShown:false}}
+            />
+          <Stack.Screen
+            name="ABlog"
+            component={ABlog}
             options={{headerShown:false}}
-          />
-        <Stack.Screen
-            name="AllBlogLists"
-            component={AllBlogs}
-            options={{headerShown:false}}
-          />
-        <Stack.Screen
-          name="ABlog"
-          component={ABlog}
-          options={{headerShown:false}}
         />
-        <Stack.Screen
-            name="Profile"
-            component={Profile}
-            options={{headerShown:false}}
-          />
-        <Stack.Screen
-            name="HowToPlay"
-            component={HowtoPlay}
-            options={{headerShown:false}}
-          /> 
-        <Stack.Screen
-            name="About"
-            component={AboutSudokuForever}
-            options={{headerShown:false}}
-          />
+          <Stack.Screen
+              name="Profile"
+              component={Profile}
+              options={{headerShown:false}}
+            />
+          <Stack.Screen
+              name="HowToPlay"
+              component={HowtoPlay}
+              options={{headerShown:false}}
+            /> 
+          <Stack.Screen
+              name="About"
+              component={AboutSudokuForever}
+              options={{headerShown:false}}
+            />
 
-        <Stack.Screen
-            name="LogIn"
-            component={LogIn}
-            options={{headerShown:false}}
-          />
           <Stack.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{headerShown:false}}
-          />
-          <Stack.Screen
-            name="LandingPage"
-            component={LandingPage}
-            options={{ headerShown:false }}
-          />
-          <Stack.Screen name="Playzone" component={Playzone} />
+              name="LogIn"
+              component={LogIn}
+              options={{headerShown:false}}
+            />
+            <Stack.Screen
+              name="SignUp"
+              component={SignUp}
+              options={{headerShown:false}}
+            />
+            <Stack.Screen
+              name="LandingPage"
+              component={LandingPage}
+              options={{ headerShown:false }}
+            />
+            <Stack.Screen name="Playzone" component={Playzone} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
