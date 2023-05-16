@@ -17,8 +17,8 @@ const initialState = {
     currentPlayer_info:{
       userRef:'eeZ8LUHQIkrd3K0XqIFv',
       userProfilePic:'images/avatar.png',
-      userName:'',
-      userEmail:'tonmoy'
+      userName:'Brainless',
+      userEmail:'tonmoydas@gmail.com'
     }
 };
 

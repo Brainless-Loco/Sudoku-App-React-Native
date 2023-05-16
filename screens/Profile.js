@@ -36,6 +36,13 @@ export default function Profile({navigation}) {
     });
   }
 
+  
+  const getImageUrlToShow = (image)=>{
+      const storageUrl = 'sudokuforever-b9936.appspot.com';
+      const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${storageUrl}/o/${encodeURIComponent(image)}?alt=media`;
+      return imageUrl
+
+  }
 
   useEffect(() => {
     preFetchDP()

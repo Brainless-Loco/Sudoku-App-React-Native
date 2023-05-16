@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import BlogListItem from '../components/BlogsListItem';
 import { Timestamp, addDoc, collection, doc, updateDoc,query, where,getDocs } from 'firebase/firestore/lite';
 import { db } from '../firebase/firebaseConfig';
+import { useIsFocused } from '@react-navigation/native';
+
 
 const BlogList = ({navigation}) => {
 
+  
+  const isFocused = useIsFocused();
 
   const blogData = [
     {
@@ -42,12 +46,12 @@ const BlogList = ({navigation}) => {
   }
 
   useEffect(() => {
-    fetchBlogs()
-  }, [])
+    isFocused && fetchBlogs()
+  }, [isFocused])
   
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor:'white',paddingTop:50,paddingHorizontal:10}}>
+    <ScrollView showsVerticalScrollIndicator={false} style={{paddingTop:50,paddingHorizontal:10, flex: 1}}>
       <Text style={styles.HeaderTitle}>Blogs</Text>
       {blogsList.map((item) => (
         <BlogListItem
@@ -60,8 +64,13 @@ const BlogList = ({navigation}) => {
           likeCount={item.likes.length}
           dislikeCount={item.dislikes.length}
           commentsCount={item.comments.length}
+          date={item.date}
         />
       ))}
+      {/* <View style={{flex:1,justifyContent:'center',height:'auto',alignItems:'center'}}>
+
+        <ActivityIndicator size={100}/>
+      </View> */}
     </ScrollView>
   );
 };

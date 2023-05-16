@@ -14,6 +14,7 @@ import HowtoPlay from './screens/HowtoPlay';
 import Profile from './screens/Profile';
 import AllBlogs from './screens/AllBlogs';
 import ABlog from './screens/ABlog';
+import PostABlog from './screens/PostABlog'
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -22,6 +23,11 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+        <Stack.Screen
+            name="PostABlog"
+            component={PostABlog}
+            options={{headerShown:false}}
+          />
         <Stack.Screen
             name="AllBlogLists"
             component={AllBlogs}

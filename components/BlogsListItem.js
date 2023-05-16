@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const BlogListItem = ({navigation, blogRef, profilePic, userName, title, likeCount, dislikeCount, commentsCount }) => {
+const BlogListItem = ({navigation, date, blogRef, profilePic, userName, title, likeCount, dislikeCount, commentsCount }) => {
 
   
   const storageUrl = 'sudokuforever-b9936.appspot.com';
@@ -19,14 +19,15 @@ const BlogListItem = ({navigation, blogRef, profilePic, userName, title, likeCou
       <Image source={{uri:imageUrl}} style={styles.profilePic} />
       <View style={styles.blogContent}>
         <Text style={styles.userName}>{userName}</Text>
+        <Text style={{fontSize:10}}>{date.slice(9)}</Text>
         <Text style={styles.title}>{title}</Text>
         <View style={styles.infoContainer}>
           <View style={styles.likeDislikeContainer}>
-            <TouchableOpacity style={styles.iconContainer}>
+            <TouchableOpacity disabled style={styles.iconContainer}>
               <Ionicons name="thumbs-up-outline" size={20} color="green" />
               <Text style={styles.countText}>{likeCount}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconContainer}>
+            <TouchableOpacity disabled style={styles.iconContainer}>
               <Ionicons name="thumbs-down-outline" size={20} color="red" />
               <Text style={styles.countText}>{dislikeCount}</Text>
             </TouchableOpacity>
@@ -63,13 +64,13 @@ const styles = {
     flex: 1,
   },
   userName: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
-    marginBottom: 5,
+    color:'#1a2373'
   },
   title: {
-    fontSize: 14,
-    marginBottom: 5,
+    fontSize: 16,
+    color:'#9c0c05',
   },
   infoContainer: {
     flexDirection: 'row',
