@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -10,6 +10,7 @@ import { auth } from '../firebase/firebaseConfig';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateUserInfo } from '../redux/actions/Grid_actions';
+import {gsap, Back} from 'gsap-rn';
 
 
 const HomeScreen = ({navigation}) => {
@@ -17,6 +18,7 @@ const HomeScreen = ({navigation}) => {
 
   const dispatch = useDispatch()
 
+  const viewRef = useRef(null);
 
   const update_user_info = (info)=>dispatch(updateUserInfo(info))
 
@@ -33,12 +35,17 @@ const HomeScreen = ({navigation}) => {
     navigation.replace('LogIn')
   }
 
+  useEffect(() => {
+    const view = viewRef.current;
+    gsap.to(view, {duration:1, transform:{rotate:360, scale:1}, 	ease:Back.easeInOut});
+  }, [])
   
 
   return (
     <View style={styles.appContainer} >
       <ScrollView showsVerticalScrollIndicator={false}>
           <Image
+              ref={viewRef}
               style={styles.logo}
               source={require('../assets/logo.png')}
           />

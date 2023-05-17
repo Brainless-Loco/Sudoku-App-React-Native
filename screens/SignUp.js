@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import {createUserWithEmailAndPassword, sendEmailVerification  } from 'firebase/auth';
 import { auth, db } from '../firebase/firebaseConfig';
@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import { FontAwesome } from '@expo/vector-icons';
 import { useEffect } from 'react';
+import {gsap, Back} from 'gsap-rn';
 
 
 
@@ -21,6 +22,9 @@ export default function SignUp({navigation}) {
     const [birthDate, setbirthDate] = useState(moment(new Date()).format('DD/MM/YYYY'))
     const [birthDateModalStatus, setbirthDateModalStatus] = useState(false)
     const [loading, setloading] = useState(false)
+
+    const viewRef = useRef(null);
+
 
     const userNameMessages = [
         ["This is a unique Username",'green'],
@@ -119,10 +123,16 @@ export default function SignUp({navigation}) {
         }
     }
 
+    useEffect(() => {
+        const view = viewRef.current;
+        gsap.to(view, {duration:1, transform:{rotate:360, scale:1}, 	ease:Back.easeInOut});
+    }, [])
+
     return (
         <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView style={{backgroundColor:'#fff',height:'100%'}} showsVerticalScrollIndicator={false}>
                 <Image
+                    ref={viewRef}
                     style={styles.logo}
                     source={require('../assets/logo.png')}
                 />
@@ -208,7 +218,7 @@ export default function SignUp({navigation}) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor:'white'
+        backgroundColor:'#fff'
     },
     title: {
         fontSize:22,
@@ -222,7 +232,7 @@ const styles = StyleSheet.create({
         height:150,
         width:150,
         marginBottom:20,
-        marginTop:80
+        marginTop:30
     },
     input: {
         height: 48,
@@ -267,7 +277,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         marginTop: 20,
-        paddingBottom:50
+        paddingBottom:50,
     },
     footerText: {
         fontSize: 16,

@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { auth, db } from '../firebase/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { updateUserInfo } from '../redux/actions/Grid_actions';
 import { collection, getDocs, query, where } from "firebase/firestore/lite";
+import {gsap, Back} from 'gsap-rn';
 
 export default function LogIn({navigation}) {
 
     const dispatch = useDispatch()
-
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -62,6 +62,8 @@ export default function LogIn({navigation}) {
         loginUser()
     }
 
+    
+
     return (
         <ScrollView style={styles.container}>
             <Image
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor:'white',
         flex:1,
-        paddingTop:100
+        paddingTop:30
     },
     title: {
         fontSize:22,

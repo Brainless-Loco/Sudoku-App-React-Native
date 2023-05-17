@@ -3,12 +3,14 @@ import {StyleSheet, Text, View,Image, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { game_pattern_formation, gridUpdate } from '../redux/actions/Grid_actions';
 import { generate_a_new_pattern } from '../sudoku_maker/sudoku_pattern_generator';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useState } from 'react';
+import {gsap, Back} from 'gsap-rn';
 
 export default function LandingPage({navigation}) {
   const dispatch = useDispatch()
 
+  const viewRef = useRef(null)
   
   const [loading, setloading] = useState(false)
 
@@ -47,9 +49,19 @@ export default function LandingPage({navigation}) {
     }
   }
 
+
+  useEffect(() => {
+    const view = viewRef.current;
+    gsap.to(view, {duration:1, transform:{rotate:360, scale:1}, 	ease:Back.easeInOut});
+    }, [])
+
+
+
+
   return (
     <View style={styles.container}>
       <Image
+        ref={viewRef}
         style={styles.logo}
         source={require('../assets/logo.png')}
       />

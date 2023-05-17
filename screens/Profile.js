@@ -14,8 +14,6 @@ export default function Profile({navigation}) {
 
   const dispatch = useDispatch()
 
-
-  
   const [loading, setloading] = useState(false)
 
 
@@ -131,7 +129,7 @@ export default function Profile({navigation}) {
       {/* New Profile Picture Upload */}
       <Pressable style={styles.imageUploadButtonContainer} onPress={uploadAnImage}>
         <Image style={styles.imageStyle} source={{uri:imageUri}}/>
-        <View style={styles.overlayEffect}>
+        <View style={styles.overlayEffect}> 
             <Text style={{fontWeight:'bold',color:'cyan'}}>Click to upload new</Text>
         </View>
       </Pressable>
