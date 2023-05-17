@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, StyleSheet, Pressable, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, ScrollView, Image, StyleSheet, Pressable, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { AirbnbRating, Rating } from 'react-native-ratings';
 import { useState } from 'react';
@@ -17,6 +17,7 @@ export default function AboutSudokuForever() {
     const [review, setreview] = useState('')
     const [rating, setrating] = useState(5)
     const [hasGivenReview,sethasGivenReview] = useState(false)
+    const [loading, setloading] = useState(false)
     
     
     const reviewColRef = collection(db,'reviews')
@@ -51,28 +52,30 @@ export default function AboutSudokuForever() {
         totalRating += reviewData.rating;
         reviewCount++;
         });
-        const avg = totalRating / reviewCount;
+        const avg = reviewCount==0? 0: totalRating / reviewCount;
         setaverageRating(avg)
     }
 
     useEffect(() => {
         getAverageRating()
         checkIfUserHasReviewed()
+        console.log(hasGivenReview)
     }, [])
     
 
 
     const submitButtonAction = async ()=>{
-        getAverageRating()
-        sethasGivenReview(true)
         try{
+            setloading(true)
             const docRef = await addDoc(reviewColRef,{
                 'date': Timestamp.fromDate(new Date()),
                 'rating':rating,
-                'userRef':'XXXXXXX',
+                'userRef':userRef,
                 'review':review
             });
             sethasGivenReview(true)
+            getAverageRating()
+            setloading(false)
         }
         catch(e){
             console.log(e)
@@ -119,8 +122,10 @@ export default function AboutSudokuForever() {
                     But that's not all! Sudoku Forever also provides valuable insights and strategies through our informative blogs. Learn the best techniques to solve puzzles efficiently, unravel the secrets of advanced solving methods, and enhance your overall gameplay. Stay up to date with the latest Sudoku trends and gain an edge over your opponents.
                 </Text>
                 
-                
-                { hasGivenReview ==false &&
+                {
+                    loading && <ActivityIndicator size={25} color={"#e80505"}/>
+                }
+                { !hasGivenReview && !loading &&
                     <View style={styles.reviewingOptionContainer}>
                         <Text style={{color:'#e80505',fontWeight:'500',fontSize:19,textAlign:'center',marginBottom:5}}>Review Sudoku Forever</Text>
                         <AirbnbRating
@@ -137,7 +142,11 @@ export default function AboutSudokuForever() {
                             
                         </TextInput>
                         <TouchableOpacity onPress={()=>submitButtonAction()} style={styles.submitButton}>
-                            <Text style={{fontSize:20,color:'#e80505',fontWeight:'bold'}}>Submit</Text>
+                            <Text style={{fontSize:20,color:'#e80505',fontWeight:'bold'}}>
+                                {
+                                loading ? <ActivityIndicator size={25} color={"#e80505"}/>:"Submit"
+                                }
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 }
@@ -154,7 +163,6 @@ export default function AboutSudokuForever() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor:'white',
         height:"100%"
     },
     logo: {
@@ -177,7 +185,13 @@ const styles = StyleSheet.create({
         padding:10,
         borderWidth:2,
         borderColor:'#e80505',
-        borderRadius:10
+        borderRadius:10,
+        backgroundColor:'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 4,
     },
     input: {
         minHeight:50,
@@ -203,12 +217,18 @@ const styles = StyleSheet.create({
         marginBottom:10
     },
     mapViewContainer:{
+        backgroundColor:'white',
         marginVertical:10,
         marginHorizontal:8,
         padding:10,
         borderWidth:2,
         borderColor:'#e80505',
         borderRadius:10,
-        height:350
+        height:350,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 4,
     }
 })

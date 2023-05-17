@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import {createUserWithEmailAndPassword  } from 'firebase/auth';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import {createUserWithEmailAndPassword, sendEmailVerification  } from 'firebase/auth';
 import { auth, db } from '../firebase/firebaseConfig';
 import { Timestamp, addDoc, collection, doc, updateDoc,query, where,getDocs } from 'firebase/firestore/lite';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -20,6 +20,7 @@ export default function SignUp({navigation}) {
     const [userNameErrorMessage, setuserNameErrorMessage] = useState(['',''])
     const [birthDate, setbirthDate] = useState(moment(new Date()).format('DD/MM/YYYY'))
     const [birthDateModalStatus, setbirthDateModalStatus] = useState(false)
+    const [loading, setloading] = useState(false)
 
     const userNameMessages = [
         ["This is a unique Username",'green'],
@@ -81,10 +82,20 @@ export default function SignUp({navigation}) {
 
     const registerWithEmail = async () => {
         try {
+            setloading(true)
             const {user} = await createUserWithEmailAndPassword(auth,email, password)
+            try {
+                await sendEmailVerification(user);
+                console.log('Email verification link sent successfully');
+            }
+            catch(e){
+                alert("Something went wrong")
+                console.log(e)
+            }
             setAllNone()
             doFireBaseUpdate()
-            alert("Account Created! You can now Log In.");
+            setloading(false)
+            alert("Account Created! Please check your email and verify yourself.");
         }
         catch(e){
             if(e.code==='auth/email-already-in-use') seterrorMessage("Email has already been used")
@@ -179,7 +190,9 @@ export default function SignUp({navigation}) {
                         disabled={password.length==0 || email.length==0}
                         style={styles.button}
                         onPress={() => onSingUpPress()}>
-                        <Text style={styles.buttonTitle}>Sign Up</Text>
+                        <Text style={styles.buttonTitle}>
+                            {loading? <ActivityIndicator size={20} color={"#fff"}/>: "Sign up"}
+                        </Text>
                     </TouchableOpacity>
                     <View style={styles.footerView}>
                         <Text style={styles.footerText}>Already have an account? <Text onPress={()=>{

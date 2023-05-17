@@ -69,13 +69,13 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#FFFFFF',
       paddingHorizontal: 20,
-      paddingTop: 50,
     },
     heading: {
       fontSize: 26,
       fontWeight: 'bold',
       marginBottom: 10,
-      color:'#b30e14'
+      color:'#b30e14',
+      paddingTop: 30,
     },
     YTcontainer:{
         flex:1

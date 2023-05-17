@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, StyleSheet, ScrollView, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, Image, Pressable, StyleSheet, ScrollView, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { signOut } from 'firebase/auth'
 import { auth, db } from '../firebase/firebaseConfig';
@@ -15,11 +15,15 @@ export default function Profile({navigation}) {
   const dispatch = useDispatch()
 
 
+  
+  const [loading, setloading] = useState(false)
+
+
   const [imageUri, setImageUri] = useState(null);
   const [password, setpassword] = useState('')
   const [confirmPassword, setconfirmPassword] = useState('')
   const [newImageUri, setnewImageUri] = useState(null)
-  
+
 
   const update_user_info = (info)=>dispatch(updateUserInfo(info))
 
@@ -38,11 +42,8 @@ export default function Profile({navigation}) {
   const preFetchDP = ()=>{
     const imageRef = getImageUrlToShow(userProfilePic)
     setImageUri(imageRef)
-    console.log(imageRef)
   }
 
-  
-  
 
   useEffect(() => {
     preFetchDP()
@@ -74,6 +75,7 @@ export default function Profile({navigation}) {
     const storageUrl = 'sudokuforever-b9936.appspot.com';
 
     if (newImageUri) {
+      setloading(true)
       const fileName = `images/${userRef}_${Date.now()}`;
 
       try {
@@ -99,7 +101,9 @@ export default function Profile({navigation}) {
             console.error('Error updating profile picture:', error);
             alert('Something went wrong')
           }
+          setloading(false)
           alert('Profile Information Updated')
+
         } 
         else {
           console.error('Error uploading image:', response.statusText);
@@ -114,8 +118,9 @@ export default function Profile({navigation}) {
 
 
   const signOutBtn = ()=>{
+    update_user_info({userRef:'',userProfilePic:'',userName:'',userEmail:''})
     signOut(auth)
-    navigation.navigate('LogIn')
+    navigation.replace('LogIn')
   }
 
 
@@ -140,7 +145,10 @@ export default function Profile({navigation}) {
     </View>
 
       <TouchableOpacity style={styles.updateProfileBtn} onPress={updateProfileInformation}>
-        <Text style={{color:'white',fontSize:20,fontWeight:'600'}}>Update Profile</Text>
+        <Text style={{color:'white',fontSize:20,fontWeight:'600'}}>{
+          loading? <ActivityIndicator size={20} color={"white"} />:
+          "Update Profile"
+          }</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.signOutBtn} onPress={signOutBtn}>
         <Text style={{color:'white',fontSize:20,fontWeight:'600'}}>Sign Out</Text>

@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     minHeight:350,
   },
   postButton: {
-    backgroundColor: 'blue',
+    backgroundColor: '#e80505',
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 24,

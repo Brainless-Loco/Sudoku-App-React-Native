@@ -24,33 +24,38 @@ export default function LogIn({navigation}) {
         try {
             setloading(true)
             setEmail(email.trim())
-            await signInWithEmailAndPassword(auth, email, password);
-            const usersRef = collection(db, "users");
-            const q = query(usersRef, where("email", "==", email));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                const userData = doc.data();
-                const {userName,user_id,email,dp_url}=userData
-                const loggedUserInfo = {
-                    userRef:user_id,
-                    userEmail:email,
-                    userName:userName,
-                    userProfilePic:dp_url
-                }
-                update_user_info(loggedUserInfo)
-                setloading(false)
-                setEmail('')
-                setPassword('')
-                alert("Welcome back "+userName)
-                navigation.navigate('HomeScreen')
-            });
-            
+            const { user } =await signInWithEmailAndPassword(auth, email, password);
+            if(user.emailVerified){
+                const usersRef = collection(db, "users");
+                const q = query(usersRef, where("email", "==", email));
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach((doc) => {
+                    const userData = doc.data();
+                    const {userName,user_id,email,dp_url}=userData
+                    const loggedUserInfo = {
+                        userRef:user_id,
+                        userEmail:email,
+                        userName:userName,
+                        userProfilePic:dp_url
+                    }
+                    update_user_info(loggedUserInfo)
+                    setloading(false)
+                    setEmail('')
+                    setPassword('')
+                    alert("Welcome back "+userName)
+                    navigation.replace('HomeScreen')
+                });
+            }
+            else{
+                alert("Please verify your email first.")
+            }
         } 
         catch (e) {
             if(e.code==='auth/wrong-password') seterrorMessage("Wrong Password")
             if(e.code==='auth/user-not-found') seterrorMessage('No account matches this email')
             else console.log(e)
         }
+        setloading(false)
       };
 
     const onLoginPress = () => {

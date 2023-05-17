@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import {StyleSheet, Text, View,Image, Pressable, TouchableOpacity } from 'react-native';
+import {StyleSheet, Text, View,Image, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { game_pattern_formation, gridUpdate } from '../redux/actions/Grid_actions';
 import { generate_a_new_pattern } from '../sudoku_maker/sudoku_pattern_generator';
@@ -33,12 +33,18 @@ export default function LandingPage({navigation}) {
   const right_value = useSelector(state=>state.grid)
 
   const update_everything_for_playzone = async ()=>{
-    var new_pattern = generate_a_new_pattern()
-    const temp = new_pattern.map((arr)=> arr.slice())
-    form_new_game(temp)
-    update_current_game(new_pattern)
-
-
+    try{
+      setloading(true)
+      var new_pattern = generate_a_new_pattern()
+      const temp = new_pattern.map((arr)=> arr.slice())
+      form_new_game(temp)
+      update_current_game(new_pattern)
+      setloading(false)
+      navigation.navigate('Playzone')
+    }
+    catch(e){
+      alert('Something went wrong!')
+    }
   }
 
   return (
@@ -53,10 +59,14 @@ export default function LandingPage({navigation}) {
         style={styles.enterPlayzoneBtn}
         onPress={ async () =>{
           update_everything_for_playzone()
-          navigation.navigate('Playzone')
         }
         }
-        ><Text style={styles.btnText}>Enter the Playzone</Text></TouchableOpacity>
+        ><Text style={styles.btnText}>
+          {
+            loading? <ActivityIndicator size={20} color={"white"} />:"Enter the Playzone"
+          }
+          </Text>
+          </TouchableOpacity>
         
         
         {/* {
