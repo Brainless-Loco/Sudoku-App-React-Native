@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { Ionicons } from '@expo/vector-icons';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { auth, db } from '../firebase/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { updateUserInfo } from '../redux/actions/Grid_actions';
-import { collection, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore/lite";
 
 export default function LogIn({navigation}) {
 
@@ -15,30 +14,36 @@ export default function LogIn({navigation}) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [errorMessage, seterrorMessage] = useState('')
+    const [loading, setloading] = useState(false)
     
 
     const update_user_info = (info)=>dispatch(updateUserInfo(info))
 
 
-
-    
-
-
-
     const loginUser = async () => {
         try {
+            setloading(true)
+            setEmail(email.trim())
             await signInWithEmailAndPassword(auth, email, password);
             const usersRef = collection(db, "users");
             const q = query(usersRef, where("email", "==", email));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id, " => ", doc.data());
+                const userData = doc.data();
+                const {userName,user_id,email,dp_url}=userData
+                const loggedUserInfo = {
+                    userRef:user_id,
+                    userEmail:email,
+                    userName:userName,
+                    userProfilePic:dp_url
+                }
+                update_user_info(loggedUserInfo)
+                setloading(false)
+                setEmail('')
+                setPassword('')
+                alert("Welcome back "+userName)
+                navigation.navigate('HomeScreen')
             });
-
-
-            alert("Logged In")
-            
             
         } 
         catch (e) {
@@ -50,7 +55,6 @@ export default function LogIn({navigation}) {
 
     const onLoginPress = () => {
         loginUser()
-        navigation.navigate('LandingPage')
     }
 
     return (
@@ -80,10 +84,12 @@ export default function LogIn({navigation}) {
                 />
                 {errorMessage.length>0 && <Text style={{color:'red',textAlign:'center'}}>*{errorMessage}*</Text>}
                 <TouchableOpacity
-                    // disabled={password.length==0 || email.length==0}
+                    disabled={password.length==0 || email.length==0}
                     style={styles.button}
                     onPress={onLoginPress}>
-                    <Text style={styles.buttonTitle}>{"Log in"}</Text>
+                    <Text style={styles.buttonTitle}>
+                        {loading? <ActivityIndicator size={18} color={"#fff"}/>: "Log in"}
+                    </Text>
                 </TouchableOpacity>
                 <View style={styles.footerView}>
                     <Text style={styles.footerText}>Don't have an account? <Text onPress={()=>{
@@ -152,7 +158,7 @@ const styles = StyleSheet.create({
         color: '#2e2e2d'
     },
     footerLink: {
-        color: "#788eec",
+        color: "#e80505",
         fontWeight: "bold",
         fontSize: 16
     }

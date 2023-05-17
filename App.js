@@ -15,6 +15,7 @@ import Profile from './screens/Profile';
 import AllBlogs from './screens/AllBlogs';
 import ABlog from './screens/ABlog';
 import WriteBlogScreen from './screens/WriteBlogScreen';
+import HomeScreen from './screens/HomeScreen';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -23,6 +24,21 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+              name="LogIn"
+              component={LogIn}
+              options={{headerShown:false}}
+            />
+            <Stack.Screen
+              name="SignUp"
+              component={SignUp}
+              options={{headerShown:false}}
+            />
+          <Stack.Screen
+              name="HomeScreen"
+              component={HomeScreen}
+              options={{headerShown:false}}
+            />
           <Stack.Screen
               name="AllBlogLists"
               component={AllBlogs}
@@ -54,16 +70,7 @@ export default function App() {
               options={{headerShown:false}}
             />
 
-          <Stack.Screen
-              name="LogIn"
-              component={LogIn}
-              options={{headerShown:false}}
-            />
-            <Stack.Screen
-              name="SignUp"
-              component={SignUp}
-              options={{headerShown:false}}
-            />
+          
             <Stack.Screen
               name="LandingPage"
               component={LandingPage}

@@ -1,14 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import {StyleSheet, Text, View,Image, Pressable } from 'react-native';
+import {StyleSheet, Text, View,Image, Pressable, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { game_pattern_formation, gridUpdate } from '../redux/actions/Grid_actions';
 import { generate_a_new_pattern } from '../sudoku_maker/sudoku_pattern_generator';
-// import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect } from 'react';
 import { useState } from 'react';
 
 export default function LandingPage({navigation}) {
   const dispatch = useDispatch()
+
+  
+  const [loading, setloading] = useState(false)
+
 
   const update_current_game = (pattern)=>dispatch(gridUpdate(pattern))
   const form_new_game = (grid)=>dispatch(game_pattern_formation(grid))
@@ -44,27 +47,29 @@ export default function LandingPage({navigation}) {
         style={styles.logo}
         source={require('../assets/logo.png')}
       />
-      <Text style={styles.welcomeText}>Welcome to <Text style={{color:'red'}}> Sudoku Forever</Text></Text>
+      <Text style={styles.welcomeText}>Welcome to <Text style={{color:'red'}}> Sudoku Playzone</Text></Text>
       <Text style={styles.welcomeText}>&nbsp;</Text>
-      <Pressable
+      <TouchableOpacity
         style={styles.enterPlayzoneBtn}
         onPress={ async () =>{
           update_everything_for_playzone()
           navigation.navigate('Playzone')
         }
         }
-        ><Text style={styles.btnText}>Enter the Playzone</Text></Pressable>
+        ><Text style={styles.btnText}>Enter the Playzone</Text></TouchableOpacity>
         
         
-        {
-        has_paused_game&&<Pressable
-        style={styles.enterPlayzoneBtn}
-        onPress={() =>{
-          update_everything_for_playzone()
-          navigation.navigate('Playzone')
-        }
-        }
-        ><Text style={styles.btnText}> Continue Previous </Text></Pressable>}
+        {/* {
+        has_paused_game&&<TouchableOpacity
+          style={styles.enterPlayzoneBtn}
+          onPress={() =>{
+            update_everything_for_playzone()
+            navigation.navigate('Playzone')
+          }
+          }
+          ><Text style={styles.btnText}> Continue Previous </Text>
+        </TouchableOpacity>
+        } */}
       <StatusBar style="auto" />
     </View>
   );
@@ -79,6 +84,7 @@ const styles = StyleSheet.create({
   welcomeText:{
     fontWeight: 'bold',
     fontSize: 20,
+    color:'#094480'
   },
   logo:{
     width: 150,

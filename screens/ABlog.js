@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, TextInput, Dimensions,ScrollView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, Dimensions,ScrollView, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { collection, doc, getDoc, onSnapshot, query, where, arrayUnion, updateDoc, arrayRemove } from 'firebase/firestore/lite';
+import { doc, getDoc, arrayUnion, updateDoc, arrayRemove } from 'firebase/firestore/lite';
 import { db } from '../firebase/firebaseConfig';
 import HTML from 'react-native-render-html';    
 import { AntDesign } from '@expo/vector-icons';
@@ -160,7 +160,10 @@ const BlogUI = ({ navigation, route }) => {
   };
 
   if (!blogData) {
-    return <Text style={{textAlign:'center',verticalAlign:'middle'}}>Loading blog...</Text>;
+    return <View style={{height:500,display:'flex',justifyContent:'center',alignItems:'center'}}>
+              <ActivityIndicator color={"#e80505"} size={50} />
+            <Text style={{textAlign:'center',verticalAlign:'middle',color:'#e80505'}}>Loading blog...</Text>
+          </View>;
   }
 
   return (
@@ -210,7 +213,7 @@ const BlogUI = ({ navigation, route }) => {
         <Image source={{ uri: getImageUrlToShow(userProfilePic) }} style={styles.commentBoxImage} />
         <TextInput style={styles.commentInput} multiline={true} value={commentInput} onChangeText={(text)=>setcommentInput(text)} placeholder="Add a comment..." />
         <TouchableOpacity style={styles.commentSubmitButton} disabled={commentInput.trim().length==0} onPress={AddANewComment}>
-          <Ionicons name="send" size={24} color="#221b7d" />
+          <Ionicons name="send" size={24} color="#e80505" />
         </TouchableOpacity>
         </View>
       </ScrollView>

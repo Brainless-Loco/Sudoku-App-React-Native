@@ -117,6 +117,7 @@ export const change_pause_status = ()=>{
 }
 
 export const updateUserInfo = (info)=>{
+  console.log(info)
   return{
     type:UPDATE_USER_INFO,
     userInfo:info

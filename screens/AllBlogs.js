@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
 import BlogListItem from '../components/BlogsListItem';
-import { Timestamp, addDoc, collection, doc, updateDoc,query, where,getDocs, orderBy, limit, getDoc, startAfter } from 'firebase/firestore/lite';
+import { collection, query,getDocs, orderBy, limit, startAfter } from 'firebase/firestore/lite';
 import { db } from '../firebase/firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
@@ -76,7 +76,6 @@ const BlogList = ({navigation}) => {
     }
   };
 
-
   const getPrevFetchedBlogsReloaded =  async ()=>{
     try {
       setloading(true)
@@ -109,11 +108,12 @@ const BlogList = ({navigation}) => {
   }, [isFocused])
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{paddingTop:50,paddingHorizontal:10, flex: 1,paddingBottom:50}}>
-      {
-        blogsList.length==0 && <ActivityIndicator size={40} color={"red"}/>
-      }
+    <ScrollView showsVerticalScrollIndicator={false} style={{paddingTop:10,paddingHorizontal:10, flex: 1,paddingBottom:50}}>
+      
       <Text style={styles.HeaderTitle}>Blogs</Text>
+      {
+        blogsList.length==0 && <ActivityIndicator size={40} color={"#e80505"}/>
+      }
       {blogsList.length>0 &&  blogsList.map((item) => (
         <BlogListItem
           navigation={navigation}
@@ -129,7 +129,7 @@ const BlogList = ({navigation}) => {
         />
       ))}
       {
-        loading&&<ActivityIndicator color={'blue'} size={25}/>
+        loading&&<ActivityIndicator color={'#e80505'} size={25}/>
       }
       {endOfAllBlogs==true?
         <Text style={{textAlign:'center',fontSize:15,color:'red',fontWeight:'bold'}}>End of all Blogs :'(</Text>:
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#4287f5',
+    backgroundColor: '#e80505',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 25,

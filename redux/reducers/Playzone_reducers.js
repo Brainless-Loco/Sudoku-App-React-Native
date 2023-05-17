@@ -15,10 +15,15 @@ const initialState = {
     selected_small_square_value:0,
     matched_all_squares:false,
     currentPlayer_info:{
-      userRef:'eeZ8LUHQIkrd3K0XqIFv',
-      userProfilePic:'images/avatar.png',
-      userName:'Brainless',
-      userEmail:'tonmoydas@gmail.com'
+      // userRef:'eeZ8LUHQIkrd3K0XqIFv',
+      // userProfilePic:'images/avatar.png',
+      // userName:'Brainless',
+      // userEmail:'tonmoydas@gmail.com',
+      userRef:'',
+      userProfilePic:'',
+      userName:'',
+      userEmail:''
+
     }
 };
 
@@ -144,13 +149,10 @@ export default (state = initialState, action) => {
         }
 
         case UPDATE_USER_INFO:{
-          const {userRef,userEmail,userName,userProfilePic}=action.userInfo
+          // const {userRef,userEmail,userName,userProfilePic}=action.userInfo
           return{
             ...state,
-            userRef:userRef,
-            userEmail:userEmail,
-            userName:userName,
-            userProfilePic:userProfilePic
+            currentPlayer_info:action.userInfo
           }
         }
 

@@ -2,47 +2,47 @@ import { View, Text, Image, Pressable, StyleSheet, ScrollView, TextInput, Toucha
 import React from 'react'
 import { signOut } from 'firebase/auth'
 import { auth, db } from '../firebase/firebaseConfig';
-import { useSelector } from 'react-redux';
-import { addDoc, collection, query, where,getDocs, Timestamp, updateDoc, doc } from 'firebase/firestore/lite';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateDoc, doc } from 'firebase/firestore/lite';
 import { useState } from 'react';
-import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect } from 'react';
+import { updateUserInfo } from '../redux/actions/Grid_actions';
 
 
 export default function Profile({navigation}) {
 
-  const storageRef = getStorage();
-  const usersColRef = collection(db,'users')
+  const dispatch = useDispatch()
 
-  
+
   const [imageUri, setImageUri] = useState(null);
   const [password, setpassword] = useState('')
   const [confirmPassword, setconfirmPassword] = useState('')
   const [newImageUri, setnewImageUri] = useState(null)
+  
+
+  const update_user_info = (info)=>dispatch(updateUserInfo(info))
 
 
-  const {userRef,userProfilePic,userEmail,userName} = useSelector(state=>state.currentPlayer_info)
+  const allUserInfo = useSelector(state=>state.currentPlayer_info)
+  const {userRef,userProfilePic,userEmail,userName} = allUserInfo
+ 
 
+  const getImageUrlToShow = (image)=>{
+    const storageUrl = 'sudokuforever-b9936.appspot.com';
+    const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${storageUrl}/o/${encodeURIComponent(image)}?alt=media`;
+    return imageUrl
+
+}
 
   const preFetchDP = ()=>{
-    const imageRef = ref(storageRef, userProfilePic);
-    getDownloadURL(imageRef)
-    .then((url) => {
-      setImageUri(url);
-    })
-    .catch((error) => {
-      console.error('Error retrieving image:', error);
-    });
+    const imageRef = getImageUrlToShow(userProfilePic)
+    setImageUri(imageRef)
+    console.log(imageRef)
   }
 
   
-  const getImageUrlToShow = (image)=>{
-      const storageUrl = 'sudokuforever-b9936.appspot.com';
-      const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${storageUrl}/o/${encodeURIComponent(image)}?alt=media`;
-      return imageUrl
-
-  }
+  
 
   useEffect(() => {
     preFetchDP()
@@ -92,8 +92,12 @@ export default function Profile({navigation}) {
           const userDocRef = doc(db, 'users', userRef)
           try {
             await updateDoc(userDocRef, { dp_url: fileName });
+            allUserInfo.userProfilePic=fileName
+            update_user_info(allUserInfo)
+            
           } catch (error) {
             console.error('Error updating profile picture:', error);
+            alert('Something went wrong')
           }
           alert('Profile Information Updated')
         } 
@@ -116,7 +120,7 @@ export default function Profile({navigation}) {
 
 
   return (
-    <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={{backgroundColor:'white',paddingTop:20}}>
+    <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={{backgroundColor:'#f0f1f2',paddingTop:20}}>
 
 
       {/* New Profile Picture Upload */}
@@ -159,7 +163,7 @@ const styles = StyleSheet.create({
     height:250,
     width:250,
     borderWidth:3,
-    borderColor:'#0274ed',
+    borderColor:'#fff',
     borderRadius:125
   },
   overlayEffect:{
@@ -174,17 +178,19 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     borderWidth:3,
-    borderColor:'#0274ed',
+    borderColor:'#e80505',
   },
   textInputStyle:{
-    borderWidth:2,
-    borderColor:'#0274ed',
-    borderRadius:30,
+    borderWidth:1,
+    borderColor:'#e80505',
+    borderRadius:10,
     height:50,
-    color:'#0274ed',
+    color:'#e80505',
     padding:10,
     fontWeight:'bold',
-    marginBottom:10
+    marginBottom:10,
+    backgroundColor:'white'
+    
   },
   updateProfileBtn:{
     backgroundColor:'#e80505',
