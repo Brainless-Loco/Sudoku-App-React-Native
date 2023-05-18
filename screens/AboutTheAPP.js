@@ -6,13 +6,16 @@ import { useSelector } from 'react-redux';
 import { db } from '../firebase/firebaseConfig';
 import { addDoc, collection, query, where,getDocs, Timestamp } from 'firebase/firestore/lite';
 import { useEffect } from 'react';
-import MapView, { Marker } from 'react-native-maps';
+// import MapView, { Marker } from 'react-native-maps';
+import { useIsFocused } from '@react-navigation/native';
 
 
 
-export default function AboutSudokuForever() {
+export default function AboutTheAPP() {
 
-    const [averageRating, setaverageRating] = useState(10)
+    const isFocused = useIsFocused()
+
+    const [averageRating, setaverageRating] = useState(0)
     const [review, setreview] = useState('')
     const [rating, setrating] = useState(5)
     const [hasGivenReview,sethasGivenReview] = useState(false)
@@ -25,54 +28,56 @@ export default function AboutSudokuForever() {
 
 
     
-    const checkIfUserHasReviewed = ()=>{
-        const reviewColRef = collection(db,'reviews')
-        const reviewCheckQuery = query(reviewColRef, where('userRef', '==', userRef));
-        getDocs(reviewCheckQuery)
-        .then((querySnapshot) => {
-            if (!querySnapshot.empty) {
-                sethasGivenReview(true)
-            } else {
-                sethasGivenReview(false)
-            }
-        })
-        .catch((error) => {
+    // const checkIfUserHasReviewed = ()=>{
+    //     const reviewColRef = collection(db,'reviews')
+    //     const reviewCheckQuery = query(reviewColRef, where('userRef', '==', userRef));
+    //     getDocs(reviewCheckQuery)
+    //     .then((querySnapshot) => {
+    //         if (!querySnapshot.empty) {
+    //             sethasGivenReview(true)
+    //         } else {
+    //             sethasGivenReview(false)
+    //         }
+    //     })
+    //     .catch((error) => {
             
-            alert('Something went wrong while getting your review status')
-            console.error('Error getting review documents:', error);
-        });
-    }
+    //         alert('Something went wrong while getting your review status')
+    //         console.error('Error getting review documents:', error);
+    //     });
+    // }
 
 
-    const getAverageRating = async()=>{
-        try {
-            const reviewColRef = collection(db,'reviews')
-            const querySnapshot = await getDocs(reviewColRef);
-            let totalRating = 0;
-            let reviewCount = 0;
-            querySnapshot.forEach((doc) => {
-                const reviewData = doc.data();
-                totalRating += reviewData.rating;
-                reviewCount++;
-            });
-            if(reviewCount==0){
-                setaverageRating(0)
-            }
-            else{
-                const avg = totalRating / reviewCount;
-                setaverageRating(avg)
-            }
-        } 
-        catch (error) {
-            alert('Something went wrong while getting the average ratings!')
-        }
+    // const getAverageRating = async()=>{
+    //     try {
+    //         const reviewColRef = collection(db,'reviews')
+    //         const querySnapshot = await getDocs(reviewColRef);
+    //         let totalRating = 0;
+    //         let reviewCount = 0;
+    //         querySnapshot.forEach((doc) => {
+    //             const reviewData = doc.data();
+    //             totalRating += reviewData.rating;
+    //             reviewCount++;
+    //         });
+    //         if(reviewCount==0){
+    //             setaverageRating(0)
+    //         }
+    //         else{
+    //             const avg = totalRating / reviewCount;
+    //             setaverageRating(avg)
+    //         }
+    //     } 
+    //     catch (error) {
+    //         alert('Something went wrong while getting the average ratings!')
+    //     }
         
-    }
+    // }
 
-    useEffect(() => {
-        getAverageRating()
-        checkIfUserHasReviewed()
-    }, [])
+    // useEffect(() => {
+        // if(isFocused){
+    //     getAverageRating()
+    //     checkIfUserHasReviewed()
+        // }
+    // }, [isFocused])
     
 
 
@@ -92,6 +97,7 @@ export default function AboutSudokuForever() {
         }
         catch(e){
             alert('Something Went Wrong!')
+            setloading(false)
             console.log(e)
         }
     }
@@ -100,7 +106,7 @@ export default function AboutSudokuForever() {
   return (
     <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={{marginTop:15,textAlign:'center',marginTop:50,paddingBottom:20,fontSize:28,color:'#e80505',fontWeight:'600'}}>About Sudoku Forever</Text>
+            <Text style={styles.aboutTitle}>About Sudoku Forever</Text>
             <Image
                 style={styles.logo}
                 source={require('../assets/logo.png')}
@@ -108,7 +114,7 @@ export default function AboutSudokuForever() {
             <View style={[styles.reviewingOptionContainer,{margin:10,overflow:'hidden',display:'flex',justifyContent:'center',alignItems:'center',}]}>
                 <Rating showRating={false} fractions="{1}" ratingCount={10}  startingValue={averageRating} readonly  imageSize={30}/>
             </View>
-            <View style={styles.mapViewContainer}>
+            {/* <View style={styles.mapViewContainer}>
                     <Text style={styles.aboutText}>HeadOffice</Text>
                     <MapView style={{flex:1}}
                         initialRegion={{
@@ -124,7 +130,7 @@ export default function AboutSudokuForever() {
                             description="Headoffice of Sudoku Forever"
                             />
                     </MapView>
-                </View>
+            </View> */}
             <View style={styles.afterLogoView}>
                 <Text style={styles.aboutText}>
                     Welcome to Sudoku Forever, the ultimate Sudoku game app! Dive into the addictive world of Sudoku and challenge yourself with puzzles of varying difficulties. Sharpen your logical thinking, improve your problem-solving skills, and have endless fun along the way!
@@ -178,6 +184,15 @@ export default function AboutSudokuForever() {
 const styles = StyleSheet.create({
     container: {
         height:"100%"
+    },
+    aboutTitle:{
+        marginTop:15,
+        textAlign:'center',
+        marginTop:50,
+        paddingBottom:20,
+        fontSize:28,
+        color:'#e80505',
+        fontWeight:'600'
     },
     logo: {
         alignSelf:'center',

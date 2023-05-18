@@ -9,13 +9,13 @@ import { Provider } from 'react-redux';
 import store  from './redux/store';
 import LogIn from './screens/LogIn';
 import SignUp from './screens/SignUp';
-import AboutSudokuForever from './screens/AboutSudokuForever';
 import HowtoPlay from './screens/HowtoPlay';
 import Profile from './screens/Profile';
 import AllBlogs from './screens/AllBlogs';
 import ABlog from './screens/ABlog';
 import WriteBlogScreen from './screens/WriteBlogScreen';
 import HomeScreen from './screens/HomeScreen';
+import AboutTheAPP from './screens/AboutTheAPP';
 
 
 export default function App() {
@@ -65,15 +65,15 @@ export default function App() {
               options={{headerShown:false}}
             />
           <Stack.Screen
+              name="About"
+              component={AboutTheAPP}
+              options={{headerShown:false}}
+            />
+          <Stack.Screen
               name="HowToPlay"
               component={HowtoPlay}
               options={{headerShown:false}}
             /> 
-          <Stack.Screen
-              name="About"
-              component={AboutSudokuForever}
-              options={{headerShown:false}}
-            />
 
           
             <Stack.Screen
