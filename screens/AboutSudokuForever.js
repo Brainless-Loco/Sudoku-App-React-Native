@@ -12,24 +12,22 @@ import MapView, { Marker } from 'react-native-maps';
 
 export default function AboutSudokuForever() {
 
-    
     const [averageRating, setaverageRating] = useState(10)
     const [review, setreview] = useState('')
     const [rating, setrating] = useState(5)
     const [hasGivenReview,sethasGivenReview] = useState(false)
     const [loading, setloading] = useState(false)
     
-    
-    const reviewColRef = collection(db,'reviews')
 
 
     const allUserInfo = useSelector(state=>state.currentPlayer_info)
     const {userRef} = allUserInfo
 
 
-    const reviewCheckQuery = query(reviewColRef, where('userRef', '==', userRef));
-
+    
     const checkIfUserHasReviewed = ()=>{
+        const reviewColRef = collection(db,'reviews')
+        const reviewCheckQuery = query(reviewColRef, where('userRef', '==', userRef));
         getDocs(reviewCheckQuery)
         .then((querySnapshot) => {
             if (!querySnapshot.empty) {
@@ -48,24 +46,24 @@ export default function AboutSudokuForever() {
 
     const getAverageRating = async()=>{
         try {
+            const reviewColRef = collection(db,'reviews')
             const querySnapshot = await getDocs(reviewColRef);
             let totalRating = 0;
             let reviewCount = 0;
             querySnapshot.forEach((doc) => {
                 const reviewData = doc.data();
-            totalRating += reviewData.rating;
-            reviewCount++;
+                totalRating += reviewData.rating;
+                reviewCount++;
             });
             if(reviewCount==0){
                 setaverageRating(0)
             }
             else{
-                const avg = reviewCount==0? 0: totalRating / reviewCount;
+                const avg = totalRating / reviewCount;
                 setaverageRating(avg)
             }
         } 
         catch (error) {
-
             alert('Something went wrong while getting the average ratings!')
         }
         
@@ -81,6 +79,7 @@ export default function AboutSudokuForever() {
     const submitButtonAction = async ()=>{
         try{
             setloading(true)
+            const reviewColRef = collection(db,'reviews')
             const docRef = await addDoc(reviewColRef,{
                 'date': Timestamp.fromDate(new Date()),
                 'rating':rating,

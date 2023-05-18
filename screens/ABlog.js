@@ -183,7 +183,7 @@ const BlogUI = ({ navigation, route }) => {
       
       <View style={styles.blogContent}>
         <Text style={styles.title}>{blogData.title}</Text>
-        <View disabled={true} style={{height:'auto',minHeight:350,borderRadius:8,overflow:'hidden',backgroundColor:'white'}}>
+        <View disabled={true} style={styles.richtexteditorContainer}>
           <RichEditor 
               useContainer={true}
               ref={editorRef}
@@ -275,15 +275,34 @@ export default BlogUI;
       fontSize: 22,
       fontWeight: 'bold',
       marginBottom: 8,
-      color:'#e80505',
-      borderTopColor:'#adacac',
+      color:'#250994',
+      borderTopColor:'#e80505',
       borderWidth:1,
       paddingVertical:6,
-      borderBottomColor:'#adacac',
+      borderBottomColor:'#e80505',
       borderRightColor:'transparent',
       borderLeftColor:'transparent',
       backgroundColor:'white',
-      paddingHorizontal:5
+      paddingHorizontal:5,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 4,
+    },
+    richtexteditorContainer:{
+      height:'auto',
+      minHeight:350,
+      borderRadius:5,
+      overflow:'hidden',
+      backgroundColor:'white',
+      borderWidth:1,
+      borderColor:'#e80505',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 4,
     },
     actions: {
       flexDirection: 'row',
@@ -300,6 +319,7 @@ export default BlogUI;
       paddingVertical:5,
       borderRadius:20,
       backgroundColor:'white',
+      borderColor:'#250994',
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.2,
@@ -308,7 +328,8 @@ export default BlogUI;
     },
     likeDislikeCount: {
       marginLeft: 4,
-      fontWeight:'bold'
+      fontWeight:'bold',
+      color:'#250994'
     },
     commentsContainer: {
       marginBottom: 10,
@@ -361,7 +382,7 @@ export default BlogUI;
       minHeight: 40,
       maxHeight:100,
       borderWidth: 1,
-      borderColor: 'gray',
+      borderColor: '#250994',
       borderRadius: 20,
       padding: 8,
       marginLeft: 8,
