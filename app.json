@@ -25,7 +25,12 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.brainless_loco.SudokuForever"
+      "package": "com.brainless_loco.SudokuForever",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDYUDVcyIfjP-xMid-UAfMcwlqOBeii__I"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

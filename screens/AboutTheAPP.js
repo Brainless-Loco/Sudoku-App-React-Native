@@ -6,9 +6,8 @@ import { useSelector } from 'react-redux';
 import { db } from '../firebase/firebaseConfig';
 import { addDoc, collection, query, where,getDocs, Timestamp } from 'firebase/firestore/lite';
 import { useEffect } from 'react';
-// import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker,PROVIDER_GOOGLE } from 'react-native-maps';
 import { useIsFocused } from '@react-navigation/native';
-
 
 
 export default function AboutTheAPP() {
@@ -28,56 +27,56 @@ export default function AboutTheAPP() {
 
 
     
-    // const checkIfUserHasReviewed = ()=>{
-    //     const reviewColRef = collection(db,'reviews')
-    //     const reviewCheckQuery = query(reviewColRef, where('userRef', '==', userRef));
-    //     getDocs(reviewCheckQuery)
-    //     .then((querySnapshot) => {
-    //         if (!querySnapshot.empty) {
-    //             sethasGivenReview(true)
-    //         } else {
-    //             sethasGivenReview(false)
-    //         }
-    //     })
-    //     .catch((error) => {
+    const checkIfUserHasReviewed = ()=>{
+        const reviewColRef = collection(db,'reviews')
+        const reviewCheckQuery = query(reviewColRef, where('userRef', '==', userRef));
+        getDocs(reviewCheckQuery)
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                sethasGivenReview(true)
+            } else {
+                sethasGivenReview(false)
+            }
+        })
+        .catch((error) => {
             
-    //         alert('Something went wrong while getting your review status')
-    //         console.error('Error getting review documents:', error);
-    //     });
-    // }
+            alert('Something went wrong while getting your review status')
+            console.error('Error getting review documents:', error);
+        });
+    }
 
 
-    // const getAverageRating = async()=>{
-    //     try {
-    //         const reviewColRef = collection(db,'reviews')
-    //         const querySnapshot = await getDocs(reviewColRef);
-    //         let totalRating = 0;
-    //         let reviewCount = 0;
-    //         querySnapshot.forEach((doc) => {
-    //             const reviewData = doc.data();
-    //             totalRating += reviewData.rating;
-    //             reviewCount++;
-    //         });
-    //         if(reviewCount==0){
-    //             setaverageRating(0)
-    //         }
-    //         else{
-    //             const avg = totalRating / reviewCount;
-    //             setaverageRating(avg)
-    //         }
-    //     } 
-    //     catch (error) {
-    //         alert('Something went wrong while getting the average ratings!')
-    //     }
+    const getAverageRating = async()=>{
+        try {
+            const reviewColRef = collection(db,'reviews')
+            const querySnapshot = await getDocs(reviewColRef);
+            let totalRating = 0;
+            let reviewCount = 0;
+            querySnapshot.forEach((doc) => {
+                const reviewData = doc.data();
+                totalRating += reviewData.rating;
+                reviewCount++;
+            });
+            if(reviewCount==0){
+                setaverageRating(0)
+            }
+            else{
+                const avg = totalRating / reviewCount;
+                setaverageRating(avg)
+            }
+        } 
+        catch (error) {
+            alert('Something went wrong while getting the average ratings!')
+        }
         
-    // }
+    }
 
-    // useEffect(() => {
-        // if(isFocused){
-    //     getAverageRating()
-    //     checkIfUserHasReviewed()
-        // }
-    // }, [isFocused])
+    useEffect(() => {
+        if(isFocused){
+            getAverageRating()
+            checkIfUserHasReviewed()
+        }
+    }, [])
     
 
 
@@ -102,7 +101,6 @@ export default function AboutTheAPP() {
         }
     }
 
-
   return (
     <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -114,9 +112,10 @@ export default function AboutTheAPP() {
             <View style={[styles.reviewingOptionContainer,{margin:10,overflow:'hidden',display:'flex',justifyContent:'center',alignItems:'center',}]}>
                 <Rating showRating={false} fractions="{1}" ratingCount={10}  startingValue={averageRating} readonly  imageSize={30}/>
             </View>
-            {/* <View style={styles.mapViewContainer}>
+            <View style={styles.mapViewContainer}>
                     <Text style={styles.aboutText}>HeadOffice</Text>
                     <MapView style={{flex:1}}
+                        provider={PROVIDER_GOOGLE}
                         initialRegion={{
                             latitude: 22.4716,
                             longitude: 91.7877,
@@ -130,7 +129,7 @@ export default function AboutTheAPP() {
                             description="Headoffice of Sudoku Forever"
                             />
                     </MapView>
-            </View> */}
+            </View>
             <View style={styles.afterLogoView}>
                 <Text style={styles.aboutText}>
                     Welcome to Sudoku Forever, the ultimate Sudoku game app! Dive into the addictive world of Sudoku and challenge yourself with puzzles of varying difficulties. Sharpen your logical thinking, improve your problem-solving skills, and have endless fun along the way!
@@ -140,6 +139,10 @@ export default function AboutTheAPP() {
                     </Text>
                 <Text style={styles.aboutText}>
                     But that's not all! Sudoku Forever also provides valuable insights and strategies through our informative blogs. Learn the best techniques to solve puzzles efficiently, unravel the secrets of advanced solving methods, and enhance your overall gameplay. Stay up to date with the latest Sudoku trends and gain an edge over your opponents.
+                </Text>
+                
+                <Text style={{margin:15,paddingBottom:10, textAlign:'right',fontSize:20,color:'#e80505', fontWeight:'bold',fontSize:25}}>
+                        - Brainless Loco
                 </Text>
                 
                 {
@@ -171,9 +174,17 @@ export default function AboutTheAPP() {
                     </View>
                 }
             </View>
-            <Text style={{margin:15,paddingBottom:10, textAlign:'center',fontSize:20,color:'#e80505', fontWeight:'bold',fontSize:25}}>
-                    - Brainless Loco -
-            </Text>
+            <View style={styles.afterLogoView}>
+                <Text style={{color:'#2c60db',fontWeight:'500'}}>Dedicating this app to my one and only friend who is always excited about my work. {'\n'}
+                </Text>
+                <Image
+                    style={styles.ramimma}
+                    source={require('../assets/images/shoaibba.jpg')}/>
+                <Text style={{color:'#e80505',fontWeight:'700'}}>{'\n'}Shoaib Ramim [19701002] 
+                    <Text style={{color:'#2c60db',fontWeight:'500'}}> , this one is for you...</Text>
+                </Text>
+                
+            </View>
         </ScrollView>
     </View>
   )
@@ -203,11 +214,23 @@ const styles = StyleSheet.create({
     },
     afterLogoView:{
         padding:10,
+        marginBottom:15,
+        backgroundColor:'#fff',
+        marginHorizontal:10,
+        borderRadius:8,
+        borderWidth:1,
+        borderColor:'#e80505',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 4,
     },
     aboutText:{
         fontSize:15,
         color:'#102487',
-        fontWeight:'500'
+        fontWeight:'500',
+        marginBottom:5
     },
     reviewingOptionContainer:{
         marginTop:20,
@@ -259,5 +282,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 4,
+    },
+    ramimma:{
+        alignSelf:'center',
+        height:150,
+        width:150,
+        borderRadius:75,
+        borderWidth:5,
+        borderColor:'#e80505'
     }
 })
