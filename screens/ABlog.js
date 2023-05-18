@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, TextInput, Dimensions,ScrollView, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { doc, getDoc, arrayUnion, updateDoc, arrayRemove } from 'firebase/firestore/lite';
@@ -9,138 +9,140 @@ import HRline from '../components/HRline'
 import { useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
+import { RichEditor } from 'react-native-pell-rich-editor';
 
 const BlogUI = ({ navigation, route }) => {
+
+  const editorRef = useRef(null);
   
-    const blogDoc = doc(db,'blogs',route.params.blogRef);
+  const blogDoc = doc(db,'blogs',route.params.blogRef);
 
-    const [blogData, setBlogData] = useState(null);
-    const [comments, setComments] = useState([]);
-    const [commentInput, setcommentInput] = useState('')
-    const [likes, setlikes] = useState([])
-    const [dislikes, setdislikes] = useState([])
+  const [blogData, setBlogData] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [commentInput, setcommentInput] = useState('')
+  const [likes, setlikes] = useState([])
+  const [dislikes, setdislikes] = useState([])
 
-    const {userRef,userProfilePic,userEmail,userName} = useSelector(state=>state.currentPlayer_info)
+  const {userRef,userProfilePic,userEmail,userName} = useSelector(state=>state.currentPlayer_info)
 
 
-    const contentWidth = Dimensions.get('window').width;
-    
-    const fetchBlogData = async () => {
-        try {
-            const blogDoc = await getDoc(doc(db, 'blogs', route.params.blogRef));
-            const TempBlogData = blogDoc.data()
-            setBlogData(TempBlogData);
-            setComments(TempBlogData.comments);
-            setlikes(TempBlogData.likes)
-            setdislikes(TempBlogData.dislikes)
-        } catch (error) {
-            console.error('Error fetching blog data:', error);
-        }
-    };
-
-    const getImageUrlToShow = (image)=>{
-        const storageUrl = 'sudokuforever-b9936.appspot.com';
-        const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${storageUrl}/o/${encodeURIComponent(image)}?alt=media`;
-        return imageUrl
+  const contentWidth = Dimensions.get('window').width;
   
-    }
-
-    const AddANewComment = async ()=>{
-      const date = moment();
-      const formattedDate = date.format('hh:mm:ss DD MMMM, YYYY');
-
-      const newCommentInfo = {
-        "commentText":commentInput,
-        "userProfilePic":userProfilePic,
-        "userRef":userRef,
-        "username":userName,
-        "date": formattedDate
-      }
+  const fetchBlogData = async () => {
       try {
-        await updateDoc(blogDoc, {
-          comments: [...comments,newCommentInfo]
-        });
-        setComments([...comments,newCommentInfo])
-        setcommentInput('')
+          const blogDoc = await getDoc(doc(db, 'blogs', route.params.blogRef));
+          const TempBlogData = blogDoc.data()
+          setBlogData(TempBlogData);
+          setComments(TempBlogData.comments);
+          setlikes(TempBlogData.likes)
+          setdislikes(TempBlogData.dislikes)
       } catch (error) {
-        console.error('Error adding comment:', error);
+          console.error('Error fetching blog data:', error);
       }
-    }
+  };
 
-    const removeLike = async ()=>{
-      try {
-        await updateDoc(blogDoc, {
-          likes:arrayRemove(userRef)
-        });
-        const tempLikes = likes.filter(item=>item!=userRef)
-        setlikes(tempLikes)
-        
-      } catch (error) {
-        console.error('Error removing likes:', error);
-      }
-    }
+  const getImageUrlToShow = (image)=>{
+      const storageUrl = 'sudokuforever-b9936.appspot.com';
+      const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${storageUrl}/o/${encodeURIComponent(image)}?alt=media`;
+      return imageUrl
 
-    const addLike = async()=>{
-      try {
-        await updateDoc(blogDoc, {
-          likes:arrayUnion(userRef)
-        })
-        setlikes([...likes,userRef])
-      } 
-      catch (error) {
-        console.error('Error adding likes:', error);
-      }
-    }
+  }
 
-    const removeDislike = async()=>{
-      try {
-        await updateDoc(blogDoc, {
-          dislikes:arrayRemove(userRef)
-        });
-        const tempDislikes = dislikes.filter(item=>item!=userRef)
-        setdislikes(tempDislikes)
-        
-      } catch (error) {
-        console.error('Error removing dislikes:', error);
-      }
-    }
+  const AddANewComment = async ()=>{
+    const date = moment();
+    const formattedDate = date.format('hh:mm:ss DD MMMM, YYYY');
 
-    const addDislike =  async()=>{
-      try {
-        await updateDoc(blogDoc, {
-          dislikes:arrayUnion(userRef)
-        })
-        setdislikes([...dislikes,userRef])
-      } 
-      catch (error) {
-        console.error('Error adding dislikes:', error);
-      }
+    const newCommentInfo = {
+      "commentText":commentInput,
+      "userProfilePic":userProfilePic,
+      "userRef":userRef,
+      "username":userName,
+      "date": formattedDate
     }
+    try {
+      await updateDoc(blogDoc, {
+        comments: [...comments,newCommentInfo]
+      });
+      setComments([...comments,newCommentInfo])
+      setcommentInput('')
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
+  }
 
-    const newLikeOrRemoveLike = ()=>{
-      if(likes.includes(userRef)==true){  ///Remove the Like
-        removeLike()
-      }
-      else{ ///new Like + remove dislike
-        addLike()
-        removeDislike()
-      }
+  const removeLike = async ()=>{
+    try {
+      await updateDoc(blogDoc, {
+        likes:arrayRemove(userRef)
+      });
+      const tempLikes = likes.filter(item=>item!=userRef)
+      setlikes(tempLikes)
+      
+    } catch (error) {
+      console.error('Error removing likes:', error);
     }
+  }
 
-    const newDislikeOrRemoveDislike = ()=>{
-      if(dislikes.includes(userRef)==true){
-        removeDislike()
-      }
-      else{
-        addDislike()
-        removeLike()
-      }
+  const addLike = async()=>{
+    try {
+      await updateDoc(blogDoc, {
+        likes:arrayUnion(userRef)
+      })
+      setlikes([...likes,userRef])
+    } 
+    catch (error) {
+      console.error('Error adding likes:', error);
     }
-    
-    useEffect(() => {
-        fetchBlogData();
-        
-    }, [route.params.blogRef]);
+  }
+
+  const removeDislike = async()=>{
+    try {
+      await updateDoc(blogDoc, {
+        dislikes:arrayRemove(userRef)
+      });
+      const tempDislikes = dislikes.filter(item=>item!=userRef)
+      setdislikes(tempDislikes)
+      
+    } catch (error) {
+      console.error('Error removing dislikes:', error);
+    }
+  }
+
+  const addDislike =  async()=>{
+    try {
+      await updateDoc(blogDoc, {
+        dislikes:arrayUnion(userRef)
+      })
+      setdislikes([...dislikes,userRef])
+    } 
+    catch (error) {
+      console.error('Error adding dislikes:', error);
+    }
+  }
+
+  const newLikeOrRemoveLike = ()=>{
+    if(likes.includes(userRef)==true){  ///Remove the Like
+      removeLike()
+    }
+    else{ ///new Like + remove dislike
+      addLike()
+      removeDislike()
+    }
+  }
+
+  const newDislikeOrRemoveDislike = ()=>{
+    if(dislikes.includes(userRef)==true){
+      removeDislike()
+    }
+    else{
+      addDislike()
+      removeLike()
+    }
+  }
+  
+  useEffect(() => {
+      fetchBlogData();
+  }, [route.params.blogRef]);
     
 
 
@@ -158,6 +160,9 @@ const BlogUI = ({ navigation, route }) => {
       </View>
     );
   };
+
+  
+    const [editorHeight, setEditorHeight] = useState(0);
 
   if (!blogData) {
     return <View style={{height:500,display:'flex',justifyContent:'center',alignItems:'center'}}>
@@ -178,7 +183,19 @@ const BlogUI = ({ navigation, route }) => {
       
       <View style={styles.blogContent}>
         <Text style={styles.title}>{blogData.title}</Text>
-        <HTML source={{ html: blogData.description }} tagsStyles={{body:{minHeight:250},a:{textDecorationLine:'none',fontWeight:'600'}}} contentWidth={contentWidth}/>
+        <View disabled={true} style={{height:'auto',minHeight:350,borderRadius:8,overflow:'hidden',backgroundColor:'white'}}>
+          <RichEditor 
+              useContainer={true}
+              ref={editorRef}
+              disabled={true}
+              style={{flex: 1,backgroundColor:'transparent',borderRadius:8}}
+              placeholder="Write your cool content here :)"
+              initialContentHTML={blogData.description}
+              onHeightChange={(height) => setEditorHeight(height)}
+            />
+        </View>
+        
+        {/* <HTML source={{ html: blogData.description }} tagsStyles={{body:{minHeight:250},a:{textDecorationLine:'none',fontWeight:'600'}}} contentWidth={contentWidth}/> */}
       </View>
       
       <HRline/>
@@ -231,7 +248,7 @@ export default BlogUI;
     header: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 16,
+      paddingVertical:10,
     },
     authorImage: {
       width: 40,
@@ -264,7 +281,9 @@ export default BlogUI;
       paddingVertical:6,
       borderBottomColor:'#adacac',
       borderRightColor:'transparent',
-      borderLeftColor:'transparent'
+      borderLeftColor:'transparent',
+      backgroundColor:'white',
+      paddingHorizontal:5
     },
     actions: {
       flexDirection: 'row',
@@ -280,7 +299,12 @@ export default BlogUI;
       justifyContent:'center',
       paddingVertical:5,
       borderRadius:20,
-      backgroundColor:'white'
+      backgroundColor:'white',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 4,
     },
     likeDislikeCount: {
       marginLeft: 4,
@@ -288,7 +312,7 @@ export default BlogUI;
     },
     commentsContainer: {
       marginBottom: 10,
-      minHeight:210
+      minHeight:150
     },
     commentsHeading: {
       fontSize: 18,
@@ -312,7 +336,7 @@ export default BlogUI;
     },
     commentAuthor: {
         color:'#250994',
-        fontSize: 16,
+        fontSize: 13,
         fontWeight: 'bold',
     },
     commentText: {

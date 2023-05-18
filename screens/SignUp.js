@@ -106,6 +106,7 @@ export default function SignUp({navigation}) {
             else if(e.code==='auth/weak-password') seterrorMessage("Password provide a strong password")
             else if(e.code === 'auth/invalid-email') seterrorMessage("Please provide a valid email")
             else console.log(e)
+            setloading(false)
         }
     }
 

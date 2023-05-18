@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, ScrollView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView } from 'react-native';
 import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
 import { useSelector } from 'react-redux';
 import { db } from '../firebase/firebaseConfig';
@@ -64,17 +64,17 @@ const WriteABlog = ({navigation}) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Text style={styles.title}>Write a Blog</Text>
       <TextInput value={title} onChangeText={(text)=>setTitle(text)} style={styles.input} placeholder='Title of the Blog..'/>
       <View style={styles.editorContainer}>
         <RichToolbar
             editor={editorRef}
-            actions={[ actions.setBold, actions.setItalic, actions.setUnderline,actions.heading1,actions.insertLink, actions.insertBulletsList,actions.insertOrderedList,actions.code,actions.checkboxList,actions.undo,actions.redo, ]}
+            actions={[ actions.setBold, actions.setItalic, actions.setUnderline,actions.setStrikethrough, actions.heading1,actions.insertLink, actions.insertBulletsList,actions.insertOrderedList,actions.code,actions.blockquote,actions.checkboxList,actions.alignLeft,actions.alignCenter,actions.alignRight,actions.setSuperscript, actions.setSubscript, actions.removeFormat,actions.undo,actions.redo ]}
             iconMap={{ [actions.heading1]: handleHead }}
             selectedIconTint="#000"
             disabledIconTint="#bfbfbf"
-            style={{marginBottom:10}}
+            // style={{marginBottom:10}}
         />
         <RichEditor
             useContainer={false}
@@ -113,11 +113,15 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 8,
     backgroundColor:'white',
-    borderRadius:8
+    borderRadius:8,
+    borderWidth:1,
+    borderColor:'#e80505'
   },
   editorContainer:{
     borderRadius:10,
     overflow:'hidden',
+    borderWidth:1,
+    borderColor:'#e80505'
   },
   editor: {
     minHeight:350,

@@ -8,6 +8,8 @@ import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect } from 'react';
 import { updateUserInfo } from '../redux/actions/Grid_actions';
+import { Entypo } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 
 export default function Profile({navigation}) {
@@ -123,7 +125,7 @@ export default function Profile({navigation}) {
 
 
   return (
-    <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={{backgroundColor:'#f0f1f2',paddingTop:20}}>
+    <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={{backgroundColor:'#f0f1f2',paddingTop:25}}>
 
 
       {/* New Profile Picture Upload */}
@@ -137,7 +139,7 @@ export default function Profile({navigation}) {
     {/* Change User Name */}
 
     <View style={{margin:5}}>
-      <TextInput editable={false} style={styles.textInputStyle} value={userName}/>
+      <TextInput editable={false}style={styles.textInputStyle} value={userName + '  (Uneditable)'}/>
       <TextInput style={styles.textInputStyle} secureTextEntry={true} showSoftInputOnFocus={true} onChangeText={(text)=>{setpassword(text)}} placeholder='Password'/>
       <TextInput style={styles.textInputStyle} secureTextEntry={true} showSoftInputOnFocus={true} onChangeText={(text)=>{setconfirmPassword(text)}} placeholder='Confirm Password'/>
     </View>
@@ -145,11 +147,13 @@ export default function Profile({navigation}) {
       <TouchableOpacity style={styles.updateProfileBtn} onPress={updateProfileInformation}>
         <Text style={{color:'white',fontSize:20,fontWeight:'600'}}>{
           loading? <ActivityIndicator size={20} color={"white"} />:
-          "Update Profile"
+          <FontAwesome5 name="check" size={20} color="white" >&nbsp; Update Profile</FontAwesome5>
           }</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.signOutBtn} onPress={signOutBtn}>
-        <Text style={{color:'white',fontSize:20,fontWeight:'600'}}>Sign Out</Text>
+        <Text style={{color:'white',fontSize:20,fontWeight:'600'}}>
+        <Entypo name="login" size={20} color="white" /> Sign Out
+          </Text>
       </TouchableOpacity>
       
     </ScrollView>
@@ -201,7 +205,7 @@ const styles = StyleSheet.create({
   updateProfileBtn:{
     backgroundColor:'#e80505',
     height:50,
-    borderRadius:25,
+    borderRadius:10,
     margin:10,
     display:'flex',
     justifyContent:'center',
@@ -216,7 +220,7 @@ const styles = StyleSheet.create({
     backgroundColor:'#a32121',
     width:'60%',
     height:50,
-    borderRadius:25,
+    borderRadius:10,
     textAlign:'center',
   }
 })

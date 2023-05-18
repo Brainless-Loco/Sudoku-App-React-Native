@@ -5,8 +5,6 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { updateUserInfo } from '../redux/actions/Grid_actions';
 import { collection, getDocs, query, where } from "firebase/firestore/lite";
-import {gsap, Back} from 'gsap-rn';
-
 export default function LogIn({navigation}) {
 
     const dispatch = useDispatch()
@@ -49,13 +47,14 @@ export default function LogIn({navigation}) {
             else{
                 alert("Please verify your email first.")
             }
+            setloading(false)
         } 
         catch (e) {
             if(e.code==='auth/wrong-password') seterrorMessage("Wrong Password")
             if(e.code==='auth/user-not-found') seterrorMessage('No account matches this email')
             else console.log(e)
+            setloading(false)
         }
-        setloading(false)
       };
 
     const onLoginPress = () => {

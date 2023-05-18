@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateUserInfo } from '../redux/actions/Grid_actions';
 import {gsap, Back} from 'gsap-rn';
+import { useIsFocused } from '@react-navigation/native';
 
 
 const HomeScreen = ({navigation}) => {
@@ -19,6 +20,7 @@ const HomeScreen = ({navigation}) => {
   const dispatch = useDispatch()
 
   const viewRef = useRef(null);
+  const isFocues = useIsFocused()
 
   const update_user_info = (info)=>dispatch(updateUserInfo(info))
 
@@ -38,7 +40,8 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     const view = viewRef.current;
     gsap.to(view, {duration:1, transform:{rotate:360, scale:1}, 	ease:Back.easeInOut});
-  }, [])
+    setIsOpen(false)
+  }, [isFocues])
   
 
   return (

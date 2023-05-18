@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, StyleSheet, Pressable, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native'
+import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { AirbnbRating, Rating } from 'react-native-ratings';
 import { useState } from 'react';
@@ -23,7 +23,8 @@ export default function AboutSudokuForever() {
     const reviewColRef = collection(db,'reviews')
 
 
-    const {userRef} = useSelector(state=>state.currentPlayer_info)
+    const allUserInfo = useSelector(state=>state.currentPlayer_info)
+    const {userRef} = allUserInfo
 
 
     const reviewCheckQuery = query(reviewColRef, where('userRef', '==', userRef));
@@ -38,28 +39,41 @@ export default function AboutSudokuForever() {
             }
         })
         .catch((error) => {
+            
+            alert('Something went wrong while getting your review status')
             console.error('Error getting review documents:', error);
         });
     }
 
 
     const getAverageRating = async()=>{
-        const querySnapshot = await getDocs(reviewColRef);
-        let totalRating = 0;
-        let reviewCount = 0;
-        querySnapshot.forEach((doc) => {
-            const reviewData = doc.data();
-        totalRating += reviewData.rating;
-        reviewCount++;
-        });
-        const avg = reviewCount==0? 0: totalRating / reviewCount;
-        setaverageRating(avg)
+        try {
+            const querySnapshot = await getDocs(reviewColRef);
+            let totalRating = 0;
+            let reviewCount = 0;
+            querySnapshot.forEach((doc) => {
+                const reviewData = doc.data();
+            totalRating += reviewData.rating;
+            reviewCount++;
+            });
+            if(reviewCount==0){
+                setaverageRating(0)
+            }
+            else{
+                const avg = reviewCount==0? 0: totalRating / reviewCount;
+                setaverageRating(avg)
+            }
+        } 
+        catch (error) {
+
+            alert('Something went wrong while getting the average ratings!')
+        }
+        
     }
 
     useEffect(() => {
         getAverageRating()
         checkIfUserHasReviewed()
-        console.log(hasGivenReview)
     }, [])
     
 
@@ -78,6 +92,7 @@ export default function AboutSudokuForever() {
             setloading(false)
         }
         catch(e){
+            alert('Something Went Wrong!')
             console.log(e)
         }
     }

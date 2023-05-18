@@ -1,6 +1,6 @@
 import { CHANGE_BUTTON_LOCK_STATUS, CHANGE_PAUSE_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, FORM_THE_GAME_PATTERN, GRID_UPDATE, INCREASE_MISTAKE_COUNT, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, UPDATE_SELECTED_SMALL_SQUARE_INDEX, UPDATE_USER_INFO } from "../Types";
-// import {AsyncStorage} from 'react-native';
-// import AsyncStorage from '@react-native-async-stora ync-storage'
+// import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 
 var rn = require('random-number');
