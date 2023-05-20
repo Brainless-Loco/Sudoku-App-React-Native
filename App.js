@@ -16,19 +16,23 @@ import ABlog from './screens/ABlog';
 import WriteBlogScreen from './screens/WriteBlogScreen';
 import HomeScreen from './screens/HomeScreen';
 import AboutTheAPP from './screens/AboutTheAPP';
+import SudokuTutorialScreen from './screens/SudokuTutorial2';
 
 
 export default function App() {
 
   const Stack = createNativeStackNavigator();
 
-
-
   return (
 
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+          {/* <Stack.Screen
+              name="LearningSudoku"
+              component={SudokuTutorialScreen}
+              options={{headerShown:false}}
+            /> */}
           <Stack.Screen
               name="LogIn"
               component={LogIn}
