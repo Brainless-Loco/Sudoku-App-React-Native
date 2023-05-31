@@ -17,6 +17,7 @@ import WriteBlogScreen from './screens/WriteBlogScreen';
 import HomeScreen from './screens/HomeScreen';
 import AboutTheAPP from './screens/AboutTheAPP';
 import SudokuTutorialScreen from './screens/SudokuTutorial2';
+import SolveWithAI from './screens/SolveWithAI';
 
 
 export default function App() {
@@ -33,7 +34,7 @@ export default function App() {
               component={SudokuTutorialScreen}
               options={{headerShown:false}}
             /> */}
-          <Stack.Screen
+          {/* <Stack.Screen
               name="LogIn"
               component={LogIn}
               options={{headerShown:false}}
@@ -42,21 +43,26 @@ export default function App() {
               name="SignUp"
               component={SignUp}
               options={{headerShown:false}}
-            />
+            /> */}
           <Stack.Screen
               name="HomeScreen"
               component={HomeScreen}
               options={{headerShown:false}}
             />
+            <Stack.Screen
+              name="AISolver"
+              component={SolveWithAI}
+              options={{headerShown:true,headerTitle:''}}
+            />
           <Stack.Screen
               name="AllBlogLists"
               component={AllBlogs}
-              options={{headerShown:false}}
+              options={{headerShown:true,headerTitle:''}}
             />
           <Stack.Screen
               name="WriteABlog"
               component={WriteBlogScreen}
-              options={{headerShown:false}}
+              options={{headerShown:true,headerTitle:''}}
             />
           <Stack.Screen
             name="ABlog"

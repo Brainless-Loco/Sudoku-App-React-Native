@@ -70,7 +70,7 @@ const WriteABlog = ({navigation}) => {
       <View style={styles.editorContainer}>
         <RichToolbar
             editor={editorRef}
-            actions={[ actions.setBold, actions.setItalic, actions.setUnderline,actions.setStrikethrough, actions.heading1,actions.insertLink, actions.insertBulletsList,actions.insertOrderedList,actions.code,actions.blockquote,actions.checkboxList,actions.alignLeft,actions.alignCenter,actions.alignRight,actions.setSuperscript, actions.setSubscript, actions.removeFormat,actions.undo,actions.redo ]}
+            actions={[ actions.setBold, actions.setItalic, actions.setUnderline,actions.setStrikethrough, actions.heading1,actions.insertLink, actions.insertBulletsList,actions.insertOrderedList,actions.code,actions.blockquote,actions.alignLeft,actions.alignCenter,actions.alignRight,actions.setSuperscript, actions.setSubscript, actions.removeFormat,actions.undo,actions.redo ]}
             iconMap={{ [actions.heading1]: handleHead }}
             selectedIconTint="#000"
             disabledIconTint="#bfbfbf"
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 8,
-    paddingVertical:50
+    paddingBottom:50
   },
   title: {
     color:'#e80505',

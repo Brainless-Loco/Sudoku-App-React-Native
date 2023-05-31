@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { updateUserInfo } from '../redux/actions/Grid_actions';
 import {gsap, Back} from 'gsap-rn';
 import { useIsFocused } from '@react-navigation/native';
+import { AntDesign } from '@expo/vector-icons';
 
 
 const HomeScreen = ({navigation}) => {
@@ -45,7 +46,6 @@ const HomeScreen = ({navigation}) => {
   
 
   return (
-    <View style={styles.appContainer} >
       <ScrollView showsVerticalScrollIndicator={false}>
           <Image
               ref={viewRef}
@@ -56,66 +56,69 @@ const HomeScreen = ({navigation}) => {
           <Text style={styles.title}>Sudoku Forever</Text>
           <View style={styles.container}>
               <TouchableOpacity onPress={()=>{navigateToAnotherScreen('LandingPage')}} style={styles.navigationBtn}>
+                  <Ionicons name="game-controller" size={65} color="#e80505" style={styles.navigationIcon} />
                   <Text style={styles.btnText}>
-                      <Ionicons name="game-controller" size={18} color="#e80505" />
                       &nbsp;Playzone
                   </Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={()=>{navigateToAnotherScreen('AllBlogLists')}} style={styles.navigationBtn}>
-                  <Text style={styles.btnText}>
-                      <MaterialCommunityIcons name="post-outline" size={18} color="#e80505" />
-                      &nbsp;Blogs
-                  </Text>
+                  <MaterialCommunityIcons name="post-outline" size={65} color="#e80505" style={styles.navigationIcon}/>
+                  <Text style={styles.btnText}>Blogs</Text>
               </TouchableOpacity>
-
-              <TouchableOpacity onPress={toggleDropdown} style={styles.navigationBtn}>
-                  <Text style={styles.btnText}>
-                      <Feather name="chevron-down" size={20} color="#e80505" />
-                      &nbsp;Others
-                  </Text>
+              
+              <TouchableOpacity onPress={()=>{navigateToAnotherScreen('AISolver')}} style={styles.navigationBtn}>
+                  <AntDesign name="camera" size={65} color="#e80505" style={styles.navigationIcon} />
+                  <Text style={styles.btnText}>AI Solver</Text>
               </TouchableOpacity>
-                  {isOpen && (
-                  <View style={styles.dropdownList}>
-                      <TouchableOpacity onPress={()=>{navigateToAnotherScreen('About')}} style={styles.dropdownListItem}>
-                          <Text style={styles.dropdownListItemText}>
-                              <FontAwesome name="question-circle" size={18} color="#e80505" />
-                              &nbsp; About
-                          </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={()=>{navigateToAnotherScreen('HowToPlay')}} style={styles.dropdownListItem}>
-                          <Text style={styles.dropdownListItemText}>
-                          <Ionicons name="md-game-controller-outline" size={18} color="#e80505" />
-                              &nbsp; How to Play
-                          </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={()=>{navigateToAnotherScreen('WriteABlog')}} style={styles.dropdownListItem}>
-                          <Text style={styles.dropdownListItemText}>
-                              <FontAwesome name="pencil-square-o" size={18} color="#e80505" />
-                              &nbsp; Write Blog
-                          </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={()=>{navigateToAnotherScreen('Profile')}} style={styles.dropdownListItem}>
-                          <Text style={styles.dropdownListItemText}>
-                              <Ionicons name="person" size={18} color="#e80505" />
-                              &nbsp; Profile
-                          </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={()=>{signOutBtn()}} style={styles.dropdownListItem}>
-                          <Text style={styles.dropdownListItemText}>
-                              <Entypo name="log-out" size={18} color="#e80505" />
-                              &nbsp; Log Out
-                          </Text>
-                      </TouchableOpacity>
-                  </View>
-                  )}
-              </View>
+              <TouchableOpacity onPress={()=>{navigateToAnotherScreen('Profile')}} style={styles.navigationBtn}>
+                  
+                  <Ionicons name="person" size={65} color="#e80505" style={styles.navigationIcon}/>
+                  <Text style={styles.btnText}>Profile</Text>
+              </TouchableOpacity>
+          </View>
+          <View style={[styles.container,{paddingBottom:20}]}>
+            <TouchableOpacity onPress={toggleDropdown} style={[styles.navigationBtn,{height:50,textAlign:'center',marginHorizontal:'auto',width:'60%'}]}>
+                    <Text style={styles.btnText}>
+                        <Feather name="chevron-down" size={20} color="#e80505" />
+                        &nbsp;Others
+                    </Text>
+                </TouchableOpacity>
+                    {isOpen && (
+                    <View style={styles.dropdownList}>
+                        <TouchableOpacity onPress={()=>{navigateToAnotherScreen('About')}} style={styles.dropdownListItem}>
+                            <Text style={styles.dropdownListItemText}>
+                                <FontAwesome name="question-circle" size={18} color="#e80505" />
+                                &nbsp; About
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=>{navigateToAnotherScreen('HowToPlay')}} style={styles.dropdownListItem}>
+                            <Text style={styles.dropdownListItemText}>
+                            <Ionicons name="md-game-controller-outline" size={18} color="#e80505" />
+                                &nbsp; How to Play
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=>{navigateToAnotherScreen('WriteABlog')}} style={styles.dropdownListItem}>
+                            <Text style={styles.dropdownListItemText}>
+                                <FontAwesome name="pencil-square-o" size={18} color="#e80505" />
+                                &nbsp; Write Blog
+                            </Text>
+                        </TouchableOpacity>
+                      
+                        <TouchableOpacity onPress={()=>{signOutBtn()}} style={styles.dropdownListItem}>
+                            <Text style={styles.dropdownListItemText}>
+                                <Entypo name="log-out" size={18} color="#e80505" />
+                                &nbsp; Log Out
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    )}
+            </View>
       </ScrollView>
       
-        <Text style={{paddingTop:0,textAlign:'center',color:'#e80505', fontWeight:'bold',fontSize:18}}>
-                    - Brainless Loco -
-            </Text>
-    </View>
+        // <Text style={{paddingTop:0,textAlign:'center',color:'#e80505', fontWeight:'bold',fontSize:18}}>
+        //             - Brainless Loco -
+        //     </Text>
   );
 };
 
@@ -125,35 +128,39 @@ const styles = StyleSheet.create({
   },
   container: {
     display:'flex',
+    flex:1,
     alignItems:'center',
+    flexDirection:'row',
+    flexWrap:'wrap',
+    justifyContent:'space-around',
   },
   logo: {
     alignSelf:'center',
     color:"#0274ed",
     height:150,
     width:150,
-    marginBottom:20,
+    marginBottom:5,
     marginTop:30
-    },
-    welcomeText:{
-        fontSize:18,
-        color:'#082275',
-        fontWeight:'500',
-        textAlign:'center'
-    },
-    title:{
-        color:'#e80505',
-        fontSize:25,
-        fontWeight:'700',
-        marginBottom:20,
-        textAlign:'center'
-    },
+  },
+  welcomeText:{
+      fontSize:18,
+      color:'#082275',
+      fontWeight:'500',
+      textAlign:'center'
+  },
+  title:{
+      color:'#e80505',
+      fontSize:25,
+      fontWeight:'700',
+      textAlign:'center'
+  },
  navigationBtn: {
     padding: 10,
     backgroundColor: '#fff',
-    borderRadius: 5,
-    width:'70%',
-    marginVertical:3,
+    borderRadius: 8,
+    width:'42%',
+    height:140,
+    marginVertical:10,
     borderWidth:0.5,
     borderColor:'#e80505',
     shadowColor: '#000',
@@ -162,17 +169,22 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
   },
+  navigationIcon:{
+    width:'100%',
+    textAlign:'center',
+    marginBottom:10
+  },
   btnText: {
-    fontSize: 16,
+    fontSize: 20,
     textAlign:'center',
     fontWeight:'bold',
-    color:'#e80505'
+    color:'#e80505',
   },
   dropdownList: {
     width:'100%',
     backgroundColor: '#f0f0f0',
     borderRadius: 5,
-    marginTop: 5,
+    marginTop:-12,
     textAlign:'center',
     display:'flex',
     alignItems:'center'
