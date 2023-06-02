@@ -12,11 +12,11 @@ export const gridUpdate = (grid) =>{
   }
 }
 
-export const game_pattern_formation = (pattern)=>{
-
+export const game_pattern_formation = (props)=>{
+  const {pattern,gameLevel}= props
   var genTotal = rn.generator({
-    min:  35,
-    max:  40,
+    min:  gameLevel==3?55:gameLevel==2?40:30,
+    max:  gameLevel==3?65:gameLevel==2?50:40,
     integer: true
   });
   var genIndex = rn.generator({

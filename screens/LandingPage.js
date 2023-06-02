@@ -16,7 +16,7 @@ export default function LandingPage({navigation}) {
 
 
   const update_current_game = (pattern)=>dispatch(gridUpdate(pattern))
-  const form_new_game = (grid)=>dispatch(game_pattern_formation(grid))
+  const form_new_game = (props)=>dispatch(game_pattern_formation(props))
 
   const [has_paused_game,set_paused_game_check] = useState(false)
 
@@ -29,17 +29,16 @@ export default function LandingPage({navigation}) {
   useEffect(()=>{
     is_there_any_paused_game()
   },[])
-  
 
   const current_grid = useSelector(state=>state.current_playing_grid)
   const right_value = useSelector(state=>state.grid)
 
-  const update_everything_for_playzone = async ()=>{
+  const update_everything_for_playzone = async (gameLevel)=>{
+    setloading(true)
     try{
-      setloading(true)
       var new_pattern = generate_a_new_pattern()
-      const temp = new_pattern.map((arr)=> arr.slice())
-      form_new_game(temp)
+      const pattern = new_pattern.map((arr)=> arr.slice())
+      form_new_game({pattern,gameLevel})
       update_current_game(new_pattern)
       setloading(false)
       navigation.navigate('Playzone')
@@ -53,7 +52,7 @@ export default function LandingPage({navigation}) {
   useEffect(() => {
     const view = viewRef.current;
     gsap.to(view, {duration:1, transform:{rotate:360, scale:1}, 	ease:Back.easeInOut});
-    }, [])
+  }, [])
 
 
 
@@ -65,20 +64,23 @@ export default function LandingPage({navigation}) {
         style={styles.logo}
         source={require('../assets/logo.png')}
       />
-      <Text style={styles.welcomeText}>Welcome to <Text style={{color:'red'}}> Sudoku Playzone</Text></Text>
-      <Text style={styles.welcomeText}>&nbsp;</Text>
+      <Text style={styles.welcomeText}>Let's Play<Text style={{color:'red'}}> Sudoku</Text></Text>
+      <Text style={styles.modeTitle}>Please select a mode</Text>
       <TouchableOpacity
         style={styles.enterPlayzoneBtn}
-        onPress={ async () =>{
-          update_everything_for_playzone()
-        }
-        }
-        ><Text style={styles.btnText}>
-          {
-            loading? <ActivityIndicator size={20} color={"white"} />:"Enter the Playzone"
-          }
-          </Text>
-          </TouchableOpacity>
+        onPress={ async () =>{update_everything_for_playzone(1)}}>
+          <Text style={styles.btnText}>Newbie</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.enterPlayzoneBtn}
+        onPress={ async () =>{update_everything_for_playzone(2)}}>
+          <Text style={styles.btnText}>Expert</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.enterPlayzoneBtn}
+        onPress={ async () =>{update_everything_for_playzone(3)}}>
+          <Text style={styles.btnText}>Master</Text>
+      </TouchableOpacity>
         
         
         {/* {
@@ -101,29 +103,45 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   welcomeText:{
     fontWeight: 'bold',
     fontSize: 20,
-    color:'#094480'
+    color:'#094480',
+    marginBottom:20
+  },
+  modeTitle:{
+    fontWeight: 'bold',
+    fontSize: 15,
+    color:'#094480',
+    marginVertical:5
   },
   logo:{
     width: 150,
     height:150,
-    margin: 30
+    marginBottom:40,
+    marginTop:20
   },
   enterPlayzoneBtn:{
+    width:'60%',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 8,
-    backgroundColor: 'red',
+    backgroundColor: 'white',
     margin:8,
+    borderWidth:1.5,
+    borderColor:'#e80505',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
   },
   btnText:{
-    color:'white',
-    fontSize: 22
+    color:'#e80505',
+    fontSize: 22,
+    fontWeight:'500'
   }
 });

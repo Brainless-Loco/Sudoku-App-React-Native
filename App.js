@@ -67,17 +67,17 @@ export default function App() {
           <Stack.Screen
             name="ABlog"
             component={ABlog}
-            options={{headerShown:false}}
+            options={{headerShown:true,headerTitle:''}}
         />
           <Stack.Screen
               name="Profile"
               component={Profile}
-              options={{headerShown:false}}
+              options={{headerShown:true,headerTitle:''}}
             />
           <Stack.Screen
               name="About"
               component={AboutTheAPP}
-              options={{headerShown:false}}
+              options={{headerShown:true,headerTitle:''}}
             />
           <Stack.Screen
               name="HowToPlay"
@@ -89,7 +89,7 @@ export default function App() {
             <Stack.Screen
               name="LandingPage"
               component={LandingPage}
-              options={{ headerShown:false }}
+              options={{headerShown:true,headerTitle:''}}
             />
             <Stack.Screen name="Playzone" component={Playzone} />
         </Stack.Navigator>
