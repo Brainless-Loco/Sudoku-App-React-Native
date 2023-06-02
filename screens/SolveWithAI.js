@@ -1,14 +1,10 @@
 import { View, Text, Image, Pressable, StyleSheet, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
 import React from 'react'
-import { FontAwesome5 } from '@expo/vector-icons';
 import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { Camera } from 'expo-camera';
-import { db } from '../firebase/firebaseConfig';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
-
-const { default: getIPV4 } = require('../api/LocalIP')
 import axios from 'axios';  
 
 export default function SolveWithAI() {
@@ -89,7 +85,7 @@ export default function SolveWithAI() {
         axios.get(flaskAPIEndpoint)
         .then(response => {
           // Handle the response data
-          console.log(response.data.solution);
+          // console.log(response.data.solution);
           setgrid(response.data.solution)
           setModalVisible(true)
         })

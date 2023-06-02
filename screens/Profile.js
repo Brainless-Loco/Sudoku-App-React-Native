@@ -141,7 +141,7 @@ export default function Profile({navigation}) {
     <View style={{margin:5}}>
       <TextInput editable={false}style={styles.textInputStyle} value={userName + '  (Uneditable)'}/>
       <TextInput style={styles.textInputStyle} secureTextEntry={true} showSoftInputOnFocus={true} onChangeText={(text)=>{setpassword(text)}} placeholder='Password'/>
-      <TextInput style={styles.textInputStyle} secureTextEntry={true} showSoftInputOnFocus={true} onChangeText={(text)=>{setconfirmPassword(text)}} placeholder='Confirm Password'/>
+      {password.length>0 && <TextInput style={styles.textInputStyle} secureTextEntry={true} showSoftInputOnFocus={true} onChangeText={(text)=>{setconfirmPassword(text)}} placeholder='Confirm Password'/>}
     </View>
 
       <TouchableOpacity style={styles.updateProfileBtn} onPress={updateProfileInformation}>

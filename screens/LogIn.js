@@ -5,7 +5,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { updateUserInfo } from '../redux/actions/Grid_actions';
 import { collection, getDocs, query, where } from "firebase/firestore/lite";
-// import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 
@@ -40,6 +40,14 @@ export default function LogIn({navigation}) {
                         userName:userName,
                         userProfilePic:dp_url
                     }
+                    const loggedUserInfoString = JSON.stringify(loggedUserInfo);
+                    AsyncStorage.setItem('userData', loggedUserInfoString)
+                    .then(() => {
+                        console.log('Data stored successfully!');
+                    })
+                    .catch((error) => {
+                        console.log('Error storing data:', error);
+                    });
                     update_user_info(loggedUserInfo)
                     setloading(false)
                     setEmail('')
@@ -64,20 +72,20 @@ export default function LogIn({navigation}) {
     const onLoginPress = () => {
         loginUser()
     }
-    // useEffect(() => {
-    //     const checkLoggedIn = async () => {
-    //         const userData = await AsyncStorage.getItem('userData');
-    //         if (userData) {
-    //           const parsedUserData = JSON.parse(userData);
-    //           update_user_info(parsedUserData)
-    //           navigation.replace('HomeScreen')
-    //         } else {
-    //           // User data doesn't exist, show login screen
-    //           // or redirect to the login page
-    //         }
-    //       };
-    //       checkLoggedIn()
-    // }, [])
+    useEffect(() => {
+        const checkLoggedIn = async () => {
+            const userData = await AsyncStorage.getItem('userData');
+            if (userData) {
+              const parsedUserData = JSON.parse(userData);
+              update_user_info(parsedUserData)
+              navigation.replace('HomeScreen')
+            } else {
+              // User data doesn't exist, show login screen
+              // or redirect to the login page
+            }
+          };
+          checkLoggedIn()
+    }, [])
     
 
     

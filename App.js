@@ -34,7 +34,7 @@ export default function App() {
               component={SudokuTutorialScreen}
               options={{headerShown:false}}
             /> */}
-          {/* <Stack.Screen
+          <Stack.Screen
               name="LogIn"
               component={LogIn}
               options={{headerShown:false}}
@@ -43,7 +43,7 @@ export default function App() {
               name="SignUp"
               component={SignUp}
               options={{headerShown:false}}
-            /> */}
+            />
           <Stack.Screen
               name="HomeScreen"
               component={HomeScreen}
