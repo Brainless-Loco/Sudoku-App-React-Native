@@ -243,7 +243,7 @@ export default BlogUI;
     container: {
       flex: 1,
       paddingHorizontal: 8,
-      paddingTop:50,
+      paddingTop:1,
     },
     header: {
       flexDirection: 'row',
