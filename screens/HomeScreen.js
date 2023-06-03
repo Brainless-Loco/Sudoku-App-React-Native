@@ -36,6 +36,7 @@ const HomeScreen = ({navigation}) => {
   const signOutBtn = ()=>{
     update_user_info({userRef:'',userProfilePic:'',userName:'',userEmail:''})
     AsyncStorage.removeItem('userData')
+    AsyncStorage.removeItem('gameData')
     signOut(auth)
     navigation.replace('LogIn')
   }

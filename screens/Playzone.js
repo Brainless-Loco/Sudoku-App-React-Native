@@ -8,7 +8,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { change_button_lock_status,change_pause_status, undo_from_action_history } from '../redux/actions/Grid_actions';
 import { useState } from 'react';
 import { useEffect } from 'react';
-// import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -26,21 +26,58 @@ export default function Playzone({ navigation}) {
   const is_pause = useSelector(state=>state.is_paused)
   const if_win = useSelector(state=>state.matched_all_squares)
   
-  const [minute,setMinute] = useState(0)
-  const [second,setSecond] = useState(0)
+  const [minute,setMinute] = useState(null)
+  const [second,setSecond] = useState(null)
 
   setTimeout(()=>{
-    if(!is_pause ){
+    if(!is_pause && minute!=null && second != null){
       if(second == 59){
         setSecond(0)
         setMinute(minute+1)
       }
       else setSecond(second+1)
+      const minuteCountString = minute.toString();
+      const secondCountString = second.toString();
+      AsyncStorage.setItem('minuteCount', minuteCountString)
+      AsyncStorage.setItem('secondCount', secondCountString)
     }
   },1000)
 
+
+  const updateStoredTimeFirst = ()=>{
+    AsyncStorage.getItem('minuteCount')
+    .then((value) => {
+      if (value !== null && value !== undefined) {
+        const minuteCount = parseInt(value, 10);
+        setMinute(minuteCount)
+      } else {
+        // console.log('No minute count value found in AsyncStorage.');
+        setMinute(0)
+      }
+    })
+    .catch((error) => {
+      // console.log('Error retrieving minute count:', error);
+    });
+
+    AsyncStorage.getItem('secondCount')
+    .then((value) => {
+      if (value !== null && value !== undefined) {
+        const secondCount = parseInt(value, 10);
+        setSecond(secondCount)
+      } else {
+        // console.log('No minute count value found in AsyncStorage.');
+        setSecond(0)
+      }
+    })
+    .catch((error) => {
+      // console.log('Error retrieving minute count:', error);
+    });
+  }
+
   useEffect(()=>{
+    updateStoredTimeFirst()
     if(if_win) update_pause_status()
+
   },[if_win])
   
   

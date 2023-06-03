@@ -1,11 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View,Modal } from 'react-native'
 import { auth, db } from '../firebase/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { updateUserInfo } from '../redux/actions/Grid_actions';
 import { collection, getDocs, query, where } from "firebase/firestore/lite";
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 
 
 
@@ -17,6 +18,8 @@ export default function LogIn({navigation}) {
     const [password, setPassword] = useState('')
     const [errorMessage, seterrorMessage] = useState('')
     const [loading, setloading] = useState(false)
+    const [loggedInStatus, setloggedInStatus] = useState(false)
+    const [welcomeUserName, setwelcomeUserName] = useState('')
     
 
     const update_user_info = (info)=>dispatch(updateUserInfo(info))
@@ -40,6 +43,7 @@ export default function LogIn({navigation}) {
                         userName:userName,
                         userProfilePic:dp_url
                     }
+                    setwelcomeUserName(userName)
                     const loggedUserInfoString = JSON.stringify(loggedUserInfo);
                     AsyncStorage.setItem('userData', loggedUserInfoString)
                     .then(() => {
@@ -50,10 +54,9 @@ export default function LogIn({navigation}) {
                     });
                     update_user_info(loggedUserInfo)
                     setloading(false)
+                    setloggedInStatus(true)
                     setEmail('')
                     setPassword('')
-                    alert("Welcome back "+userName)
-                    navigation.replace('HomeScreen')
                 });
             }
             else{
@@ -130,6 +133,30 @@ export default function LogIn({navigation}) {
                         setPassword('');
                         navigation.navigate('SignUp')}} style={styles.footerLink}>Sign up</Text></Text>
                 </View>
+
+                <Modal
+                    visible={loggedInStatus}
+                    animationType="fade"
+                    transparent={true}
+                    >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Ionicons name="md-person" size={64} color="#e80505" />
+                            <Text style={styles.welcomeText}>
+                                Welcome, <Text style={styles.usernameText}>{welcomeUserName}</Text>!
+                            </Text>
+                            <TouchableOpacity style={styles.cancelButton} 
+                                onPress={()=>{setloggedInStatus(false); 
+                                navigation.replace('HomeScreen');
+                            }}
+                            >
+                                <Text style={styles.cancelButtonText}>Enter the Arena</Text>
+                            </TouchableOpacity>
+                        </View>
+                        
+                    </View>
+                    
+                </Modal>
         </ScrollView>
     )
 }
@@ -194,5 +221,43 @@ const styles = StyleSheet.create({
         color: "#e80505",
         fontWeight: "bold",
         fontSize: 16
-    }
+    },
+
+
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      modalContent: {
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        width:'90%'
+      },
+      welcomeText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginTop: 20,
+        textAlign: 'center',
+      },
+      usernameText: {
+        color: '#e80505',
+      },
+      cancelButton: {
+        marginTop: 20,
+        backgroundColor: '#e80505',
+        paddingVertical: 10,
+        alignItems: 'center',
+        justifyContent:'center',
+        borderRadius: 4,
+        width:'80%'
+      },
+      cancelButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+      },
 })

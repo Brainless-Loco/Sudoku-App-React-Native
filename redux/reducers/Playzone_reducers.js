@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { CHANGE_BUTTON_LOCK_STATUS, CHANGE_PAUSE_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, FORM_THE_GAME_PATTERN, GRID_UPDATE, INCREASE_MISTAKE_COUNT, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, UPDATE_SELECTED_SMALL_SQUARE_INDEX, UPDATE_USER_INFO } from "../Types";
+import { CHANGE_BUTTON_LOCK_STATUS, CHANGE_PAUSE_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, FORM_THE_GAME_PATTERN, GRID_UPDATE, INCREASE_MISTAKE_COUNT, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, UPDATE_FROM_LAST_PLAYED_GAME, UPDATE_SELECTED_SMALL_SQUARE_INDEX, UPDATE_USER_INFO } from "../Types";
 // import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
@@ -30,25 +30,25 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
+
     switch (action.type) {
 
       ///New Game Creation Reducers
         case GRID_UPDATE: {///update the new Grid
           const gameData = {
             grid:state.grid,
-            mistakes:state.mistakes,
             current_playing_grid: state.current_playing_grid,
-            action_history:state.action_history,
-            matched_all_squares:false,
+            is_editable:state.is_editable,
+            mistakes:state.mistakes,
+            matched_all_squares:false
           }
           const gameDataString = JSON.stringify(gameData);
-          AsyncStorage.setItem('has_saved_game','1');
           AsyncStorage.setItem('gameData', gameDataString)
           .then(() => {
-              console.log('Game Data stored successfully!');
+              // console.log('Game Data stored successfully!');
           })
           .catch((error) => {
-              console.log('Error storing data:', error);
+              // console.log('Error storing data:', error);
           });
 
           return{
@@ -104,17 +104,19 @@ export default (state = initialState, action) => {
             var col = action.index.col
             temp_grid[row][col]=action.val*1
             var temp = (JSON.stringify(temp_grid)==JSON.stringify(state.grid))
-
-            const gameData = {
-              grid:state.grid,
-              mistakes:state.mistakes,
-              current_playing_grid: state.current_playing_grid,
-              action_history:state.action_history,
-              matched_all_squares:temp,
-            }
-            const gameDataString = JSON.stringify(gameData);
             if(temp) AsyncStorage.removeItem('gameData')
-            else AsyncStorage.setItem('gameData', gameDataString);
+            else{
+              const gameData = {
+                grid:state.grid,
+                current_playing_grid: state.current_playing_grid,
+                is_editable:state.is_editable,
+                mistakes:state.mistakes,
+                matched_all_squares:temp
+              }
+              const gameDataString = JSON.stringify(gameData);
+              AsyncStorage.setItem('gameData', gameDataString);
+            }
+           
             
             return {
               ...state,
@@ -182,6 +184,22 @@ export default (state = initialState, action) => {
             ...state,
             currentPlayer_info:action.userInfo
           }
+        }
+        
+        case UPDATE_FROM_LAST_PLAYED_GAME:{
+          
+          // console.log(action.gameData)
+          const {grid,current_playing_grid,is_editable, mistakes,matched_all_squares} = action.gameData
+
+          return{
+            ...state,
+            grid:grid,
+            current_playing_grid:current_playing_grid,
+            is_editable:is_editable,
+            mistakes:mistakes,
+            matched_all_squares:matched_all_squares
+          }
+
         }
 
       default:
