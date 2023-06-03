@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { updateUserInfo } from '../redux/actions/Grid_actions';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Profile({navigation}) {
@@ -119,6 +120,7 @@ export default function Profile({navigation}) {
 
   const signOutBtn = ()=>{
     update_user_info({userRef:'',userProfilePic:'',userName:'',userEmail:''})
+    AsyncStorage.removeItem('userData')
     signOut(auth)
     navigation.replace('LogIn')
   }

@@ -84,8 +84,6 @@ export default function App() {
               component={HowtoPlay}
               options={{headerShown:false}}
             /> 
-
-          
             <Stack.Screen
               name="LandingPage"
               component={LandingPage}

@@ -6,6 +6,7 @@ import { generate_a_new_pattern } from '../sudoku_maker/sudoku_pattern_generator
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import {gsap, Back} from 'gsap-rn';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LandingPage({navigation}) {
   const dispatch = useDispatch()
@@ -21,9 +22,8 @@ export default function LandingPage({navigation}) {
   const [has_paused_game,set_paused_game_check] = useState(false)
 
   const is_there_any_paused_game = async ()=>{
-    // var ret = await AsyncStorage.getItem('has_saved_game')
-    var ret = '1'
-    set_paused_game_check((ret === '1'))
+    const has_saved_game = await AsyncStorage.getItem('has_saved_game')
+    has_saved_game == '1' ? set_paused_game_check(true) : set_paused_game_check(false)
   }
 
   useEffect(()=>{
@@ -34,6 +34,22 @@ export default function LandingPage({navigation}) {
   const right_value = useSelector(state=>state.grid)
 
   const update_everything_for_playzone = async (gameLevel)=>{
+    setloading(true)
+    try{
+      var new_pattern = generate_a_new_pattern()
+      const pattern = new_pattern.map((arr)=> arr.slice())
+      form_new_game({pattern,gameLevel})
+      update_current_game(new_pattern)
+      setloading(false)
+      navigation.navigate('Playzone')
+    }
+    catch(e){
+      alert('Something went wrong!')
+    }
+  }
+
+
+  const update_everything_for_playzone_via_saved_game = async (gameLevel)=>{
     setloading(true)
     try{
       var new_pattern = generate_a_new_pattern()
@@ -83,9 +99,9 @@ export default function LandingPage({navigation}) {
       </TouchableOpacity>
         
         
-        {/* {
+        {
         has_paused_game&&<TouchableOpacity
-          style={styles.enterPlayzoneBtn}
+          style={[styles.enterPlayzoneBtn,{width:'80%'}]}
           onPress={() =>{
             update_everything_for_playzone()
             navigation.navigate('Playzone')
@@ -93,7 +109,7 @@ export default function LandingPage({navigation}) {
           }
           ><Text style={styles.btnText}> Continue Previous </Text>
         </TouchableOpacity>
-        } */}
+        }
       <StatusBar style="auto" />
     </View>
   );

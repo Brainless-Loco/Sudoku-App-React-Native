@@ -13,6 +13,7 @@ import { updateUserInfo } from '../redux/actions/Grid_actions';
 import {gsap, Back} from 'gsap-rn';
 import { useIsFocused } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const HomeScreen = ({navigation}) => {
@@ -34,6 +35,7 @@ const HomeScreen = ({navigation}) => {
   }
   const signOutBtn = ()=>{
     update_user_info({userRef:'',userProfilePic:'',userName:'',userEmail:''})
+    AsyncStorage.removeItem('userData')
     signOut(auth)
     navigation.replace('LogIn')
   }
