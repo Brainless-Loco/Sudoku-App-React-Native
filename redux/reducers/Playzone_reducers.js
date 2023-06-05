@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { CHANGE_BUTTON_LOCK_STATUS, CHANGE_PAUSE_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, FORM_THE_GAME_PATTERN, GRID_UPDATE, INCREASE_MISTAKE_COUNT, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, UPDATE_FROM_LAST_PLAYED_GAME, UPDATE_SELECTED_SMALL_SQUARE_INDEX, UPDATE_USER_INFO } from "../Types";
+import { CHANGE_BUTTON_LOCK_STATUS, CHANGE_PAUSE_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, FORM_THE_GAME_PATTERN, GRID_UPDATE, INCREASE_MISTAKE_COUNT, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, UPDATE_ASYNCSTORAGE_FOR_NEW_GAME, UPDATE_FROM_LAST_PLAYED_GAME, UPDATE_SELECTED_SMALL_SQUARE_INDEX, UPDATE_USER_INFO } from "../Types";
 // import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
@@ -35,22 +35,6 @@ export default (state = initialState, action) => {
 
       ///New Game Creation Reducers
         case GRID_UPDATE: {///update the new Grid
-          const gameData = {
-            grid:state.grid,
-            current_playing_grid: state.current_playing_grid,
-            is_editable:state.is_editable,
-            mistakes:state.mistakes,
-            matched_all_squares:false
-          }
-          const gameDataString = JSON.stringify(gameData);
-          AsyncStorage.setItem('gameData', gameDataString)
-          .then(() => {
-              // console.log('Game Data stored successfully!');
-          })
-          .catch((error) => {
-              // console.log('Error storing data:', error);
-          });
-
           return{
             ...state,
             grid : action.new_game,
@@ -200,6 +184,26 @@ export default (state = initialState, action) => {
             matched_all_squares:matched_all_squares
           }
 
+        }
+
+        case UPDATE_ASYNCSTORAGE_FOR_NEW_GAME:{
+          const gameData = {
+            grid:state.grid,
+            current_playing_grid: state.current_playing_grid,
+            is_editable:state.is_editable,
+            mistakes:0,
+            matched_all_squares:false
+          }
+          const gameDataString = JSON.stringify(gameData);
+          AsyncStorage.removeItem('gameData');
+          AsyncStorage.setItem('gameData', gameDataString)
+          .then(() => {
+              // console.log(gameData);
+          })
+          .catch((error) => {
+              // console.log('Error storing data:', error);
+          });
+          return state
         }
 
       default:

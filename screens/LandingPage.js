@@ -1,17 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
 import {StyleSheet, Text, View,Image, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { game_pattern_formation, gridUpdate, update_from_last_saved_game } from '../redux/actions/Grid_actions';
+import { game_pattern_formation, gridUpdate, update_asyncstorage_for_a_new_game, update_from_last_saved_game } from '../redux/actions/Grid_actions';
 import { generate_a_new_pattern } from '../sudoku_maker/sudoku_pattern_generator';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import {gsap, Back} from 'gsap-rn';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function LandingPage({navigation}) {
   const dispatch = useDispatch()
 
   const viewRef = useRef(null)
+  const isFocused = useIsFocused();
   
   const [loading, setloading] = useState(false)
 
@@ -19,20 +21,9 @@ export default function LandingPage({navigation}) {
   const update_current_game = (pattern)=>dispatch(gridUpdate(pattern))
   const form_new_game = (props)=>dispatch(game_pattern_formation(props))
   const update_from_last_played_game = (gameData)=>{dispatch(update_from_last_saved_game(gameData))}
+  const update_asyncstorage_for__new_game = ()=>{dispatch(update_asyncstorage_for_a_new_game())}
 
-  const [has_paused_game,set_paused_game_check] = useState(false)
-
-  const is_there_any_paused_game = async ()=>{
-    const has_saved_game = await AsyncStorage.getItem('gameData')
-    has_saved_game != null ? set_paused_game_check(true) : set_paused_game_check(false)
-  }
-
-  useEffect(()=>{
-    is_there_any_paused_game()
-  },[])
-
-  const current_grid = useSelector(state=>state.current_playing_grid)
-  const right_value = useSelector(state=>state.grid)
+  const [gameData, setgameData] = useState(null)
   
 
   const update_everything_for_playzone = async (gameLevel)=>{
@@ -42,6 +33,7 @@ export default function LandingPage({navigation}) {
       const pattern = new_pattern.map((arr)=> arr.slice())
       form_new_game({pattern,gameLevel})
       update_current_game(new_pattern)
+      update_asyncstorage_for__new_game()
       setloading(false)
       AsyncStorage.removeItem('minuteCount')
       AsyncStorage.removeItem('secondCount')
@@ -57,7 +49,7 @@ export default function LandingPage({navigation}) {
       const value = await AsyncStorage.getItem('gameData');
       if (value !== null && value !== undefined) {
         const gameData = JSON.parse(value);
-        return gameData;
+        setgameData(gameData)
       } else {
         throw new Error('No gameData value found in AsyncStorage.');
       }
@@ -69,8 +61,6 @@ export default function LandingPage({navigation}) {
   const update_everything_for_playzone_via_saved_game = async ()=>{
     // setloading(true)
     try {
-      const gameData = await retrieveGameData();
-      // console.log('Retrieved gameData:', gameData);
       update_from_last_played_game(gameData)
       navigation.navigate('Playzone')
     } catch (error) {
@@ -80,6 +70,7 @@ export default function LandingPage({navigation}) {
 
 
   useEffect(() => {
+    retrieveGameData()
     const view = viewRef.current;
     gsap.to(view, {duration:1, transform:{rotate:360, scale:1}, 	ease:Back.easeInOut});
   }, [])
@@ -114,7 +105,7 @@ export default function LandingPage({navigation}) {
         
         
         {
-        has_paused_game&&<TouchableOpacity
+        gameData!=null && gameData!=undefined &&<TouchableOpacity
           style={[styles.enterPlayzoneBtn,{width:'80%'}]}
           onPress={() =>{
             update_everything_for_playzone_via_saved_game()

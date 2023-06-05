@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   correct_value: {
-    color: '#03fc13',
+    color: '#11c90a',
     fontWeight: 'bold',
   },
   incorrect_value: {
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   locked_text:{
-    color:'#000099',
+    color:'#cae310',
     fontWeight: 'bold',
   }
 });
