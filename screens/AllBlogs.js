@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
 import BlogListItem from '../components/BlogsListItem';
-import { collection, query,getDocs, orderBy, limit, startAfter } from 'firebase/firestore/lite';
+import { collection, query,getDocs, orderBy, limit, startAfter, endBefore, limitToLast } from 'firebase/firestore/lite';
 import { db } from '../firebase/firebaseConfig';
 import { useIsFocused } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 
 const BlogList = ({navigation}) => {
@@ -12,49 +13,21 @@ const BlogList = ({navigation}) => {
   
   const isFocused = useIsFocused();
 
-  const blogData = [
-    {
-      id: 1,
-      profilePic: require('../assets/images/avatar.png'),
-      userName: 'John Doe',
-      title: 'Amazing Blog Post',
-      likeCount: 10,
-      dislikeCount: 2,
-      commentsCount:10,
-    },
-    {
-      id: 2,
-      profilePic: require('../assets/images/avatar.png'),
-      userName: 'Jane Smith',
-      title: 'Awesome Blog Article',
-      likeCount: 15,
-      dislikeCount: 5,
-      commentsCount:10,
-    }
-  ];
+  
+  const blogsRef = collection(db, 'blogs');
 
   const [blogsList, setblogsList] = useState([])
   const [lastBlogRef, setlastBlogRef] = useState(null)
+  const [lastPrevBlogRef, setlastPrevBlogRef] = useState(null)
   const [endOfAllBlogs, setendOfAllBlogs] = useState(false)
   const [loading, setloading] = useState(false)
-
-  const fetchBlogs = async ()=>{
-    const blogsRef = collection(db, 'blogs');
-    const snapshot = await getDocs(blogsRef);
-    
-    const blogs = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    setblogsList(blogs)
-  }
+  const [firstBlogReached, setfirstBlogReached] = useState(true)
 
   const FetchFewBlogs = async () => {
     try {
       setloading(true)
-      const blogsRef = collection(db, 'blogs');
-      let blogQuery = query(blogsRef, orderBy('blogRef'), limit(2));
-
+      setfirstBlogReached(false)
+      let blogQuery = query(blogsRef, orderBy('blogRef'), limit(3));
       if (lastBlogRef) {
         blogQuery = query(blogQuery, startAfter(lastBlogRef));
       }
@@ -66,13 +39,43 @@ const BlogList = ({navigation}) => {
       }
       else{
         const newBlogs = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        setblogsList([...blogsList, ...newBlogs])
+        setblogsList(newBlogs)
+        setlastPrevBlogRef(newBlogs[0].blogRef)
         setlastBlogRef(newBlogs[newBlogs.length-1].blogRef)
       }
       setloading(false)
       
     } catch (error) {
       console.error('Error fetching blogs:', error);
+    }
+  };
+
+  const FetchPrevTwoBlogs = async () => {
+    try {
+      setloading(true);
+      setendOfAllBlogs(false)
+      
+      let blogQuery = query(blogsRef, orderBy('blogRef'), limitToLast(3));
+
+      if (lastBlogRef) {
+        blogQuery = query(blogQuery, endBefore(lastPrevBlogRef));
+      }
+  
+      const querySnapshot = await getDocs(blogQuery);
+  
+      if (querySnapshot.size < 1) {
+        setfirstBlogReached(true)
+      } 
+      else {
+        const newBlogs = querySnapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() }));
+        setblogsList(newBlogs);
+        setlastBlogRef(newBlogs[newBlogs.length-1].blogRef)
+        setlastPrevBlogRef(newBlogs[0].blogRef);
+      }
+      setloading(false);
+    } catch (error) {
+      console.error('Error fetching previous blogs:', error);
     }
   };
 
@@ -91,6 +94,7 @@ const BlogList = ({navigation}) => {
         const newBlogs = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setblogsList([...newBlogs])
         setlastBlogRef(newBlogs[newBlogs.length-1].blogRef)
+        setlastPrevBlogRef(newBlogs[0])
       }
       setloading(false)
       
@@ -112,9 +116,9 @@ const BlogList = ({navigation}) => {
       
       <Text style={styles.HeaderTitle}>Blogs</Text>
       {
-        blogsList.length==0 && <ActivityIndicator size={40} color={"#e80505"}/>
+        loading && <ActivityIndicator size={40} style={{height:350}} color={"#e80505"}/>
       }
-      {blogsList.length>0 &&  blogsList.map((item) => (
+      {!loading && blogsList.length>0 &&  blogsList.map((item) => (
         <BlogListItem
           navigation={navigation}
           key={item.id}
@@ -128,17 +132,22 @@ const BlogList = ({navigation}) => {
           date={item.date}
         />
       ))}
-      {
-        loading&&<ActivityIndicator color={'#e80505'} size={25}/>
-      }
-      {endOfAllBlogs==true?
+      {/* {endOfAllBlogs==true?
         <Text style={{textAlign:'center',fontSize:15,color:'red',fontWeight:'bold'}}>End of all Blogs :'(</Text>:
         <TouchableOpacity style={styles.buttonContainer} onPress={FetchFewBlogs}>
           <Feather name="chevron-down" size={24} color="white" />
           <Text style={styles.buttonText}>Load More</Text>
         </TouchableOpacity>
-      }
-      <View style={{flex:1,justifyContent:'center',height:'auto',alignItems:'center',paddingBottom:50,paddingTop:20}}>
+      } */}
+      <View style={{flex:1,justifyContent:'space-between',height:'auto',alignItems:'center',paddingBottom:50,paddingTop:20,flexDirection:'row'}}>
+        <TouchableOpacity disabled={firstBlogReached==true?true:false} style={[styles.buttonContainer,{borderTopRightRadius:0,borderBottomRightRadius:0}]} onPress={FetchPrevTwoBlogs}>
+            <AntDesign name="doubleleft" size={18} color="white" />
+            <Text style={styles.buttonText}>&nbsp;Prev</Text>
+          </TouchableOpacity>
+          <TouchableOpacity disabled={endOfAllBlogs} style={[styles.buttonContainer,{borderTopLeftRadius:0,borderBottomLeftRadius:0}]} onPress={FetchFewBlogs}>
+            <Text style={styles.buttonText}>Next&nbsp;</Text>
+            <AntDesign name="doubleright" size={18} color="white" />
+          </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -163,7 +172,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 16,
-    marginLeft: 10,
   },
 })
 
