@@ -76,24 +76,26 @@ export default function SolveWithAI() {
            catch (error) {
             console.error('Error uploading image:', error);
             alert(error.code)
+            setloading(false)
           }
-          setloading(false)
       }
 
       const FlaskAPICall = ()=>{
-        const flaskAPIEndpoint = `http://192.168.0.108:5000/`;
+        const flaskAPIEndpoint = `http://192.168.0.110:5000/`;
         axios.get(flaskAPIEndpoint)
         .then(response => {
           // Handle the response data
           // console.log(response.data.solution);
           setgrid(response.data.solution)
+          setloading(false)
           setModalVisible(true)
         })
         .catch(error => {
           // Handle any errors that occur during the request
           console.error(error);
         });
-        }
+        
+      }
 
         const StartSolvingTheImage = ()=>{
           uploadPhotoInFirebase();

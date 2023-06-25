@@ -103,9 +103,9 @@ export default function SignUp({navigation}) {
         }
         catch(e){
             if(e.code==='auth/email-already-in-use') seterrorMessage("Email has already been used")
-            else if(e.code==='auth/weak-password') seterrorMessage("Password provide a strong password")
+            else if(e.code==='auth/weak-password') seterrorMessage("Please provide a strong password")
             else if(e.code === 'auth/invalid-email') seterrorMessage("Please provide a valid email")
-            else console.log(e)
+            alert(errorMessage)
             setloading(false)
         }
     }

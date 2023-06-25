@@ -7,6 +7,8 @@ import { updateUserInfo } from '../redux/actions/Grid_actions';
 import { collection, getDocs, query, where } from "firebase/firestore/lite";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import Checkbox from 'expo-checkbox';
+import { Pressable } from 'react-native';
 
 
 
@@ -20,6 +22,7 @@ export default function LogIn({navigation}) {
     const [loading, setloading] = useState(false)
     const [loggedInStatus, setloggedInStatus] = useState(false)
     const [welcomeUserName, setwelcomeUserName] = useState('')
+    const [isRememberMeChecked, setIsRememberMeChecked] = useState(false);
     
 
     const update_user_info = (info)=>dispatch(updateUserInfo(info))
@@ -44,19 +47,21 @@ export default function LogIn({navigation}) {
                         userProfilePic:dp_url
                     }
                     setwelcomeUserName(userName)
-                    const loggedUserInfoString = JSON.stringify(loggedUserInfo);
-                    AsyncStorage.setItem('userData', loggedUserInfoString)
-                    .then(() => {
-                        console.log('Data stored successfully!');
-                    })
-                    .catch((error) => {
-                        console.log('Error storing data:', error);
-                    });
+                    if(isRememberMeChecked==true){
+                        const loggedUserInfoString = JSON.stringify(loggedUserInfo);
+                        AsyncStorage.setItem('userData', loggedUserInfoString)
+                        .then(() => {
+                            console.log('Data stored successfully!');
+                        })
+                        .catch((error) => {
+                            console.log('Error storing data:', error);
+                        });
+                    }
                     update_user_info(loggedUserInfo)
-                    setloading(false)
-                    setloggedInStatus(true)
                     setEmail('')
                     setPassword('')
+                    setloading(false)
+                    setloggedInStatus(true)
                 });
             }
             else{
@@ -90,9 +95,7 @@ export default function LogIn({navigation}) {
           checkLoggedIn()
     }, [])
     
-
-    
-
+console.log(isRememberMeChecked)
     return (
         <ScrollView style={styles.container}>
             <Image
@@ -100,63 +103,66 @@ export default function LogIn({navigation}) {
                 source={require('../assets/logo.png')}
             />
             <TextInput
-                    style={styles.input}
-                    placeholder='E-mail'
-                    placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => {setEmail(text);  seterrorMessage('');}}
-                    value={email}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    secureTextEntry
-                    placeholder='Password'
-                    onChangeText={(text) => {setPassword(text); seterrorMessage('')}}
-                    value={password}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                {errorMessage.length>0 && <Text style={{color:'red',textAlign:'center'}}>*{errorMessage}*</Text>}
-                <TouchableOpacity
-                    disabled={password.length==0 || email.length==0}
-                    style={styles.button}
-                    onPress={onLoginPress}>
-                    <Text style={styles.buttonTitle}>
-                        {loading? <ActivityIndicator size={18} color={"#fff"}/>: "Log in"}
-                    </Text>
-                </TouchableOpacity>
-                <View style={styles.footerView}>
-                    <Text style={styles.footerText}>Don't have an account? <Text onPress={()=>{
-                        setEmail('');
-                        setPassword('');
-                        navigation.navigate('SignUp')}} style={styles.footerLink}>Sign up</Text></Text>
-                </View>
+                style={styles.input} placeholder='E-mail' placeholderTextColor="#aaaaaa"
+                onChangeText={(text) => {setEmail(text);  seterrorMessage('');}} value={email} 
+                underlineColorAndroid="transparent" autoCapitalize="none"
+            />
+            <TextInput
+                style={styles.input} placeholderTextColor="#aaaaaa" secureTextEntry placeholder='Password'
+                onChangeText={(text) => {setPassword(text); seterrorMessage('')}} value={password}
+                underlineColorAndroid="transparent" autoCapitalize="none"
+            />
 
-                <Modal
-                    visible={loggedInStatus}
-                    animationType="fade"
-                    transparent={true}
-                    >
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <Ionicons name="md-person" size={64} color="#e80505" />
-                            <Text style={styles.welcomeText}>
-                                Welcome, <Text style={styles.usernameText}>{welcomeUserName}</Text>!
-                            </Text>
-                            <TouchableOpacity style={styles.cancelButton} 
-                                onPress={()=>{setloggedInStatus(false); 
-                                navigation.replace('HomeScreen');
-                            }}
-                            >
-                                <Text style={styles.cancelButtonText}>Enter the Arena</Text>
-                            </TouchableOpacity>
-                        </View>
-                        
+            <Pressable style={styles.checkboxContainer}  onPress={()=>setIsRememberMeChecked(!isRememberMeChecked)}>
+                <Checkbox
+                style={styles.checkbox}
+                value={isRememberMeChecked}
+                onValueChange={()=>setIsRememberMeChecked(!isRememberMeChecked)}
+                color={isRememberMeChecked ? '#e80909' : undefined}
+                />
+                <Text style={styles.checkboxLabel}>Keep me logged in</Text>
+            </Pressable>
+            
+            {errorMessage.length>0 && <Text style={{color:'red',textAlign:'center'}}>*{errorMessage}*</Text>}
+            <TouchableOpacity
+                disabled={password.length==0 || email.length==0}
+                style={styles.button}
+                onPress={onLoginPress}>
+                <Text style={styles.buttonTitle}>
+                    {loading? <ActivityIndicator size={18} color={"#fff"}/>: "Log in"}
+                </Text>
+            </TouchableOpacity>
+            <View style={styles.footerView}>
+                <Text style={styles.footerText}>Don't have an account? <Text onPress={()=>{
+                    setEmail('');
+                    setPassword('');
+                    seterrorMessage('')
+                    navigation.navigate('SignUp')}} style={styles.footerLink}>Sign up</Text></Text>
+            </View>
+
+            <Modal
+                visible={loggedInStatus}
+                animationType="fade"
+                transparent={true}
+                >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Ionicons name="md-person" size={64} color="#e80505" />
+                        <Text style={styles.welcomeText}>
+                            Welcome, <Text style={styles.usernameText}>{welcomeUserName}</Text>
+                        </Text>
+                        <TouchableOpacity style={styles.cancelButton} 
+                            onPress={()=>{setloggedInStatus(false); 
+                            navigation.replace('HomeScreen');
+                        }}
+                        >
+                            <Text style={styles.cancelButtonText}>Enter the Arena</Text>
+                        </TouchableOpacity>
                     </View>
                     
-                </Modal>
+                </View>
+                
+            </Modal>
         </ScrollView>
     )
 }
@@ -189,8 +195,7 @@ const styles = StyleSheet.create({
         color:'#5591ad',
         marginTop: 10,
         marginBottom: 10,
-        marginLeft: 15,
-        marginRight: 15,
+        marginHorizontal:15,
         paddingLeft: 16
     },
     button: {
@@ -259,5 +264,18 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold',
+      },
+      checkboxContainer: {
+        flexDirection: 'row',
+        marginBottom: 10,
+        marginHorizontal:15,
+        width:'50%'
+      },
+      checkbox: {
+        alignSelf: 'center',
+        
+      },
+      checkboxLabel: {
+        margin: 8,
       },
 })

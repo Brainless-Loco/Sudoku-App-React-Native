@@ -16,7 +16,6 @@ import ABlog from './screens/ABlog';
 import WriteBlogScreen from './screens/WriteBlogScreen';
 import HomeScreen from './screens/HomeScreen';
 import AboutTheAPP from './screens/AboutTheAPP';
-import SudokuTutorialScreen from './screens/SudokuTutorial2';
 import SolveWithAI from './screens/SolveWithAI';
 
 
