@@ -28,7 +28,7 @@ export default function SmallSquareBox({ id }) {
 
 
   return (
-    <Pressable style={[styles.container, !is_editable_square?styles.uneditable_square: locked_square == id ? styles.selected_square : styles.unselected_square]}
+    <Pressable style={[styles.container, !is_editable_square?styles.uneditable_square: locked_square == id ? styles.selected_square : styles.unselected_square,is_pause==true && {backgroundColor:'white',borderColor:'red'}]}
       onPress={() => {
         if (is_editable_square) {
           select_this_square_for_update(id)

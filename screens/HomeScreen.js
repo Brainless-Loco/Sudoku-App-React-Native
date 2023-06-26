@@ -52,7 +52,7 @@ const HomeScreen = ({navigation}) => {
   
 
   return (
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor:'white'}}>
           <Image
               ref={viewRef}
               style={styles.logo}
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   },
   dropdownList: {
     width:'100%',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fff',
     borderRadius: 5,
     marginTop:-12,
     textAlign:'center',

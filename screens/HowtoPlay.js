@@ -67,7 +67,7 @@ export default function HowtoPlay() {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: '#fff',
       paddingHorizontal: 20,
     },
     heading: {

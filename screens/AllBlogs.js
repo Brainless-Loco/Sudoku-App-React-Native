@@ -27,7 +27,7 @@ const BlogList = ({navigation}) => {
     try {
       setloading(true)
       setfirstBlogReached(false)
-      let blogQuery = query(blogsRef, orderBy('blogRef'), limit(3));
+      let blogQuery = query(blogsRef, orderBy('blogRef'), limit(4));
       if (lastBlogRef) {
         blogQuery = query(blogQuery, startAfter(lastBlogRef));
       }
@@ -55,7 +55,7 @@ const BlogList = ({navigation}) => {
       setloading(true);
       setendOfAllBlogs(false)
       
-      let blogQuery = query(blogsRef, orderBy('blogRef'), limitToLast(3));
+      let blogQuery = query(blogsRef, orderBy('blogRef'), limitToLast(4));
 
       if (lastBlogRef) {
         blogQuery = query(blogQuery, endBefore(lastPrevBlogRef));
@@ -112,7 +112,7 @@ const BlogList = ({navigation}) => {
   }, [isFocused])
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{paddingTop:10,paddingHorizontal:10, flex: 1,paddingBottom:50}}>
+    <ScrollView showsVerticalScrollIndicator={false} style={{paddingTop:10,paddingHorizontal:10, flex: 1,paddingBottom:50,backgroundColor:'#fffcfc'}}>
       
       <Text style={styles.HeaderTitle}>Blogs</Text>
       {

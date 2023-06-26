@@ -66,7 +66,7 @@ const WriteABlog = ({navigation}) => {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Text style={styles.title}>Write a Blog</Text>
-      <TextInput value={title} onChangeText={(text)=>setTitle(text)} style={styles.input} placeholder='Title of the Blog..'/>
+      <TextInput value={title} onChangeText={(text)=>setTitle(text)} style={styles.input} placeholder='Title of the blog..'/>
       <View style={styles.editorContainer}>
         <RichToolbar
             editor={editorRef}
@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 8,
-    paddingBottom:50
+    paddingBottom:50,
+    backgroundColor:'#fff'
   },
   title: {
     color:'#e80505',

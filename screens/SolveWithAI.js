@@ -102,7 +102,7 @@ export default function SolveWithAI() {
         }
 
     return (
-        <View style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+        <View style={{display:'flex',alignItems:'center',justifyContent:'center',backgroundColor:'#fafafa'}}>
             <View style={styles.imageUploadButtonContainer} onPress={openCamera}>
                 {imageUri==null && <Text style={[{fontWeight:'bold',color:'red',position:'absolute',top:'50%',zIndex:50}]}>Upload or capture</Text>}
                 <Image style={styles.imageStyle} height={'auto'} width={'auto'} source={{uri:imageUri}}/>

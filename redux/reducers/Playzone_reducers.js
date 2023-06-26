@@ -140,13 +140,18 @@ export default (state = initialState, action) => {
       ///end of undo button reducers
       
         case INCREASE_MISTAKE_COUNT:{
-          // AsyncStorage.setItem('mistake',(state.mistakes+1).toString())
-          // if(state.mistakes==4){
-          //   AsyncStorage.setItem('current_playing_game','')
-          //   AsyncStorage.setItem('grid','')
-          //   AsyncStorage.setItem('has_saved_game','0')
-          //   AsyncStorage.setItem("is_editable_matrix",'');  
-          // }
+          const gameData = {
+            grid:state.grid,
+            current_playing_grid: state.current_playing_grid,
+            is_editable:state.is_editable,
+            mistakes:state.mistakes+1,
+            matched_all_squares:temp
+          }
+          const gameDataString = JSON.stringify(gameData);
+          AsyncStorage.setItem('gameData', gameDataString);
+          if(state.mistakes==4){
+            AsyncStorage.removeItem('gameData')
+          }
           return{
             ...state,
             mistakes:state.mistakes+1

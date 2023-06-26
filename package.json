@@ -21,8 +21,9 @@
     "axios": "^1.4.0",
     "expo": "~47.0.12",
     "expo-camera": "~13.1.0",
+    "expo-checkbox": "~2.2.2",
     "expo-image-picker": "~14.0.2",
-    "expo-permissions": "~14.0.0",
+    "expo-notifications": "~0.17.0",
     "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
     "firebase": "^9.22.0",
@@ -48,8 +49,7 @@
     "react-native-web": "~0.18.9",
     "react-native-webview": "11.23.1",
     "react-redux": "^8.0.5",
-    "redux": "^4.2.1",
-    "expo-checkbox": "~2.2.2"
+    "redux": "^4.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

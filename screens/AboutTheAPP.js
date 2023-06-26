@@ -269,7 +269,8 @@ export default function AboutTheAPP() {
 
 const styles = StyleSheet.create({
     container: {
-        height:"100%"
+        height:"100%",
+        backgroundColor:'#fcfafa'
     },
     aboutTitle:{
         marginTop:15,
