@@ -95,7 +95,6 @@ export default function LogIn({navigation}) {
           checkLoggedIn()
     }, [])
     
-console.log(isRememberMeChecked)
     return (
         <ScrollView style={styles.container}>
             <Image

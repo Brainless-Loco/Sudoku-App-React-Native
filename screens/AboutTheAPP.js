@@ -4,7 +4,7 @@ import { AirbnbRating, Rating } from 'react-native-ratings';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { db } from '../firebase/firebaseConfig';
-import { addDoc, collection, query, where,getDocs, Timestamp } from 'firebase/firestore/lite';
+import { addDoc, collection, query, where,getDocs, Timestamp, getDoc, doc } from 'firebase/firestore/lite';
 import { useEffect } from 'react';
 import MapView, { Marker,PROVIDER_GOOGLE } from 'react-native-maps';
 import { useIsFocused } from '@react-navigation/native';
@@ -19,12 +19,14 @@ export default function AboutTheAPP() {
     const [rating, setrating] = useState(5)
     const [hasGivenReview,sethasGivenReview] = useState(false)
     const [loading, setloading] = useState(false)
+    const [countries, setcountries] = useState([])
+    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [cities, setCities] = useState([])
+    const [cityNameLoading, setcityNameLoading] = useState(false)
     
-
 
     const allUserInfo = useSelector(state=>state.currentPlayer_info)
     const {userRef} = allUserInfo
-
 
     
     const checkIfUserHasReviewed = ()=>{
@@ -44,7 +46,6 @@ export default function AboutTheAPP() {
             console.error('Error getting review documents:', error);
         });
     }
-
 
     const getAverageRating = async()=>{
         try {
@@ -67,18 +68,64 @@ export default function AboutTheAPP() {
         } 
         catch (error) {
             alert('Something went wrong while getting the average ratings!')
-        }
-        
+        }   
+    }
+
+    const fetchCountries = async () => {
+      try {
+        const countriesRef = collection(db,'countries');
+        const querySnapshot = await getDocs(countriesRef);
+        let tempCountries = []
+        querySnapshot.forEach((doc) => {
+            const countryData = doc.data();
+            tempCountries.push(countryData)
+        });
+        setcountries(tempCountries);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      }
+    };
+
+
+    const fetchCities = async ()=>{
+        if(selectedCountry==null) return;
+        const countriesRef = collection(db,'countries');
+        const citiesQuery = query(countriesRef, where('name', '==', selectedCountry));
+        getDocs(citiesQuery)
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                querySnapshot.forEach((doc) => {
+                    const countryData = doc.data();
+                    setCities(countryData.cities)
+                });
+                
+                setcityNameLoading(false)
+            } 
+            else {
+                //nothing found
+            }
+        })
+        .catch((error) => {
+            ///something error has been encountered
+        });
     }
 
     useEffect(() => {
         if(isFocused){
             getAverageRating()
             checkIfUserHasReviewed()
+            fetchCountries()
         }
     }, [])
-    
 
+    useEffect(() => {
+        if(selectedCountry) {
+            setcityNameLoading(true)
+            fetchCities()
+            setcityNameLoading(false)
+        }
+    }, [selectedCountry])
+    
 
     const submitButtonAction = async ()=>{
         try{
@@ -101,14 +148,18 @@ export default function AboutTheAPP() {
         }
     }
 
+
+    const handleCountryPress = (country) => {
+        setSelectedCountry(country == selectedCountry ? null : country);
+    };
+
+
+
   return (
     <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
             <Text style={styles.aboutTitle}>About Sudoku Forever</Text>
-            <Image
-                style={styles.logo}
-                source={require('../assets/logo.png')}
-            />
+            <Image style={styles.logo} source={require('../assets/logo.png')} />
             <View style={[styles.reviewingOptionContainer,{margin:10,overflow:'hidden',display:'flex',justifyContent:'center',alignItems:'center',}]}>
                 <Rating showRating={false} fractions="{1}" ratingCount={10}  startingValue={averageRating} readonly  imageSize={30}/>
             </View>
@@ -129,6 +180,30 @@ export default function AboutTheAPP() {
                             description="Headoffice of Sudoku Forever"
                             />
                     </MapView>
+            </View>
+            <View style={styles.afterLogoView}>
+                <Text style={styles.aboutText}>Sudoku Forever is being played in</Text>
+                {countries.length>0 && countries.map((country) => (
+                    <View key={country.id}>
+                    <TouchableOpacity
+                        onPress={() => handleCountryPress(country.name)}
+                        style={[
+                        styles.countryButton,
+                        selectedCountry === country.name && styles.selectedCountryButton,
+                        ]}
+                    >
+                        <Text style={[styles.countryButtonText,{color:country.name == selectedCountry ?'white': '#e80505'}]}>{country.name}</Text>
+                    </TouchableOpacity>
+                    {selectedCountry == country.name && (
+                        <View style={styles.cityContainer}>
+                        {cityNameLoading==true && <ActivityIndicator size={35} style={{padding:5}} color={'red'}/>}
+                        {cityNameLoading==false && cities.map((city) => (
+                            <Text key={city} style={styles.cityText}>&#9737; {city}</Text>
+                        ))}
+                        </View>
+                    )}
+                    </View>
+                ))}
             </View>
             <View style={styles.afterLogoView}>
                 <Text style={styles.aboutText}>
@@ -174,7 +249,7 @@ export default function AboutTheAPP() {
                     </View>
                 }
             </View>
-            <View style={styles.afterLogoView}>
+            {/* <View style={styles.afterLogoView}>
                 <Text style={{color:'#2c60db',fontWeight:'500'}}>Dedicating this app to my one and only friend who is always excited about my work. {'\n'}
                 </Text>
                 <Image
@@ -184,7 +259,7 @@ export default function AboutTheAPP() {
                     <Text style={{color:'#2c60db',fontWeight:'500'}}> , this one is for you...</Text>
                 </Text>
                 
-            </View>
+            </View> */}
         </ScrollView>
     </View>
   )
@@ -290,5 +365,30 @@ const styles = StyleSheet.create({
         borderRadius:75,
         borderWidth:5,
         borderColor:'#e80505'
-    }
+    },
+    countryButton: {
+        padding: 10,
+        backgroundColor: 'white',
+        marginBottom: 5,
+        borderRadius: 5,
+        borderWidth:1,
+        borderColor:'#e80505'
+    },
+    selectedCountryButton: {
+        backgroundColor: '#e80505',
+    },
+    countryButtonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color:'white'
+    },
+    cityContainer: {
+        marginLeft: 20,
+    },
+    cityText: {
+        fontSize: 14,
+        marginBottom: 5,
+        color:'#090157',
+        fontWeight:'500'
+    },
 })
