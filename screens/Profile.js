@@ -129,7 +129,7 @@ export default function Profile({navigation}) {
 
 
   return (
-    <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={{backgroundColor:'#fafafa',paddingTop:25}}>
+    <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={{backgroundColor:'#fafafa',paddingTop:5}}>
 
 
       {/* New Profile Picture Upload */}

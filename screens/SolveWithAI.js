@@ -81,7 +81,7 @@ export default function SolveWithAI() {
       }
 
       const FlaskAPICall = ()=>{
-        const flaskAPIEndpoint = `http://192.168.0.110:5000/`;
+        const flaskAPIEndpoint = `http://192.168.0.187:5000/`;
         axios.get(flaskAPIEndpoint)
         .then(response => {
           // Handle the response data
@@ -97,15 +97,15 @@ export default function SolveWithAI() {
         
       }
 
-        const StartSolvingTheImage = ()=>{
-          uploadPhotoInFirebase();
-        }
+      const StartSolvingTheImage = ()=>{
+        uploadPhotoInFirebase();
+      }
 
     return (
-        <View style={{display:'flex',alignItems:'center',justifyContent:'center',backgroundColor:'#fafafa'}}>
+        <View style={{display:'flex',alignItems:'center',justifyContent:'center',backgroundColor:'#fafafa',height:'100%'}}>
             <View style={styles.imageUploadButtonContainer} onPress={openCamera}>
                 {imageUri==null && <Text style={[{fontWeight:'bold',color:'red',position:'absolute',top:'50%',zIndex:50}]}>Upload or capture</Text>}
-                <Image style={styles.imageStyle} height={'auto'} width={'auto'} source={{uri:imageUri}}/>
+                <Image style={styles.imageStyle} height={'auto'} width={'auto'}  source={{uri:imageUri}}/>
             </View>
             <View  style={{flexDirection:'row',marginBottom:15}} >
               <Pressable style={styles.cameraAndGallaryBtn} onPress={SelectFromGallery}>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
       overflow:'hidden',
       flexDirection:'column',
       width:'95%',
-      height:270
+      height:350,
     },
     imageStyle:{
         height:'100%',
