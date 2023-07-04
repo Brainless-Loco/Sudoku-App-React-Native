@@ -81,7 +81,7 @@ export default function SolveWithAI() {
       }
 
       const FlaskAPICall = ()=>{
-        const flaskAPIEndpoint = `http://192.168.0.187:5000/`;
+        const flaskAPIEndpoint = `http://139.144.116.9:9999/`;
         axios.get(flaskAPIEndpoint)
         .then(response => {
           // Handle the response data

@@ -184,24 +184,24 @@ export default function AboutTheAPP() {
             <View style={styles.afterLogoView}>
                 <Text style={styles.aboutText}>Sudoku Forever is being played in</Text>
                 {countries.length>0 && countries.map((country) => (
-                    <View key={country.id}>
-                    <TouchableOpacity
-                        onPress={() => handleCountryPress(country.name)}
-                        style={[
-                        styles.countryButton,
-                        selectedCountry === country.name && styles.selectedCountryButton,
-                        ]}
-                    >
-                        <Text style={[styles.countryButtonText,{color:country.name == selectedCountry ?'white': '#e80505'}]}>{country.name}</Text>
-                    </TouchableOpacity>
-                    {selectedCountry == country.name && (
-                        <View style={styles.cityContainer}>
-                        {cityNameLoading==true && <ActivityIndicator size={35} style={{padding:5}} color={'red'}/>}
-                        {cityNameLoading==false && cities.map((city) => (
-                            <Text key={city} style={styles.cityText}>&#9737; {city}</Text>
-                        ))}
-                        </View>
-                    )}
+                    <View key={country.name}>
+                        <TouchableOpacity
+                            onPress={() => handleCountryPress(country.name)}
+                            style={[
+                            styles.countryButton,
+                            selectedCountry === country.name && styles.selectedCountryButton,
+                            ]}
+                        >
+                            <Text style={[styles.countryButtonText,{color:country.name == selectedCountry ?'white': '#e80505'}]}>{country.name}</Text>
+                        </TouchableOpacity>
+                        {selectedCountry == country.name && (
+                            <View style={styles.cityContainer}>
+                            {cityNameLoading==true && <ActivityIndicator size={35} style={{padding:5}} color={'red'}/>}
+                            {cityNameLoading==false && cities.map((city) => (
+                                <Text key={city} style={styles.cityText}>&#9737; {city}</Text>
+                            ))}
+                            </View>
+                        )}
                     </View>
                 ))}
             </View>

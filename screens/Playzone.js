@@ -168,6 +168,8 @@ export default function Playzone({ navigation}) {
                   style={[styles.modal_button]}
                   onPress={()=>{
                     // AsyncStorage.setItem('has_saved_game','0')
+                    
+                    AsyncStorage.removeItem('gameData')
                     navigation.navigate('LandingPage')
                   }}
                   >
