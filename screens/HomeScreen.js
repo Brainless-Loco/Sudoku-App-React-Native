@@ -83,7 +83,7 @@ const HomeScreen = ({navigation}) => {
                   <Text style={styles.btnText}>Profile</Text>
               </TouchableOpacity>
           </View>
-          <View style={[styles.container,{paddingBottom:20}]}>
+          {/* <View style={[styles.container,{paddingBottom:20}]}>
             <TouchableOpacity onPress={toggleDropdown} style={[styles.navigationBtn,{height:50,textAlign:'center',marginHorizontal:'auto',width:'60%'}]}>
                     <Text style={styles.btnText}>
                         <Feather name="chevron-down" size={20} color="#e80505" />
@@ -119,7 +119,36 @@ const HomeScreen = ({navigation}) => {
                         </TouchableOpacity>
                     </View>
                     )}
-            </View>
+          </View > */}
+          
+          <View style={{paddingHorizontal:2}}>
+            <Text style={styles.othersTitle}>Others</Text>
+            <View style={styles.container}>
+            
+              <TouchableOpacity onPress={()=>{navigateToAnotherScreen('HowToPlay')}} style={styles.miniNavigationBtn}>
+                        
+                  <Ionicons name="md-game-controller-outline" size={25} color="#e80505" style={styles.miniNavigationIcon}/>
+                  <Text style={styles.miniBtnText}>How to Play</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=>{navigateToAnotherScreen('WriteABlog')}} style={styles.miniNavigationBtn}>
+                        
+                    <FontAwesome name="pencil-square-o" size={25} color="#e80505" style={styles.miniNavigationIcon}/>
+                  <Text style={styles.miniBtnText}>Write Blog</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=>{navigateToAnotherScreen('About')}} style={styles.miniNavigationBtn}>
+                        
+                  <FontAwesome name="question-circle" size={25} color="#e80505" style={styles.miniNavigationIcon}/>
+                  <Text style={styles.miniBtnText}>About</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity onPress={()=>{signOutBtn()}} style={styles.miniNavigationBtn}>
+                        
+                    <Entypo name="log-out" size={25} color="#e80505" style={styles.miniNavigationIcon}/>
+                  <Text style={styles.miniBtnText}>Log Out</Text>
+              </TouchableOpacity>
+          </View>
+          </View>
+          
       </ScrollView>
       
         // <Text style={{paddingTop:0,textAlign:'center',color:'#e80505', fontWeight:'bold',fontSize:18}}>
@@ -213,6 +242,45 @@ const styles = StyleSheet.create({
     color:'#e80505',
     fontWeight:'500'
   },
+  othersTitle:{
+    color:'#e80505',
+    marginHorizontal:12,
+    paddingLeft:2,
+    fontWeight:'bold',
+    marginTop:10,
+    borderBottomColor:'#e80505',
+    borderBottomWidth:1,
+    fontSize:18
+  },
+  miniNavigationBtn:{
+    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    width:'22%',
+    height:70,
+    alignItems:'center',
+    justifyContent:'center',
+    marginVertical:10,
+    borderWidth:0.5,
+    borderColor:'#e80505',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  miniNavigationIcon:{
+    width:'100%',
+    textAlign:'center',
+    marginBottom:2
+  },
+  miniBtnText: {
+    fontSize: 12,
+    textAlign:'center',
+    fontWeight:'bold',
+    color:'#e80505',
+  },
+
 });
 
 export default HomeScreen;
