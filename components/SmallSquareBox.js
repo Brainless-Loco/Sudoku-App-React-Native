@@ -28,7 +28,8 @@ export default function SmallSquareBox({ id }) {
 
 
   return (
-    <Pressable style={[styles.container, !is_editable_square?styles.uneditable_square: locked_square == id ? styles.selected_square : styles.unselected_square,is_pause==true && {backgroundColor:'white',borderColor:'red'}]}
+    <Pressable style={[styles.container, !is_editable_square?styles.uneditable_square: locked_square == id ? styles.selected_square : styles.unselected_square,is_pause==true && {backgroundColor:'white',borderColor:'red'},
+    is_locked && value==locked_button_key && styles.locked_btn_style]}
       onPress={() => {
         if (is_editable_square) {
           select_this_square_for_update(id)
@@ -68,8 +69,11 @@ const styles = StyleSheet.create({
     borderColor:'transparent'
   },
   unselected_square: {
-    backgroundColor: '#ed2d07',
-    borderColor: 'transparent',
+    // backgroundColor: '#ed2d07',
+    // borderColor: 'transparent',
+    backgroundColor:'#fff',
+    borderWidth:1.5,
+    borderColor:'#a30707'
   },
   unselected_text: {
     color: "white",
@@ -77,9 +81,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   selected_square: {
-    backgroundColor: 'white',
+    backgroundColor: '#ededed',
     borderColor: '#ed2d07',
-    color: '#ed2d07'
+    borderWidth:2, 
   },
   selected_text: {
     color: '#ed2d07',
@@ -91,11 +95,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   incorrect_value: {
-    color:'#42282a',
+    color:'#7a7a7a',
     fontWeight: 'bold',
   },
   locked_text:{
-    color:'#cae310',
+    color:'cyan',
     fontWeight: 'bold',
+  },
+  locked_btn_style:{
+    backgroundColor:'#540619'
   }
+
 });

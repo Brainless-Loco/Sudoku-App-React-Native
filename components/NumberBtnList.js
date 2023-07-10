@@ -14,13 +14,14 @@ export default function NumberBtnList() {
   const did_a_mistake = ()=>dispatch(increase_mistake_count())
   const select_this_square_for_update = (id) => dispatch(update_selected_small_square_index(id))
 
+
   
   const selected_index = useSelector(state=>state.selected_small_square_index)
   const selected_index_value = useSelector(state=>state.selected_small_square_value);
   const lock_btn_status = useSelector(state=>state.is_Num_Button_Locked)
   const locked_btn_id = useSelector(state=>state.selected_Button)
-  const if_win = useSelector(state=>state.matched_all_squares)
   const is_pause = useSelector(state=>state.is_paused)
+  const remainingNumbers = useSelector(state=>state.remainingNums)
 
   const GRID = useSelector(state=>state.grid)
   const GAME = useSelector(state=>state.current_playing_grid)
@@ -37,9 +38,9 @@ export default function NumberBtnList() {
       <View style={styles.midContainer}>
         {
           nums.map((num)=>{
-            return <Pressable style={[styles.btn,lock_btn_status && locked_btn_id==num && styles.locked_btn,
+            return <Pressable disabled={remainingNumbers[num]==0} style={[styles.btn,lock_btn_status && locked_btn_id==num && styles.locked_btn,
                 lock_btn_status && locked_btn_id!=num && styles.unlocked_btn,
-                !lock_btn_status && styles.locked_btn]} key={num} 
+                !lock_btn_status && styles.locked_btn,remainingNumbers[num]==0 && styles.completed_btn]} key={num} 
                   onPress={()=>{
                     if(!is_pause){
                       update_selected_button(num)
@@ -54,6 +55,7 @@ export default function NumberBtnList() {
                     }
                       }} >
                     <Text style={styles.text}>{num}</Text>
+                    <Text style={{color:'white',fontSize:10}}>{remainingNumbers[num]}</Text>
                   </Pressable>
           })
         }
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
     borderColor:'#000099',
     borderTopWidth:1,
     borderBottomWidth:1,
-    minHeight:60,
+    minHeight:65,
     width: '100%',
   },
   midContainer:{
@@ -81,16 +83,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     color:"white",
-    height:50,
+    height:'auto',
     width: '100%',
   },
   btn:{
     backgroundColor:'#000099',
     width:'10%',
-    height:40,
+    height:'auto',
     display:'flex',
     justifyContent:'center',
     alignItems:'center',
+    paddingVertical:5,
     borderRadius: 5,
     shadowColor: 'black',
     shadowOffset: {
@@ -112,5 +115,8 @@ const styles = StyleSheet.create({
   },
   unlocked_btn:{
     opacity:0.6
+  },
+  completed_btn:{
+    opacity:0.25
   }
 });

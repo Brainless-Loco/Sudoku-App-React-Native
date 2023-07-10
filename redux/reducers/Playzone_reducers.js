@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { CHANGE_BUTTON_LOCK_STATUS, CHANGE_PAUSE_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, FORM_THE_GAME_PATTERN, GRID_UPDATE, INCREASE_MISTAKE_COUNT, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, UPDATE_ASYNCSTORAGE_FOR_NEW_GAME, UPDATE_FROM_LAST_PLAYED_GAME, UPDATE_SELECTED_SMALL_SQUARE_INDEX, UPDATE_USER_INFO } from "../Types";
-// import AsyncStorage from '@react-native-async-storage/async-storage'
+import { CHANGE_BUTTON_LOCK_STATUS, CHANGE_PAUSE_STATUS, CURRENT_GRID_UPDATE, DELETE_ACTION_HISTORY, FORM_THE_GAME_PATTERN, GRID_UPDATE, INCREASE_MISTAKE_COUNT, INSERT_ACTION_HISTORY, SELECTED_BUTTON_UPDATE, UPDATE_ASYNCSTORAGE_FOR_NEW_GAME, UPDATE_FROM_LAST_PLAYED_GAME, UPDATE_REMAINING_NUMS_LIST, UPDATE_SELECTED_SMALL_SQUARE_INDEX, UPDATE_USER_INFO } from "../Types";
 
 
 
@@ -8,6 +7,7 @@ const initialState = {
     grid: [[]],
     current_playing_grid:[[]],
     is_editable:[[]],
+    remainingNums:[0,1,2,3,4,5,6,7,8,9],
     mistakes:0,
     is_paused:false,
     action_history:[],
@@ -35,6 +35,7 @@ export default (state = initialState, action) => {
 
       ///New Game Creation Reducers
         case GRID_UPDATE: {///update the new Grid
+          
           return{
             ...state,
             grid : action.new_game,
@@ -50,10 +51,29 @@ export default (state = initialState, action) => {
         }
 
         case FORM_THE_GAME_PATTERN:{
+
           return {
             ...state,
             current_playing_grid:action.game,
             is_editable:action.is_editable
+          }
+        }
+
+        case UPDATE_REMAINING_NUMS_LIST:{
+          let temp_remaining_num_list = Array(10).fill(0)
+          let i,j;
+          for(i=0;i<9;i++){
+            for(j=0;j<9;j++){
+              if(state.grid[i][j]==state.current_playing_grid[i][j]){
+                temp_remaining_num_list[state.grid[i][j]]++;
+              }
+            }
+          }
+          temp_remaining_num_list = temp_remaining_num_list.map((val)=>9-val)
+
+          return{
+            ...state,
+            remainingNums:temp_remaining_num_list
           }
         }
 
@@ -100,12 +120,24 @@ export default (state = initialState, action) => {
               const gameDataString = JSON.stringify(gameData);
               AsyncStorage.setItem('gameData', gameDataString);
             }
+
+            let temp_remaining_num_list = Array(10).fill(0)
+            let i,j;
+            for(i=0;i<9;i++){
+              for(j=0;j<9;j++){
+                if(state.grid[i][j]==temp_grid[i][j]){
+                  temp_remaining_num_list[temp_grid[i][j]]++;
+                }
+              }
+            }
+            temp_remaining_num_list = temp_remaining_num_list.map((val)=>9-val)
            
             
             return {
               ...state,
               current_playing_grid:temp_grid,
-              matched_all_squares:temp
+              matched_all_squares:temp,
+              remainingNums : temp_remaining_num_list
             }
           }
 

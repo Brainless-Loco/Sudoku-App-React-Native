@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import {StyleSheet, Text, View,Image, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { game_pattern_formation, gridUpdate, update_asyncstorage_for_a_new_game, update_from_last_saved_game } from '../redux/actions/Grid_actions';
+import { game_pattern_formation, gridUpdate, update_asyncstorage_for_a_new_game, update_from_last_saved_game, update_remaining_num_list } from '../redux/actions/Grid_actions';
 import { generate_a_new_pattern } from '../sudoku_maker/sudoku_pattern_generator';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
@@ -22,6 +22,7 @@ export default function LandingPage({navigation}) {
   const form_new_game = (props)=>dispatch(game_pattern_formation(props))
   const update_from_last_played_game = (gameData)=>{dispatch(update_from_last_saved_game(gameData))}
   const update_asyncstorage_for__new_game = ()=>{dispatch(update_asyncstorage_for_a_new_game())}
+  const update_remaining_nums_list = ()=> {dispatch(update_remaining_num_list())}
 
   const [gameData, setgameData] = useState(null)
   
@@ -34,6 +35,7 @@ export default function LandingPage({navigation}) {
       form_new_game({pattern,gameLevel})
       update_current_game(new_pattern)
       update_asyncstorage_for__new_game()
+      update_remaining_nums_list()
       setloading(false)
       AsyncStorage.removeItem('minuteCount')
       AsyncStorage.removeItem('secondCount')
@@ -62,6 +64,7 @@ export default function LandingPage({navigation}) {
     // setloading(true)
     try {
       update_from_last_played_game(gameData)
+      update_remaining_nums_list()
       navigation.navigate('Playzone')
     } catch (error) {
       console.log('Error retrieving gameData:', error);
