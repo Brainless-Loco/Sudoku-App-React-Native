@@ -62,24 +62,24 @@ const HomeScreen = ({navigation}) => {
           <Text style={styles.title}>Sudoku Forever</Text>
           <View style={styles.container}>
               <TouchableOpacity onPress={()=>{navigateToAnotherScreen('LandingPage')}} style={styles.navigationBtn}>
-                  <Ionicons name="game-controller" size={65} color="#e80505" style={styles.navigationIcon} />
+                  <Ionicons name="game-controller" size={60} color="#e80505" style={styles.navigationIcon} />
                   <Text style={styles.btnText}>
                       &nbsp;Playzone
                   </Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={()=>{navigateToAnotherScreen('AllBlogLists')}} style={styles.navigationBtn}>
-                  <MaterialCommunityIcons name="post-outline" size={65} color="#e80505" style={styles.navigationIcon}/>
+                  <MaterialCommunityIcons name="post-outline" size={60} color="#e80505" style={styles.navigationIcon}/>
                   <Text style={styles.btnText}>Blogs</Text>
               </TouchableOpacity>
               
               <TouchableOpacity onPress={()=>{navigateToAnotherScreen('AISolver')}} style={styles.navigationBtn}>
-                  <AntDesign name="camera" size={65} color="#e80505" style={styles.navigationIcon} />
+                  <AntDesign name="camera" size={60} color="#e80505" style={styles.navigationIcon} />
                   <Text style={styles.btnText}>AI Solver</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={()=>{navigateToAnotherScreen('Profile')}} style={styles.navigationBtn}>
                   
-                  <Ionicons name="person" size={65} color="#e80505" style={styles.navigationIcon}/>
+                  <Ionicons name="person" size={60} color="#e80505" style={styles.navigationIcon}/>
                   <Text style={styles.btnText}>Profile</Text>
               </TouchableOpacity>
           </View>
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
     flexDirection:'row',
     flexWrap:'wrap',
-    justifyContent:'space-around',
+    justifyContent:'space-evenly',
   },
   logo: {
     alignSelf:'center',
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#fff',
     borderRadius: 8,
-    width:'42%',
+    width:'40%',
     height:140,
     marginVertical:10,
     borderWidth:0.5,
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     marginBottom:10
   },
   btnText: {
-    fontSize: 20,
+    fontSize: 18,
     textAlign:'center',
     fontWeight:'bold',
     color:'#e80505',

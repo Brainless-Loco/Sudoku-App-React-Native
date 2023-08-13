@@ -1,6 +1,6 @@
 import { View, Text, Image, Pressable, StyleSheet, ScrollView, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React from 'react'
-import { signOut } from 'firebase/auth'
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { auth, db } from '../firebase/firebaseConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateDoc, doc } from 'firebase/firestore/lite';
@@ -24,6 +24,7 @@ export default function Profile({navigation}) {
   const [password, setpassword] = useState('')
   const [confirmPassword, setconfirmPassword] = useState('')
   const [newImageUri, setnewImageUri] = useState(null)
+  const [passwordOkay, setpasswordOkay] = useState(false)
 
 
   const update_user_info = (info)=>dispatch(updateUserInfo(info))
@@ -127,6 +128,23 @@ export default function Profile({navigation}) {
     navigation.replace('LogIn')
   }
 
+  const checkPassword = async () => {
+    if(password.length<=5) return; 
+    try {
+        const { user } =await signInWithEmailAndPassword(auth, userEmail, password);
+        setpasswordOkay(true)
+    } 
+    catch (e) {
+      console.log(e)
+      setpasswordOkay(false)
+    }
+  };
+
+  useEffect(() => {
+    checkPassword()
+  }, [password])
+  
+
 
   return (
     <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={{backgroundColor:'#fafafa',paddingTop:5}}>
@@ -143,12 +161,12 @@ export default function Profile({navigation}) {
     {/* Change User Name */}
 
     <View style={{margin:5}}>
-      <TextInput editable={false}style={styles.textInputStyle} value={userName + '  (Uneditable)'}/>
-      <TextInput style={styles.textInputStyle} secureTextEntry={true} showSoftInputOnFocus={true} onChangeText={(text)=>{setpassword(text)}} placeholder='Password'/>
-      {password.length>0 && <TextInput style={styles.textInputStyle} secureTextEntry={true} showSoftInputOnFocus={true} onChangeText={(text)=>{setconfirmPassword(text)}} placeholder='Confirm Password'/>}
+      <TextInput editable={false}style={styles.textInputStyle} value={userName + '  (Unchangeable)'}/>
+      <TextInput style={styles.textInputStyle} secureTextEntry={true} showSoftInputOnFocus={true} onChangeText={(text)=>{setpassword(text);}} placeholder='Password'/>
+      {/* {password.length>0 && <TextInput style={styles.textInputStyle} secureTextEntry={true} showSoftInputOnFocus={true} onChangeText={(text)=>{setconfirmPassword(text)}} placeholder='Confirm Password'/>} */}
     </View>
 
-      <TouchableOpacity style={styles.updateProfileBtn} onPress={updateProfileInformation}>
+      <TouchableOpacity disabled={!passwordOkay || newImageUri==null} style={passwordOkay && newImageUri? styles.updateProfileBtn:styles.disabledUpdateProfileBtn} onPress={updateProfileInformation}>
         <Text style={{color:'white',fontSize:20,fontWeight:'600'}}>{
           loading? <ActivityIndicator size={20} color={"white"} />:
           <FontAwesome5 name="check" size={20} color="white" >&nbsp; Update Profile</FontAwesome5>
@@ -205,6 +223,16 @@ const styles = StyleSheet.create({
     marginBottom:10,
     backgroundColor:'white'
     
+  },
+  disabledUpdateProfileBtn:{
+    backgroundColor:'gray',
+    height:50,
+    borderRadius:10,
+    margin:10,
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    marginTop:12
   },
   updateProfileBtn:{
     backgroundColor:'#e80505',
